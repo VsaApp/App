@@ -1,2 +1,1 @@
 # App
-Stunden- und Vertretungspläne
