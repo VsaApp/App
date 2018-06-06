@@ -12,7 +12,7 @@
             android:title="@string/menu_sp" />
         <item
             android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@android:drawable/ic_menu_manage"
             android:title="@string/menu_settings" />
     </group>
 
