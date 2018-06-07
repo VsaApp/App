@@ -13,12 +13,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Server server = new Server();
     private MainActivity mainActivity = this;
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +53,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String username = sharedPref.getString("pref_username", "-1");
         String password = sharedPref.getString("pref_password", "-1");
-        if ((username == "-1" | password == "-1") | !server.checkLoginData(username,password)){
+        Log.i("username", username);
+        Log.i("password", password);
+        if (username.equals("-1") || password.equals("-1")) {
             showLoginScreen();
+        } else {
+            Server.credentialsCallback callback = new Server.credentialsCallback() {
+                @Override
+                public void onSuccess() {
+                    Log.i("Server", "Success");
+                }
+
+                @Override
+                public void onFailed() {
+                    Log.e("Server", "Failed");
+                    showLoginScreen();
+                }
+            };
+            server.login(username, password, callback);
         }
 
     }
@@ -77,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return item.getItemId() == R.id.action_home || super.onOptionsItemSelected(item);
     }
 
-    private void showLoginScreen(){
+    private void showLoginScreen() {
         final Dialog loginDialog = new Dialog(this);
         loginDialog.setContentView(R.layout.dialog_login);
         loginDialog.setCancelable(false);
@@ -88,27 +107,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final EditText username = loginDialog.findViewById(R.id.login_username);
         final EditText password = loginDialog.findViewById(R.id.login_passwort);
         final TextView feedback = loginDialog.findViewById(R.id.lbl_loginFeedback);
-        loginDialog.show();
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (server.checkLoginData(username.getText().toString(), password.getText().toString())){
-                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString("pref_username", username.getText().toString());
-                    editor.putString("pref_password", password.getText().toString());
-                    editor.commit();
+                Server.credentialsCallback callback = new Server.credentialsCallback() {
+                    @Override
+                    public void onSuccess() {
+                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putString("pref_username", username.getText().toString());
+                        editor.putString("pref_password", password.getText().toString());
+                        editor.apply();
+                        loginDialog.cancel();
+                        Toast.makeText(mainActivity, R.string.login_success, Toast.LENGTH_SHORT).show();
+                    }
 
-                    //SharedPreferences settings = getSharedPreferences("pref_username", MODE_PRIVATE);
-
-                    loginDialog.cancel();
-                }
-                else {
-                    feedback.setText(R.string.loginDialog_statusFailed);
-                }
+                    @Override
+                    public void onFailed() {
+                        feedback.setText(R.string.loginDialog_statusFailed);
+                    }
+                };
+                server.login(username.getText().toString(), password.getText().toString(), callback);
             }
         });
+        loginDialog.show();
     }
 
     @Override
@@ -131,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (viewId) {
             case R.id.nav_vp:
                 fragment = new VpFragment();
-                title  = getString(R.string.vp);
+                title = getString(R.string.vp);
 
                 break;
             case R.id.nav_sp:
@@ -150,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Set new fragment...
         if (fragment != null) {
-            if (showSettings){
+            if (showSettings) {
                 // remove settings fragment...
                 getFragmentManager().beginTransaction().
                         remove(getFragmentManager().findFragmentById(R.id.content_frame)).commit();
@@ -162,8 +185,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ft.commit();
         }
 
-        if (settingsFragment != null){
-            if (!showSettings){
+        if (settingsFragment != null) {
+            if (!showSettings) {
                 // remove current fragment...
                 getSupportFragmentManager().beginTransaction().
                         remove(getSupportFragmentManager().findFragmentById(R.id.content_frame)).commit();
@@ -172,9 +195,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // Add settings fragment...
             getFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, new SettingsFragment())
-                .commit();
-    }
+                    .replace(R.id.content_frame, new SettingsFragment())
+                    .commit();
+        }
 
         // set the toolbar title...
         if (getSupportActionBar() != null) {
