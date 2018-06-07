@@ -8,7 +8,33 @@
     <string name="teacher">Lehrer</string>
     <string name="menu_settings">Einstellungen</string>
     <string name="action_home">Home</string>
+    <string name="loginDialog">Login Dialog</string>
+    <string name="loginDialog_passwordHint">Passwort</string>
+    <string name="loginDialog_usernameHint">Benutzername</string>
+    <string name="loginDialog_btnText">OK</string>
+    <string name="loginDialog_status">Zugangsdaten eingeben:</string>
+    <string name="loginDialog_statusFailed">Benutzername oder Passwort ist falsch</string>
 
-    <string name="preferenceTitle_showVpInSp">Vertretungsplan im Stundenplan anzeigen</string>
-    <string name="preferenceSummary_showVpInSp">Alle änderungen im Vertretungsplan werden im Stundenplan angezeigt</string>
+    <string name="preferenceCategory_loginData">Login Daten</string>
+        <string name="preferenceTitle_webpagePassword">Password</string>
+        <string name="preferenceSummary_webpagePassword">Password der viktoriaschule-aachen Homepage</string>
+        <string name="preferenceTitle_webpageUsername">Benutzername</string>
+        <string name="preferenceSummary_webpageUsername">Benutzername der viktoriaschule-aachen Homepage</string>
+        <string name="default_password">passwort</string>
+        <string name="default_username">benutzername</string>
+
+    <string name="preferenceCategory_userInfo">Persönliche Daten</string>
+        <string name="preferenceTitle_classname">Klasse</string>
+        <string name="preferenceSummary_classname">Wähle deine Klasse</string>
+        <string-array name="nameOfClasses">
+            <item>5a</item><item>5b</item><item>5c</item><item>6a</item><item>6b</item><item>6c</item><item>7a</item><item>7b</item><item>7c</item><item>8a</item><item>8b</item><item>8c</item><item>9a</item><item>9b</item><item>9c</item><item>EF</item><item>Q1</item><item>Q2</item>
+        </string-array>
+
+    <string name="preferenceCategory_appPref">Appeinstellungen</string>
+        <string name="preferenceTitle_showVpInSp">Vertretungsplan im Stundenplan anzeigen</string>
+        <string name="preferenceSummary_showVpInSp">Im Stundenplan werden alle Änderungen vom Vertretungsplan angezeigt</string>
+
+
+
+
 </resources>

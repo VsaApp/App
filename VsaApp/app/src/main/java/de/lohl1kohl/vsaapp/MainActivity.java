@@ -1,7 +1,9 @@
 package de.lohl1kohl.vsaapp;
 
-import android.content.Intent;
+import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,10 +15,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private boolean showSettings = false;
+    private Server server = new Server();
+    private MainActivity mainActivity = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +45,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
+
+        // Check the login data...
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String username = sharedPref.getString("pref_username", "-1");
+        String password = sharedPref.getString("pref_password", "-1");
+        if ((username == "-1" | password == "-1") | !server.checkLoginData(username,password)){
+            showLoginScreen();
+        }
+
     }
 
     @Override
@@ -60,19 +77,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return item.getItemId() == R.id.action_home || super.onOptionsItemSelected(item);
     }
 
+    private void showLoginScreen(){
+        final Dialog loginDialog = new Dialog(this);
+        loginDialog.setContentView(R.layout.dialog_login);
+        loginDialog.setCancelable(false);
+        loginDialog.setTitle(R.string.loginDialog);
+
+        Button btn_login = loginDialog.findViewById(R.id.btn_loginOk);
+
+        final EditText username = loginDialog.findViewById(R.id.login_username);
+        final EditText password = loginDialog.findViewById(R.id.login_passwort);
+        final TextView feedback = loginDialog.findViewById(R.id.lbl_loginFeedback);
+        loginDialog.show();
+
+        btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (server.checkLoginData(username.getText().toString(), password.getText().toString())){
+                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("pref_username", username.getText().toString());
+                    editor.putString("pref_password", password.getText().toString());
+                    editor.commit();
+
+                    //SharedPreferences settings = getSharedPreferences("pref_username", MODE_PRIVATE);
+
+                    loginDialog.cancel();
+                }
+                else {
+                    feedback.setText(R.string.loginDialog_statusFailed);
+                }
+            }
+        });
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Get the item id...
         int id = item.getItemId();
 
         // Set new fragment...
-        displayView(id);
-
-        return true;
+        return displayView(id);
     }
 
-    public void displayView(int viewId) {
+    public boolean displayView(int viewId) {
 
+        // If the logindata is correct, open fragment...
         Fragment fragment = null;
         SettingsFragment settingsFragment = null;
         String title = getString(R.string.app_name);
@@ -131,8 +181,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportActionBar().setTitle(title);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
+        return true;
     }
 }
