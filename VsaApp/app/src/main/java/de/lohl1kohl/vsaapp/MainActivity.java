@@ -84,6 +84,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 title = getString(R.string.sp);
                 break;
 
+            case R.id.nav_teacher:
+                fragment = new TeacherFragment();
+                title = getString(R.string.teacher);
+                break;
         }
 
         // Set new fragment...
