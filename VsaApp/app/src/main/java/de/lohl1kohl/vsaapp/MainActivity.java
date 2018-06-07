@@ -3,6 +3,8 @@ package de.lohl1kohl.vsaapp;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Show the vpFragment as the start fragment...
+        displayView(R.id.nav_vp);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -49,23 +53,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return item.getItemId() == R.id.action_settings || super.onOptionsItemSelected(item);
+        return item.getItemId() == R.id.action_home || super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Get the item id...
         int id = item.getItemId();
 
-        if (id == R.id.nav_vp) {
+        // Set new fragment...
+        displayView(id);
 
-        } else if (id == R.id.nav_sp) {
+        return true;
+    }
 
-        } else if (id == R.id.nav_settings) {
+    public void displayView(int viewId) {
+
+        Fragment fragment = null;
+        String title = getString(R.string.app_name);
+
+        // Get new fragment...
+        switch (viewId) {
+            case R.id.nav_vp:
+                fragment = new VpFragment();
+                title  = getString(R.string.vp);
+
+                break;
+            case R.id.nav_sp:
+                fragment = new SpFragment();
+                title = getString(R.string.sp);
+                break;
 
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        // Set new fragment...
+        if (fragment != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, fragment);
+            ft.commit();
+        }
+
+        // set the toolbar title...
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+
     }
 }
