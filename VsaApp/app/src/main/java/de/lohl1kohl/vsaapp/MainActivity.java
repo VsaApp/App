@@ -1,5 +1,6 @@
 package de.lohl1kohl.vsaapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -15,6 +16,8 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private boolean showSettings = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         // Show the vpFragment as the start fragment...
-        displayView(R.id.nav_vp);
+        displayView(R.id.nav_sp);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
     @Override
@@ -70,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void displayView(int viewId) {
 
         Fragment fragment = null;
+        SettingsFragment settingsFragment = null;
         String title = getString(R.string.app_name);
 
         // Get new fragment...
@@ -88,14 +93,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragment = new TeacherFragment();
                 title = getString(R.string.teacher);
                 break;
+
+            case R.id.nav_settings:
+                settingsFragment = new SettingsFragment();
         }
 
         // Set new fragment...
         if (fragment != null) {
+            if (showSettings){
+                // remove settings fragment...
+                getFragmentManager().beginTransaction().
+                        remove(getFragmentManager().findFragmentById(R.id.content_frame)).commit();
+                showSettings = false;
+            }
+
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
             ft.commit();
         }
+
+        if (settingsFragment != null){
+            if (!showSettings){
+                // remove current fragment...
+                getSupportFragmentManager().beginTransaction().
+                        remove(getSupportFragmentManager().findFragmentById(R.id.content_frame)).commit();
+                showSettings = true;
+            }
+
+            // Add settings fragment...
+            getFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, new SettingsFragment())
+                .commit();
+    }
 
         // set the toolbar title...
         if (getSupportActionBar() != null) {
