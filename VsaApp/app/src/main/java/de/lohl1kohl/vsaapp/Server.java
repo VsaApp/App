@@ -1,7 +1,5 @@
 package de.lohl1kohl.vsaapp;
 
-import android.util.Log;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -36,7 +34,6 @@ public class Server implements AsyncResponse {
         }
 
         url = String.format("https://vsa.lohl1kohl.de/validate?username=%s&password=%s", hashUsername, hashPassword);
-        Log.i("Server", url);
 
         HttpGetRequest asyncTask = new HttpGetRequest();
 

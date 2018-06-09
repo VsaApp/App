@@ -53,8 +53,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String username = sharedPref.getString("pref_username", "-1");
         String password = sharedPref.getString("pref_password", "-1");
-        Log.i("username", username);
-        Log.i("password", password);
+        String grade = sharedPref.getString("pref_grade", "-1");
+        // Update subscription
+        if (!grade.equals("-1")) {
+            FirebaseHandler.unsubscribeAll(this);
+            FirebaseHandler.subscribe(this, grade);
+        }
         if (username.equals("-1") || password.equals("-1")) {
             showLoginScreen();
         } else {

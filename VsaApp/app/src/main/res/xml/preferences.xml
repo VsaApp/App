@@ -9,18 +9,18 @@
             android:maxLines="1"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="@string/preferenceTitle_webpageUsername"
-            android:summary="@string/preferenceSummary_webpageUsername"/>
+            android:summary="@string/preferenceSummary_webpageUsername"
+            android:title="@string/preferenceTitle_webpageUsername" />
 
         <EditTextPreference
             android:inputType="textPassword"
             android:key="pref_password"
             android:maxLines="1"
+            android:password="true"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:password="true"
-            android:title="@string/preferenceTitle_webpagePassword"
-            android:summary="@string/preferenceSummary_webpagePassword"/>
+            android:summary="@string/preferenceSummary_webpagePassword"
+            android:title="@string/preferenceTitle_webpagePassword" />
 
     </PreferenceCategory>
 
@@ -30,13 +30,13 @@
 
         <ListPreference
             android:defaultValue="180"
-            android:entries="@array/nameOfClasses"
-            android:entryValues="@array/nameOfClasses"
-            android:key="sync_frequency"
+            android:entries="@array/nameOfGrades"
+            android:entryValues="@array/nameOfGrades"
+            android:key="pref_grade"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:title="@string/preferenceTitle_classname"
-            android:summary="@string/preferenceSummary_classname"/>
+            android:summary="@string/preferenceSummary_classname"
+            android:title="@string/preferenceTitle_classname" />
 
     </PreferenceCategory>
 
@@ -45,10 +45,10 @@
         android:title="@string/preferenceCategory_appPref">
 
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="pref_showVpInSp"
-            android:title="@string/preferenceTitle_showVpInSp"
             android:summary="@string/preferenceSummary_showVpInSp"
-            android:defaultValue="true" />
+            android:title="@string/preferenceTitle_showVpInSp" />
 
     </PreferenceCategory>
 

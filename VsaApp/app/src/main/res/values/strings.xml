@@ -26,7 +26,7 @@
     <string name="preferenceCategory_userInfo">Persönliche Daten</string>
     <string name="preferenceTitle_classname">Klasse</string>
     <string name="preferenceSummary_classname">Wähle deine Klasse</string>
-    <string-array name="nameOfClasses">
+    <string-array name="nameOfGrades">
         <item>5a</item>
         <item>5b</item>
         <item>5c</item>
