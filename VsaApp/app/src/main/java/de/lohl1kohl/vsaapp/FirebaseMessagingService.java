@@ -11,6 +11,8 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
+    private int channel = 0;
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // https://stackoverflow.com/a/38451582/9512602
@@ -30,6 +32,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             NotificationChannel channel = new NotificationChannel(channelId, "Default channel", NotificationManager.IMPORTANCE_DEFAULT);
             manager.createNotificationChannel(channel);
         }
-        manager.notify(0, builder.build());
+        manager.notify(channel++, builder.build());
     }
 }
