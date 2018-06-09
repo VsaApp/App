@@ -1,5 +1,6 @@
 package de.lohl1kohl.vsaapp;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,23 +12,27 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private boolean showSettings = false;
-    private Server server = new Server();
-    private MainActivity mainActivity = this;
+    private final Server server = new Server();
+    private final MainActivity mainActivity = this;
 
+    @SuppressLint("SetTextI18n")
     @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +94,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String grade = sharedPref.getString("pref_grade", "-1");
+        if (!grade.equals("-1")) {
+            ((TextView) findViewById(R.id.header_name)).setText(getString(R.string.app_name) + " - " + grade);
+        }
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -100,42 +111,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return item.getItemId() == R.id.action_home || super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("SetTextI18n")
     private void showLoginScreen() {
         final Dialog loginDialog = new Dialog(this);
+        WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
+        lWindowParams.copyFrom(Objects.requireNonNull(loginDialog.getWindow()).getAttributes());
+        lWindowParams.width = WindowManager.LayoutParams.FILL_PARENT;
+        lWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
         loginDialog.setContentView(R.layout.dialog_login);
         loginDialog.setCancelable(false);
         loginDialog.setTitle(R.string.loginDialog);
 
-        Button btn_login = loginDialog.findViewById(R.id.btn_loginOk);
-
+        final Button btn_login = loginDialog.findViewById(R.id.btn_loginOk);
+        final Button btn_grade = loginDialog.findViewById(R.id.btn_loginGrade);
         final EditText username = loginDialog.findViewById(R.id.login_username);
         final EditText password = loginDialog.findViewById(R.id.login_passwort);
         final TextView feedback = loginDialog.findViewById(R.id.lbl_loginFeedback);
 
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Server.credentialsCallback callback = new Server.credentialsCallback() {
-                    @Override
-                    public void onSuccess() {
-                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putString("pref_username", username.getText().toString());
-                        editor.putString("pref_password", password.getText().toString());
-                        editor.apply();
-                        loginDialog.cancel();
-                        Toast.makeText(mainActivity, R.string.login_success, Toast.LENGTH_SHORT).show();
-                    }
+        String[] grades = getResources().getStringArray(R.array.nameOfGrades);
+        final int[] w = {0};
 
-                    @Override
-                    public void onFailed() {
-                        feedback.setText(R.string.loginDialog_statusFailed);
-                    }
-                };
-                server.login(username.getText().toString(), password.getText().toString(), callback);
-            }
+        btn_grade.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.choose_grade));
+            builder.setSingleChoiceItems(grades, 1, (dialog, which) -> {
+                w[0] = which;
+                dialog.cancel();
+                btn_grade.setText(getString(R.string.choose_grade) + " - " + grades[w[0]]);
+            });
+
+            builder.setPositiveButton(getString(R.string.OK), (dialog, which) -> dialog.cancel());
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
+
+        btn_login.setOnClickListener(view -> {
+            Server.credentialsCallback callback = new Server.credentialsCallback() {
+                @Override
+                public void onSuccess() {
+                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("pref_username", username.getText().toString());
+                    editor.putString("pref_password", password.getText().toString());
+                    editor.putString("pref_grade", grades[w[0]]);
+                    FirebaseHandler.subscribe(MainActivity.this, grades[w[0]]);
+                    ((TextView) findViewById(R.id.header_name)).setText(getString(R.string.app_name) + " - " + grades[w[0]]);
+                    editor.apply();
+                    loginDialog.cancel();
+                    Toast.makeText(mainActivity, R.string.login_success, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailed() {
+                    feedback.setText(R.string.loginDialog_statusFailed);
+                }
+            };
+            server.login(username.getText().toString(), password.getText().toString(), callback);
         });
         loginDialog.show();
+        loginDialog.getWindow().setAttributes(lWindowParams);
     }
 
     @Override
@@ -144,10 +180,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         // Set new fragment...
-        return displayView(id);
+        displayView(id);
+        return true;
     }
 
-    public boolean displayView(int viewId) {
+    private void displayView(int viewId) {
 
         // If the logindata is correct, open fragment...
         Fragment fragment = null;
@@ -210,7 +247,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-
-        return true;
     }
 }

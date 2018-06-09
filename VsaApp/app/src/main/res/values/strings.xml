@@ -11,7 +11,7 @@
     <string name="loginDialog">Login Dialog</string>
     <string name="loginDialog_passwordHint">Passwort</string>
     <string name="loginDialog_usernameHint">Benutzername</string>
-    <string name="loginDialog_btnText">OK</string>
+    <string name="OK">OK</string>
     <string name="loginDialog_status">Zugangsdaten eingeben:</string>
     <string name="loginDialog_statusFailed">Benutzername oder Passwort ist falsch</string>
 
@@ -20,8 +20,6 @@
     <string name="preferenceSummary_webpagePassword">Password der viktoriaschule-aachen Homepage</string>
     <string name="preferenceTitle_webpageUsername">Benutzername</string>
     <string name="preferenceSummary_webpageUsername">Benutzername der viktoriaschule-aachen Homepage</string>
-    <string name="default_password">passwort</string>
-    <string name="default_username">benutzername</string>
 
     <string name="preferenceCategory_userInfo">Persönliche Daten</string>
     <string name="preferenceTitle_classname">Klasse</string>
@@ -51,4 +49,5 @@
     <string name="preferenceTitle_showVpInSp">Vertretungsplan im Stundenplan anzeigen</string>
     <string name="preferenceSummary_showVpInSp">Im Stundenplan werden alle Änderungen vom Vertretungsplan angezeigt</string>
     <string name="login_success">Erfolgreich angemeldet</string>
+    <string name="choose_grade">Klasse auswählen</string>
 </resources>

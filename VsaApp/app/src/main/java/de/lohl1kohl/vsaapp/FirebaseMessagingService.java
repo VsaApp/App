@@ -9,6 +9,8 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Objects;
+
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
     private int channel = 0;
@@ -23,15 +25,14 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         String channelId = "Default";
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.drawable.logo_white)
-                .setContentTitle(remoteMessage.getNotification().getTitle())
+                .setContentTitle(Objects.requireNonNull(remoteMessage.getNotification()).getTitle())
                 .setColor(getResources().getColor(R.color.colorPrimary))
                 .setContentText(remoteMessage.getNotification().getBody()).setAutoCancel(true).setContentIntent(pendingIntent);
-        ;
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, "Default channel", NotificationManager.IMPORTANCE_DEFAULT);
-            manager.createNotificationChannel(channel);
+            Objects.requireNonNull(manager).createNotificationChannel(channel);
         }
-        manager.notify(channel++, builder.build());
+        Objects.requireNonNull(manager).notify(channel++, builder.build());
     }
 }
