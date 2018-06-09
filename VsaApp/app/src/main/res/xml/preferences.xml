@@ -35,7 +35,7 @@
             android:key="pref_grade"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:summary="@string/preferenceSummary_classname"
+            android:summary="@string/choose_grade"
             android:title="@string/preferenceTitle_classname" />
 
     </PreferenceCategory>

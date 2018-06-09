@@ -16,14 +16,13 @@
     <string name="loginDialog_statusFailed">Benutzername oder Passwort ist falsch</string>
 
     <string name="preferenceCategory_loginData">Login Daten</string>
-    <string name="preferenceTitle_webpagePassword">Password</string>
-    <string name="preferenceSummary_webpagePassword">Password der viktoriaschule-aachen Homepage</string>
+    <string name="preferenceTitle_webpagePassword">Passwort</string>
+    <string name="preferenceSummary_webpagePassword">Passwort der viktoriaschule-aachen Homepage</string>
     <string name="preferenceTitle_webpageUsername">Benutzername</string>
     <string name="preferenceSummary_webpageUsername">Benutzername der viktoriaschule-aachen Homepage</string>
 
     <string name="preferenceCategory_userInfo">Persönliche Daten</string>
     <string name="preferenceTitle_classname">Klasse</string>
-    <string name="preferenceSummary_classname">Wähle deine Klasse</string>
     <string-array name="nameOfGrades">
         <item>5a</item>
         <item>5b</item>
@@ -50,4 +49,141 @@
     <string name="preferenceSummary_showVpInSp">Im Stundenplan werden alle Änderungen vom Vertretungsplan angezeigt</string>
     <string name="login_success">Erfolgreich angemeldet</string>
     <string name="choose_grade">Klasse auswählen</string>
+    <string name="search_teacher">Lehrer mit Namen oder Kürzel suchen</string>
+    <string name="send_email">Email senden</string>
+
+    <string-array name="short_names">
+        <item>ALV</item>
+        <item>AND</item>
+        <item>AYM</item>
+        <item>BAC</item>
+        <item>BEM</item>
+        <item>BÖL</item>
+        <item>BOR</item>
+        <item>CLA</item>
+        <item>DNB</item>
+        <item>EGL</item>
+        <item>EWE</item>
+        <item>FEL</item>
+        <item>FES</item>
+        <item>GIL</item>
+        <item>GÖB</item>
+        <item>GRE</item>
+        <item>HER</item>
+        <item>HIM</item>
+        <item>HNZ</item>
+        <item>HIN</item>
+        <item>HOM</item>
+        <item>JAC</item>
+        <item>JAK</item>
+        <item>JAN</item>
+        <item>JAR</item>
+        <item>JEF</item>
+        <item>KAT</item>
+        <item>KAN</item>
+        <item>KER</item>
+        <item>KLN</item>
+        <item>KLS</item>
+        <item>KLF</item>
+        <item>KLI</item>
+        <item>KLU</item>
+        <item>KOH</item>
+        <item>KRA</item>
+        <item>KBN</item>
+        <item>KUC</item>
+        <item>LAS</item>
+        <item>LIC</item>
+        <item>MAR</item>
+        <item>MAY</item>
+        <item>MEN</item>
+        <item>MÖL</item>
+        <item>MOR</item>
+        <item>NEM</item>
+        <item>NIE</item>
+        <item>PJU</item>
+        <item>PRN</item>
+        <item>RAM</item>
+        <item>RIC</item>
+        <item>SAL</item>
+        <item>SCH</item>
+        <item>SLF</item>
+        <item>SLL</item>
+        <item>SND</item>
+        <item>SNL</item>
+        <item>SEP</item>
+        <item>SER</item>
+        <item>STO</item>
+        <item>SOM</item>
+        <item>WEB</item>
+        <item>WEL</item>
+        <item>WIS</item>
+        <item>WÖR</item>
+    </string-array>
+    <string-array name="long_names">
+        <item>Frau Alvarez-Brückmann</item>
+        <item>Frau Andre</item>
+        <item>Krenne</item>
+        <item>Herr Bachem</item>
+        <item>Frau Bemberg</item>
+        <item>Herr Bölling</item>
+        <item>Frau Borgetto-Kamp</item>
+        <item>Frau Claßen</item>
+        <item>Frau Dornebusch</item>
+        <item>Herr Egerland</item>
+        <item>Frau Ewen</item>
+        <item>Frau Feldhues</item>
+        <item>Herr Festag</item>
+        <item>Frau Gillessen</item>
+        <item>Frau Göbel</item>
+        <item>Herr Dr. Greschik</item>
+        <item>Herr Hermsdorff</item>
+        <item>Herr Hiltmann</item>
+        <item>Herr Hinz</item>
+        <item>Frau Hinz</item>
+        <item>Frau Homm</item>
+        <item>Frau Jachmann</item>
+        <item>Frau Jakobs</item>
+        <item>Frau Jantzen</item>
+        <item>Frau Dr. Jarminowski</item>
+        <item>Frau Jeffcoat</item>
+        <item>Herr Dr. Katthage</item>
+        <item>Frau Kleiber</item>
+        <item>Herr Kern</item>
+        <item>Frau Klein</item>
+        <item>Frau Kleines</item>
+        <item>Herr Kleinfeld</item>
+        <item>Herr Klier</item>
+        <item>Frau Kluge</item>
+        <item>Herr Kohring</item>
+        <item>Herr Kramer</item>
+        <item>Frau Krugel-Bentzin</item>
+        <item>Frau Kuck</item>
+        <item>Herr Lausch</item>
+        <item>Frau Licata</item>
+        <item>Herr Maresch</item>
+        <item>Herr May</item>
+        <item>Herr Mentjes</item>
+        <item>Herr Möller</item>
+        <item>Frau Morjan-Drees</item>
+        <item>Frau Nemnich</item>
+        <item>Frau Nießen</item>
+        <item>Frau Petereit</item>
+        <item>Herr Prenzlau</item>
+        <item>Frau Ramirez</item>
+        <item>Herr Dr. Richter</item>
+        <item>Herr Salber</item>
+        <item>Herr Dr. Schmidt</item>
+        <item>Herr Schleifer</item>
+        <item>Herr Schell</item>
+        <item>Herr Schneirder</item>
+        <item>Herr Schnell</item>
+        <item>Frau Seppe</item>
+        <item>Frau Schneider</item>
+        <item>Frau Stoffers</item>
+        <item>Frau Sommerfeld</item>
+        <item>Herr Weber</item>
+        <item>Herr Welter</item>
+        <item>Frau Wiswedel</item>
+        <item>Herr Wörner</item>
+    </string-array>
 </resources>
