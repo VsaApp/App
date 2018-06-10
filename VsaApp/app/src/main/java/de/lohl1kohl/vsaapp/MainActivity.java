@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent i = getIntent();
         if (i.getStringExtra("page") != null) {
             displayView(R.id.nav_vp);
+            navigationView.getMenu().getItem(1).setChecked(true);
         }
     }
 
