@@ -1,29 +1,4 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <PreferenceCategory
-        android:key="button_loginData"
-        android:title="@string/preferenceCategory_loginData">
-
-        <EditTextPreference
-            android:key="pref_username"
-            android:maxLines="1"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:summary="@string/preferenceSummary_webpageUsername"
-            android:title="@string/preferenceTitle_webpageUsername" />
-
-        <EditTextPreference
-            android:inputType="textPassword"
-            android:key="pref_password"
-            android:maxLines="1"
-            android:password="true"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:summary="@string/preferenceSummary_webpagePassword"
-            android:title="@string/preferenceTitle_webpagePassword" />
-
-    </PreferenceCategory>
-
     <PreferenceCategory
         android:key="button_userInfo"
         android:title="@string/preferenceCategory_userInfo">

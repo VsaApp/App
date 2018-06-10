@@ -9,18 +9,11 @@
     <string name="menu_settings">Einstellungen</string>
     <string name="action_home">Home</string>
     <string name="loginDialog">Login Dialog</string>
-    <string name="chooseSubjectDialog">Kurswahl</string>
     <string name="loginDialog_passwordHint">Passwort</string>
     <string name="loginDialog_usernameHint">Benutzername</string>
     <string name="OK">OK</string>
     <string name="loginDialog_status">Zugangsdaten eingeben:</string>
     <string name="loginDialog_statusFailed">Benutzername oder Passwort ist falsch</string>
-
-    <string name="preferenceCategory_loginData">Login Daten</string>
-    <string name="preferenceTitle_webpagePassword">Passwort</string>
-    <string name="preferenceSummary_webpagePassword">Passwort der viktoriaschule-aachen Homepage</string>
-    <string name="preferenceTitle_webpageUsername">Benutzername</string>
-    <string name="preferenceSummary_webpageUsername">Benutzername der viktoriaschule-aachen Homepage</string>
 
     <string name="preferenceCategory_userInfo">Persönliche Daten</string>
     <string name="preferenceTitle_classname">Klasse</string>
@@ -72,15 +65,13 @@
 
 
     <string name="vpInfoDialogTitle">Vertretung</string>
-    <string name="vpStand">Aktualesiere...</string>
-    <string name="chooseSubjectInfo">Wählen Sie ihren Kurs aus:</string>
+    <string name="vpStand">Aktualesiere…</string>
     <string name="preferenceCategory_appPref">Appeinstellungen</string>
     <string name="preferenceTitle_showVpInSp">Vertretungsplan im Stundenplan anzeigen</string>
     <string name="preferenceSummary_showVpInSp">Im Stundenplan werden alle Änderungen vom Vertretungsplan angezeigt</string>
     <string name="login_success">Erfolgreich angemeldet</string>
     <string name="no_connection">Verbindung zum Server vehlgeschagen</string>
     <string name="no_class">Keine Klasse gesetzt</string>
-    <string name="menu_refresh">Aktualesieren</string>
     <string name="choose_grade">Klasse auswählen</string>
     <string name="search_teacher">Lehrer mit Namen oder Kürzel suchen</string>
     <string name="send_email">Email senden</string>
