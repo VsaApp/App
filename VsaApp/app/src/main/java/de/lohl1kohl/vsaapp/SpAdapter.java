@@ -66,9 +66,9 @@ public class SpAdapter extends BaseAdapter {
         if (convertView == null) {
             listViewHolder = new ViewHolder();
             convertView = layoutinflater.inflate(R.layout.sp_cell, parent, false);
-            listViewHolder.lessonInListView = (TextView) convertView.findViewById(R.id.sp_lesson);
-            listViewHolder.roomInListView = (TextView) convertView.findViewById(R.id.sp_room);
-            listViewHolder.teacherInListView = (TextView) convertView.findViewById(R.id.sp_tutor);
+            listViewHolder.lessonInListView = convertView.findViewById(R.id.sp_lesson);
+            listViewHolder.roomInListView = convertView.findViewById(R.id.sp_room);
+            listViewHolder.teacherInListView = convertView.findViewById(R.id.sp_tutor);
             convertView.setTag(listViewHolder);
         } else {
             listViewHolder = (ViewHolder) convertView.getTag();

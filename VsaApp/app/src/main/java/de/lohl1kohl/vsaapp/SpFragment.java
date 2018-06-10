@@ -62,7 +62,7 @@ public class SpFragment extends Fragment {
             fillSp(savedSP);
         }
 
-        SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) spView.findViewById(R.id.spLayout);
+        SwipeRefreshLayout swipeLayout = spView.findViewById(R.id.spLayout);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                                              @Override
                                              public void onRefresh() {
@@ -146,7 +146,7 @@ public class SpFragment extends Fragment {
             public void onReceived(String output) {
                 fillSp(output);
                 Log.i("VsaApp/Server", "Success");
-                SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) spView.findViewById(R.id.spLayout);
+                SwipeRefreshLayout swipeLayout = spView.findViewById(R.id.spLayout);
                 swipeLayout.setRefreshing(false);
 
                 // Save the current sp...
@@ -160,7 +160,7 @@ public class SpFragment extends Fragment {
             public void onConnectionFailed() {
                 Log.e("VsaApp/Server", "Failed");
                 Toast.makeText(mainActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
-                SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) spView.findViewById(R.id.spLayout);
+                SwipeRefreshLayout swipeLayout = spView.findViewById(R.id.spLayout);
                 swipeLayout.setRefreshing(false);
             }
         };
@@ -226,7 +226,7 @@ public class SpFragment extends Fragment {
         }
 
 
-        GridView gridview = (GridView) spView.findViewById(R.id.spGrid);
+        GridView gridview = spView.findViewById(R.id.spGrid);
         spAdapter = new SpAdapter(mainActivity, lessonsObjects);
         gridview.setAdapter(spAdapter);
     }
