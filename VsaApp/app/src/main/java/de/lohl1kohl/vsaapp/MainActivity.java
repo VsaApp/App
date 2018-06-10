@@ -64,13 +64,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Server.credentialsCallback callback = new Server.credentialsCallback() {
                 @Override
                 public void onSuccess() {
-                    Log.i("Server", "Success");
+                    Log.i("VsaApp/Server", "Password success");
                 }
 
                 @Override
                 public void onFailed() {
-                    Log.e("Server", "Failed");
+                    Log.e("VsaApp/Server", "Password failed");
                     showLoginScreen();
+                }
+
+                @Override
+                public void onConnectionFailed(){
+                    Log.e("VsaApp/Server", "No connection");
+                    Toast.makeText(mainActivity, R.string.no_connection, Toast.LENGTH_LONG).show();
                 }
             };
             server.login(username, password, callback);
@@ -139,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             AlertDialog dialog = builder.create();
             dialog.show();
+
         });
 
         btn_login.setOnClickListener(view -> {
@@ -161,6 +168,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onFailed() {
                     feedback.setText(R.string.loginDialog_statusFailed);
                 }
+
+                @Override
+                public void onConnectionFailed() {feedback.setText(R.string.no_connection);}
             };
             server.login(username.getText().toString(), password.getText().toString(), callback);
         });

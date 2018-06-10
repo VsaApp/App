@@ -1,26 +1,55 @@
 package de.lohl1kohl.vsaapp;
 
+import android.util.Log;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 
 public class Server implements AsyncResponse {
-    private credentialsCallback callback;
+    private credentialsCallback credentialsCallback;
+    private spCallback spCallback;
+    private String waitForMsg;
+    private boolean connectedToServer = false;
 
     Server() {
     }
 
     @Override
     public void processFinish(String output) {
-        if (output.equals("0")) {
-            callback.onSuccess();
+        if (output != null){
+            connectedToServer = true;
+        }
+        if (waitForMsg.equals("loginData")){
+            credentialFinish(output);
+        }
+        else if (waitForMsg.equals("spData")){
+            spFinish(output);
+        }
+    }
+
+    private void spFinish(String output){
+        if (output == null){
+            spCallback.onConnectionFailed();
         } else {
-            callback.onFailed();
+            spCallback.onReceived(output);
+        }
+    }
+
+    private void credentialFinish(String output) {
+        if (output == null){
+            credentialsCallback.onConnectionFailed();
+        }else if (output.equals("0")) {
+            credentialsCallback.onSuccess();
+        } else {
+            credentialsCallback.onFailed();
         }
     }
 
     public void login(String username, String password, credentialsCallback c) {
-        callback = c;
+        credentialsCallback = c;
+        waitForMsg = "loginData";
+
         MessageDigest digest;
         String url, hashPassword = "", hashUsername = "";
         try {
@@ -34,6 +63,22 @@ public class Server implements AsyncResponse {
         }
 
         url = String.format("https://vsa.lohl1kohl.de/validate?username=%s&password=%s", hashUsername, hashPassword);
+
+        HttpGetRequest asyncTask = new HttpGetRequest();
+
+        //this to set delegate/listener back to this class
+        asyncTask.delegate = this;
+
+        //execute the async task
+        asyncTask.execute(url);
+    }
+
+    public void updateSp(String classname,spCallback c){
+        spCallback = c;
+        waitForMsg = "spData";
+
+        String url = String.format("https://vsa.lohl1kohl.de/sp/%s.json", classname);
+        Log.i("VsaApp/Server", "Open: " + url);
 
         HttpGetRequest asyncTask = new HttpGetRequest();
 
@@ -58,9 +103,14 @@ public class Server implements AsyncResponse {
         return sb.toString();
     }
 
+    public interface spCallback {
+        void onReceived(String output);
+        void onConnectionFailed();
+    }
+
     public interface credentialsCallback {
         void onSuccess();
-
         void onFailed();
+        void onConnectionFailed();
     }
 }

@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    android:id="@+id/spLayout">
 
-    <TextView
-        android:id="@+id/textView_sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="247dp"
-        android:layout_marginEnd="144dp"
-        android:layout_marginLeft="162dp"
-        android:layout_marginRight="144dp"
-        android:layout_marginStart="162dp"
-        android:layout_marginTop="245dp"
-        android:text="Stundenplan"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</android.support.constraint.ConstraintLayout>
+    <GridView
+        android:id="@+id/spGrid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnWidth="65dp"
+        android:gravity="center"
+        android:horizontalSpacing="5dp"
+        android:numColumns="5"
+        android:padding="10dp"
+        android:stretchMode="spacingWidth"
+        android:verticalSpacing="5dp"/>
+
+</android.support.v4.widget.SwipeRefreshLayout>
