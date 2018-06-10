@@ -1,6 +1,5 @@
 package de.lohl1kohl.vsaapp;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class Lesson {
@@ -11,10 +10,10 @@ public class Lesson {
     public String room;
     public String tutor;
     public String changes;
-    private Map<String, String> subjectSymbols;
     boolean changed = false;
+    private Map<String, String> subjectSymbols;
 
-    Lesson(String day, String lesson, String name, String room, String tutor, Map<String, String> subjectSymbols){
+    Lesson(String day, String lesson, String name, String room, String tutor, Map<String, String> subjectSymbols) {
         this.day = day;
         this.lesson = lesson;
         this.name = name;
@@ -23,9 +22,9 @@ public class Lesson {
         this.subjectSymbols = subjectSymbols;
     }
 
-    public String getName(){
-        if (subjectSymbols.containsKey(name.toUpperCase())){
-            return  subjectSymbols.get(name.toUpperCase());
+    public String getName() {
+        if (subjectSymbols.containsKey(name.toUpperCase())) {
+            return subjectSymbols.get(name.toUpperCase());
         }
         return name;
     }

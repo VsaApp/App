@@ -22,6 +22,6 @@
         android:numColumns="auto_fit"
         android:padding="10dp"
         android:stretchMode="spacingWidth"
-        android:verticalSpacing="5dp"/>
+        android:verticalSpacing="5dp" />
 
 </LinearLayout>

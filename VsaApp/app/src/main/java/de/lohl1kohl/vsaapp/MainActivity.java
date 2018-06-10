@@ -28,9 +28,9 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private boolean showSettings = false;
     private final Server server = new Server();
     private final MainActivity mainActivity = this;
+    private boolean showSettings = false;
 
     @SuppressLint("SetTextI18n")
     @SuppressWarnings("deprecation")
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
                 @Override
-                public void onConnectionFailed(){
+                public void onConnectionFailed() {
                     Log.e("VsaApp/Server", "No connection");
                     Toast.makeText(mainActivity, R.string.no_connection, Toast.LENGTH_LONG).show();
                 }
@@ -170,7 +170,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
                 @Override
-                public void onConnectionFailed() {feedback.setText(R.string.no_connection);}
+                public void onConnectionFailed() {
+                    feedback.setText(R.string.no_connection);
+                }
             };
             server.login(username.getText().toString(), password.getText().toString(), callback);
         });

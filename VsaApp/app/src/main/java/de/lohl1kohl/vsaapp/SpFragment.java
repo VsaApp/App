@@ -4,19 +4,16 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,12 +23,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 
 public class SpFragment extends Fragment {
@@ -50,7 +45,7 @@ public class SpFragment extends Fragment {
 
         // Create dictionary with all subject symbols...
         String[] subjects = getResources().getStringArray(R.array.nameOfSubjects);
-        for(String subject : subjects) {
+        for (String subject : subjects) {
             String[] pair = subject.split(":");
 
             subjectsSymbols.put(pair[0], pair[1]);
@@ -63,23 +58,23 @@ public class SpFragment extends Fragment {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
         String savedSP = sharedPref.getString("pref_sp", "-1");
 
-        if (!savedSP.equals("-1")){
+        if (!savedSP.equals("-1")) {
             fillSp(savedSP);
         }
 
         SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) spView.findViewById(R.id.spLayout);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-             @Override
-             public void onRefresh() {
-                 syncSp();
-             }
-         }
+                                             @Override
+                                             public void onRefresh() {
+                                                 syncSp();
+                                             }
+                                         }
         );
 
         return spView;
     }
 
-    private void showChooseSubjectDialog(ArrayList<Lesson> subjects){
+    private void showChooseSubjectDialog(ArrayList<Lesson> subjects) {
         final Dialog loginDialog = new Dialog(mainActivity);
         WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
         lWindowParams.copyFrom(Objects.requireNonNull(loginDialog.getWindow()).getAttributes());
@@ -117,7 +112,7 @@ public class SpFragment extends Fragment {
                 SharedPreferences.Editor editor = settings.edit();
 
                 // Edit settings...
-                if (choosedSubjects.equals("-1")){
+                if (choosedSubjects.equals("-1")) {
                     editor.putString("pref_choosedSubjects" + grade, selectedLesson.name);
                 } else {
                     editor.putString("pref_choosedSubjects" + grade, choosedSubjects + ":" + selectedLesson.name);
@@ -134,14 +129,14 @@ public class SpFragment extends Fragment {
         loginDialog.getWindow().setAttributes(lWindowParams);
     }
 
-    public void syncSp(){
+    public void syncSp() {
         // Get classname...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
         String classname = sharedPref.getString("pref_grade", "-1");
 
         // Check if a classname is set...
-        if (classname.equals("-1")){
-            Toast.makeText(mainActivity, R.string.no_class,Toast.LENGTH_LONG).show();
+        if (classname.equals("-1")) {
+            Toast.makeText(mainActivity, R.string.no_class, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -175,7 +170,7 @@ public class SpFragment extends Fragment {
 
     }
 
-    private void fillSp(String spData){
+    private void fillSp(String spData) {
         // Get current subjects...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
         String grade = sharedPref.getString("pref_grade", "");
@@ -183,35 +178,35 @@ public class SpFragment extends Fragment {
         Log.i("VsaApp/fillSp", grade);
         Collections.addAll(choosedSubjects, sharedPref.getString("pref_choosedSubjects" + grade, "").split(":"));
 
-        ArrayList<ArrayList<Lesson>> lessonsObjects  = new ArrayList<ArrayList<Lesson>>();
+        ArrayList<ArrayList<Lesson>> lessonsObjects = new ArrayList<ArrayList<Lesson>>();
 
-        try{
+        try {
             JSONArray jsonarray = new JSONArray(spData);
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject day = jsonarray.getJSONObject(i);
                 String name = day.getString("name");
                 JSONArray lessons = new JSONArray(day.getString("lessons"));
-                ArrayList<Lesson> dayObjects  = new ArrayList<Lesson>();
+                ArrayList<Lesson> dayObjects = new ArrayList<Lesson>();
 
                 for (int j = 0; j < lessons.length(); j++) {
                     JSONArray lesson = lessons.getJSONArray(j);
 
-                    ArrayList<Lesson> lessonObjects  = new ArrayList<Lesson>();
+                    ArrayList<Lesson> lessonObjects = new ArrayList<Lesson>();
 
-                    for (int x = 0; x < lesson.length(); x++){
+                    for (int x = 0; x < lesson.length(); x++) {
                         JSONObject subject = lesson.getJSONObject(x);
                         String subjectName = subject.getString("lesson");
                         String room = subject.getString("room");
                         String tutor = subject.getString("tutor");
-                        Lesson lessonObject = new Lesson(name, Integer.toString(j+1), subjectName, room, tutor, subjectsSymbols);
+                        Lesson lessonObject = new Lesson(name, Integer.toString(j + 1), subjectName, room, tutor, subjectsSymbols);
                         lessonObjects.add(lessonObject);
                     }
 
                     if (lessonObjects.size() > 0) {
                         if (lessonObjects.size() > 1) {
                             boolean olreadyChoosed = false;
-                            for (Lesson lesson1 : lessonObjects){
-                                if (choosedSubjects.contains(lesson1.name)){
+                            for (Lesson lesson1 : lessonObjects) {
+                                if (choosedSubjects.contains(lesson1.name)) {
                                     olreadyChoosed = true;
                                     dayObjects.add(lessonObjects.get(lessonObjects.indexOf(lesson1)));
                                 }
@@ -220,13 +215,13 @@ public class SpFragment extends Fragment {
                             if (!olreadyChoosed) {
                                 showChooseSubjectDialog(lessonObjects);
                             }
-                        }else dayObjects.add(lessonObjects.get(0));
+                        } else dayObjects.add(lessonObjects.get(0));
                     }
                 }
 
                 lessonsObjects.add(dayObjects);
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
             Log.i("VsaApp/SpFragment", "Cannont convert output to array!");
         }
 

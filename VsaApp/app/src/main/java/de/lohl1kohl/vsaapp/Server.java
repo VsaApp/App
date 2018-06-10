@@ -15,21 +15,34 @@ public class Server implements AsyncResponse {
     Server() {
     }
 
+    // utility function
+    private static String bytesToHexString(byte[] bytes) {
+        // http://stackoverflow.com/questions/332079
+        StringBuilder sb = new StringBuilder();
+        for (byte aByte : bytes) {
+            String hex = Integer.toHexString(0xFF & aByte);
+            if (hex.length() == 1) {
+                sb.append('0');
+            }
+            sb.append(hex);
+        }
+        return sb.toString();
+    }
+
     @Override
     public void processFinish(String output) {
-        if (output != null){
+        if (output != null) {
             connectedToServer = true;
         }
-        if (waitForMsg.equals("loginData")){
+        if (waitForMsg.equals("loginData")) {
             credentialFinish(output);
-        }
-        else if (waitForMsg.equals("spData")){
+        } else if (waitForMsg.equals("spData")) {
             spFinish(output);
         }
     }
 
-    private void spFinish(String output){
-        if (output == null){
+    private void spFinish(String output) {
+        if (output == null) {
             spCallback.onConnectionFailed();
         } else {
             spCallback.onReceived(output);
@@ -37,9 +50,9 @@ public class Server implements AsyncResponse {
     }
 
     private void credentialFinish(String output) {
-        if (output == null){
+        if (output == null) {
             credentialsCallback.onConnectionFailed();
-        }else if (output.equals("0")) {
+        } else if (output.equals("0")) {
             credentialsCallback.onSuccess();
         } else {
             credentialsCallback.onFailed();
@@ -73,7 +86,7 @@ public class Server implements AsyncResponse {
         asyncTask.execute(url);
     }
 
-    public void updateSp(String classname,spCallback c){
+    public void updateSp(String classname, spCallback c) {
         spCallback = c;
         waitForMsg = "spData";
 
@@ -89,28 +102,17 @@ public class Server implements AsyncResponse {
         asyncTask.execute(url);
     }
 
-    // utility function
-    private static String bytesToHexString(byte[] bytes) {
-        // http://stackoverflow.com/questions/332079
-        StringBuilder sb = new StringBuilder();
-        for (byte aByte : bytes) {
-            String hex = Integer.toHexString(0xFF & aByte);
-            if (hex.length() == 1) {
-                sb.append('0');
-            }
-            sb.append(hex);
-        }
-        return sb.toString();
-    }
-
     public interface spCallback {
         void onReceived(String output);
+
         void onConnectionFailed();
     }
 
     public interface credentialsCallback {
         void onSuccess();
+
         void onFailed();
+
         void onConnectionFailed();
     }
 }

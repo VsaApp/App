@@ -28,6 +28,35 @@ public class TeacherFragment extends Fragment {
     @SuppressLint("StaticFieldLeak")
     private static LinearLayout list;
 
+    public static void listTeachers(Activity activity, List<Teacher> teachers) {
+        for (Teacher teacher : teachers) {
+            @SuppressLint("InflateParams") View v = LayoutInflater.from(activity).inflate(R.layout.teacher_item, null);
+            ((TextView) v.findViewById(R.id.teacherLongName)).setText(teacher.lName);
+            ((TextView) v.findViewById(R.id.teacherShortName)).setText(teacher.sName);
+            TextView mail = v.findViewById(R.id.teacherMail);
+            mail.setText(Html.fromHtml("<a href=\"\">@</a>"));
+            mail.setOnClickListener(v1 -> {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + teacher.sName.toLowerCase() + "@viktoriaschule-aachen.de"));
+                activity.startActivity(Intent.createChooser(emailIntent, activity.getApplicationContext().getString(R.string.send_email)));
+            });
+            Objects.requireNonNull(activity).runOnUiThread(() -> list.addView(v));
+        }
+    }
+
+    public static List<Teacher> searchTeacher(String str) {
+        List<Teacher> teachers = new ArrayList<>();
+        for (int i = 0; i < shortNames.length; i++) {
+            String sName = shortNames[i];
+            String lName = longNames[i];
+            if (sName.toLowerCase().contains(str.toLowerCase())) {
+                teachers.add(new Teacher(sName, lName));
+            } else if (lName.toLowerCase().substring(5).contains(str.toLowerCase())) {
+                teachers.add(new Teacher(sName, lName));
+            }
+        }
+        return teachers;
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         shortNames = Objects.requireNonNull(getContext()).getResources().getStringArray(R.array.short_names);
@@ -60,35 +89,6 @@ public class TeacherFragment extends Fragment {
             listTeachers(getActivity(), teachers);
         }).start();
         return root;
-    }
-
-    public static void listTeachers(Activity activity, List<Teacher> teachers) {
-        for (Teacher teacher : teachers) {
-            @SuppressLint("InflateParams") View v = LayoutInflater.from(activity).inflate(R.layout.teacher_item, null);
-            ((TextView) v.findViewById(R.id.teacherLongName)).setText(teacher.lName);
-            ((TextView) v.findViewById(R.id.teacherShortName)).setText(teacher.sName);
-            TextView mail = v.findViewById(R.id.teacherMail);
-            mail.setText(Html.fromHtml("<a href=\"\">@</a>"));
-            mail.setOnClickListener(v1 -> {
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + teacher.sName.toLowerCase() + "@viktoriaschule-aachen.de"));
-                activity.startActivity(Intent.createChooser(emailIntent, activity.getApplicationContext().getString(R.string.send_email)));
-            });
-            Objects.requireNonNull(activity).runOnUiThread(() -> list.addView(v));
-        }
-    }
-
-    public static List<Teacher> searchTeacher(String str) {
-        List<Teacher> teachers = new ArrayList<>();
-        for (int i = 0; i < shortNames.length; i++) {
-            String sName = shortNames[i];
-            String lName = longNames[i];
-            if (sName.toLowerCase().contains(str.toLowerCase())) {
-                teachers.add(new Teacher(sName, lName));
-            } else if (lName.toLowerCase().substring(5).contains(str.toLowerCase())) {
-                teachers.add(new Teacher(sName, lName));
-            }
-        }
-        return teachers;
     }
 
     static class Teacher {
