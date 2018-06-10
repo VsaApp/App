@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class Lesson {
     public String day;
-    public String lesson;
+    public int unit;
     public String name;
     public String room;
     public String tutor;
@@ -12,9 +12,9 @@ public class Lesson {
     boolean changed = false;
     private Map<String, String> subjectSymbols;
 
-    Lesson(String day, String lesson, String name, String room, String tutor, Map<String, String> subjectSymbols) {
+    Lesson(String day, int unit, String name, String room, String tutor, Map<String, String> subjectSymbols) {
         this.day = day;
-        this.lesson = lesson;
+        this.unit = unit;
         this.name = name;
         this.room = room;
         this.tutor = tutor;

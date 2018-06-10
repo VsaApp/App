@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +28,7 @@ public class VpFragment extends Fragment {
     Activity mainActivity;
     View vpView;
     Server server = new Server();
-    private Map<String, String> subjectsSymbols = new HashMap<String, String>();
+    private Map<String, String> subjectsSymbols = new HashMap<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,7 +37,7 @@ public class VpFragment extends Fragment {
         mainActivity = getActivity();
 
         // Update vp...
-        synkVp();
+        syncVp();
 
         // Create dictionary with all subject symbols...
         String[] subjects = getResources().getStringArray(R.array.nameOfSubjects);
@@ -50,18 +48,13 @@ public class VpFragment extends Fragment {
         }
 
         // Add refresh listener...
-        SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) vpView.findViewById(R.id.vpListLayout);
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                synkVp();
-            }
-        });
+        SwipeRefreshLayout swipeLayout = vpView.findViewById(R.id.vpListLayout);
+        swipeLayout.setOnRefreshListener(this::syncVp);
 
         return vpView;
     }
 
-    private void synkVp(){
+    private void syncVp() {
         // Get classname...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
         String classname = sharedPref.getString("pref_grade", "-1");
@@ -72,27 +65,27 @@ public class VpFragment extends Fragment {
             return;
         }
 
-            // Create callback...
-            Server.vpCallback callback = new Server.vpCallback() {
-                @Override
-                public void onReceived(String output) {
-                    fillVp(output);
-                    Log.v("VsaApp/Server", "Success");
-                    SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) vpView.findViewById(R.id.vpListLayout);
-                    swipeLayout.setRefreshing(false);
+        // Create callback...
+        Server.vpCallback callback = new Server.vpCallback() {
+            @Override
+            public void onReceived(String output) {
+                fillVp(output);
+                Log.v("VsaApp/Server", "Success");
+                SwipeRefreshLayout swipeLayout = vpView.findViewById(R.id.vpListLayout);
+                swipeLayout.setRefreshing(false);
 
-                    // Save the current sp...
-                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString("pref_vp", output);
-                    editor.apply();
-                }
+                // Save the current sp...
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("pref_vp", output);
+                editor.apply();
+            }
 
             @Override
             public void onConnectionFailed() {
                 Log.e("VsaApp/Server", "Failed");
                 Toast.makeText(mainActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
-                SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) vpView.findViewById(R.id.vpListLayout);
+                SwipeRefreshLayout swipeLayout = vpView.findViewById(R.id.vpListLayout);
 
                 // Show saved sp...
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
@@ -110,8 +103,8 @@ public class VpFragment extends Fragment {
         server.updateVp(classname, callback, "today");
     }
 
-    private void fillVp(String output){
-        ArrayList<Lesson> lessons = new ArrayList<Lesson>();
+    private void fillVp(String output) {
+        ArrayList<Lesson> lessons = new ArrayList<>();
 
         try {
             String weekday = "";
@@ -119,11 +112,16 @@ public class VpFragment extends Fragment {
             String time = "";
 
             JSONArray jsonarray = new JSONArray(output);
+            if (jsonarray.length() == 0) {
+                TextView textView = vpView.findViewById(R.id.vpStand);
+                textView.setText(R.string.no_vp);
+                return;
+            }
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject entry = jsonarray.getJSONObject(i);
                 date = entry.getString("date");
                 weekday = entry.getString("weekday");
-                String unit = entry.getString("unit");
+                int unit = Integer.valueOf(entry.getString("unit"));
                 time = entry.getString("time");
                 JSONObject changed = new JSONObject(entry.getString("changed"));
 
@@ -138,14 +136,16 @@ public class VpFragment extends Fragment {
                 lessons.add(lesson);
             }
 
-            TextView textView = (TextView) vpView.findViewById(R.id.vpStand);
-            textView.setText(String.format("Für %s den %s (Von: %s)", weekday, date.substring(0,10), time));
+            TextView textView = vpView.findViewById(R.id.vpStand);
+            String[] parts = date.substring(0, 10).split("-");
+            date = parts[2] + "." + parts[1] + "." + parts[0];
+            textView.setText(String.format("Für %s den %s (Von: %s)", weekday, date, time));
 
         } catch (JSONException e) {
             Log.i("VsaApp/SpFragment", "Cannont convert output to array!");
         }
 
-        ListView gridview = (ListView) vpView.findViewById(R.id.vpList);
+        ListView gridview = vpView.findViewById(R.id.vpList);
         VpAdapter vpAdapter = new VpAdapter(mainActivity, lessons);
         gridview.setAdapter(vpAdapter);
     }

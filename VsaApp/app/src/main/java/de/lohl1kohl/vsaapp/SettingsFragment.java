@@ -22,10 +22,12 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals("pref_grade")) {
-            // Update subscription for grade
-            FirebaseHandler.unsubscribeAll(this.getActivity().getApplicationContext());
-            FirebaseHandler.subscribe(this.getActivity().getApplicationContext(), sharedPreferences.getString("pref_grade", "-1"));
-            ((TextView) getActivity().findViewById(R.id.header_name)).setText(getString(R.string.app_name) + " - " + sharedPreferences.getString("pref_grade", "-1"));
+            if (this.getActivity() != null) {
+                // Update subscription for grade
+                FirebaseHandler.unsubscribeAll(this.getActivity().getApplicationContext());
+                FirebaseHandler.subscribe(this.getActivity().getApplicationContext(), sharedPreferences.getString("pref_grade", "-1"));
+                ((TextView) getActivity().findViewById(R.id.header_name)).setText(getString(R.string.app_name) + " - " + sharedPreferences.getString("pref_grade", "-1"));
+            }
         }
     }
 }

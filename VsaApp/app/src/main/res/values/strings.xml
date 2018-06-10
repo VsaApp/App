@@ -79,6 +79,7 @@
     <string name="choose_grade">Klasse auswählen</string>
     <string name="search_teacher">Lehrer mit Namen oder Kürzel suchen</string>
     <string name="send_email">Email senden</string>
+    <string name="no_vp">Es gibt keine Vertretungsplan für dich</string>
 
     <string-array name="short_names">
         <item>ALV</item>
