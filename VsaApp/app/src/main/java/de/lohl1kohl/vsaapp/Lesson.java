@@ -5,11 +5,10 @@ import java.util.Map;
 public class Lesson {
     public String day;
     public String lesson;
-    public String lastStand;
     public String name;
     public String room;
     public String tutor;
-    public String changes;
+    public Lesson changes;
     boolean changed = false;
     private Map<String, String> subjectSymbols;
 

@@ -54,15 +54,7 @@ public class SpFragment extends Fragment {
         // Try to refresh the sp...
         syncSp();
 
-        // Show the saved sp...
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-        String savedSP = sharedPref.getString("pref_sp", "-1");
-
-        if (!savedSP.equals("-1")) {
-            fillSp(savedSP);
-        }
-
-        SwipeRefreshLayout swipeLayout = spView.findViewById(R.id.spLayout);
+        SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) spView.findViewById(R.id.spLayout);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                                              @Override
                                              public void onRefresh() {
@@ -160,7 +152,16 @@ public class SpFragment extends Fragment {
             public void onConnectionFailed() {
                 Log.e("VsaApp/Server", "Failed");
                 Toast.makeText(mainActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
-                SwipeRefreshLayout swipeLayout = spView.findViewById(R.id.spLayout);
+                SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) spView.findViewById(R.id.spLayout);
+
+                // Show saved sp...
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+                String savedSP = sharedPref.getString("pref_sp", "-1");
+
+                if (!savedSP.equals("-1")) {
+                    fillSp(savedSP);
+                }
+
                 swipeLayout.setRefreshing(false);
             }
         };

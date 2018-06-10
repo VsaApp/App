@@ -1,0 +1,70 @@
+package de.lohl1kohl.vsaapp;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+public class VpAdapter extends BaseAdapter {
+
+    private ArrayList<Lesson> listStorage = new ArrayList<Lesson>();
+    private LayoutInflater layoutinflater;
+
+    public VpAdapter(Context context, ArrayList<Lesson> lessonList) {
+        layoutinflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        listStorage = lessonList;
+    }
+
+    @Override
+    public int getCount() {
+        return listStorage.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        ViewHolder listViewHolder;
+        if (convertView == null) {
+            listViewHolder = new ViewHolder();
+            convertView = layoutinflater.inflate(R.layout.vp_line, parent, false);
+            listViewHolder.lessonInListView = (TextView) convertView.findViewById(R.id.vp_lesson);
+            //listViewHolder.normalInListView = (TextView) convertView.findViewById(R.id.vp_normal);
+            listViewHolder.changesInListView = (TextView) convertView.findViewById(R.id.vp_changes);
+            convertView.setTag(listViewHolder);
+        } else {
+            listViewHolder = (ViewHolder) convertView.getTag();
+        }
+        Lesson nLesson = listStorage.get(position);
+        Lesson cLesson = listStorage.get(position).changes;
+
+        String normal = String.format("%s im Raum %s", nLesson.getName(), nLesson.room);
+        String changes = String.format("%s %s", cLesson.tutor, cLesson.name);
+
+        listViewHolder.lessonInListView.setText(nLesson.lesson + ".");
+        //listViewHolder.normalInListView.setText(normal);
+        listViewHolder.changesInListView.setText(changes);
+
+        return convertView;
+    }
+
+    static class ViewHolder {
+        TextView lessonInListView;
+        //TextView normalInListView;
+        TextView changesInListView;
+    }
+
+}

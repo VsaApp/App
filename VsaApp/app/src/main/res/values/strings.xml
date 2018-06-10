@@ -67,6 +67,7 @@
     </string-array>
 
 
+    <string name="vpStand">Stand vom: </string>
     <string name="chooseSubjectInfo">Wählen Sie ihren Kurs aus:</string>
     <string name="preferenceCategory_appPref">Appeinstellungen</string>
     <string name="preferenceTitle_showVpInSp">Vertretungsplan im Stundenplan anzeigen</string>

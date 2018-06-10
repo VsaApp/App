@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 public class Server implements AsyncResponse {
     private credentialsCallback credentialsCallback;
     private spCallback spCallback;
+    private vpCallback vpCallback;
     private String waitForMsg;
     private boolean connectedToServer = false;
 
@@ -38,6 +39,16 @@ public class Server implements AsyncResponse {
             credentialFinish(output);
         } else if (waitForMsg.equals("spData")) {
             spFinish(output);
+        } else if (waitForMsg.equals("vpData")) {
+            vpFinish(output);
+        }
+    }
+
+    private void vpFinish(String output){
+        if (output == null) {
+            vpCallback.onConnectionFailed();
+        } else {
+            vpCallback.onReceived(output);
         }
     }
 
@@ -100,6 +111,28 @@ public class Server implements AsyncResponse {
 
         //execute the async task
         asyncTask.execute(url);
+    }
+
+    public void updateVp(String classname, vpCallback c, String day) {
+        vpCallback = c;
+        waitForMsg = "vpData";
+
+        String url = String.format("https://vsa.lohl1kohl.de/vp/%s/%s.json", day, classname);
+        Log.i("VsaApp/Server", "Open: " + url);
+
+        HttpGetRequest asyncTask = new HttpGetRequest();
+
+        //this to set delegate/listener back to this class
+        asyncTask.delegate = this;
+
+        //execute the async task
+        asyncTask.execute(url);
+    }
+
+    public interface vpCallback {
+        void onReceived(String output);
+
+        void onConnectionFailed();
     }
 
     public interface spCallback {
