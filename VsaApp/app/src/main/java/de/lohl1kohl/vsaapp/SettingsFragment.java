@@ -1,11 +1,16 @@
 package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.widget.TextView;
+
+import java.util.Objects;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -26,7 +31,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 // Update subscription for grade
                 FirebaseHandler.unsubscribeAll(this.getActivity().getApplicationContext());
                 FirebaseHandler.subscribe(this.getActivity().getApplicationContext(), sharedPreferences.getString("pref_grade", "-1"));
-                ((TextView) getActivity().findViewById(R.id.header_name)).setText(getString(R.string.app_name) + " - " + sharedPreferences.getString("pref_grade", "-1"));
+
+                Intent mStartActivity = new Intent(this.getActivity().getApplicationContext(), MainActivity.class);
+                int mPendingIntentId = 123456;
+                PendingIntent mPendingIntent = PendingIntent.getActivity(this.getActivity().getApplicationContext(), mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager mgr = (AlarmManager) this.getActivity().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                Objects.requireNonNull(mgr).set(AlarmManager.RTC, 0, mPendingIntent);
+                System.exit(0);
             }
         }
     }

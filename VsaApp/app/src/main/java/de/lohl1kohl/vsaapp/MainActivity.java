@@ -211,18 +211,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_vp:
                 fragment = new VpFragment();
                 title = getString(R.string.vp);
-
                 break;
             case R.id.nav_sp:
                 fragment = new SpFragment();
                 title = getString(R.string.sp);
                 break;
-
             case R.id.nav_teacher:
                 fragment = new TeacherFragment();
                 title = getString(R.string.teacher);
                 break;
-
             case R.id.nav_settings:
                 settingsFragment = new SettingsFragment();
         }

@@ -61,9 +61,7 @@ public class DayFragment extends Fragment {
                         ((TextView) cell.findViewById(R.id.sp_lesson)).setText(lesson.getName());
                         ((TextView) cell.findViewById(R.id.sp_tutor)).setText(lesson.tutor);
                         ((TextView) cell.findViewById(R.id.sp_room)).setText(lesson.room);
-                        Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
-                            ll.addView(cell);
-                        });
+                        Objects.requireNonNull(getActivity()).runOnUiThread(() -> ll.addView(cell));
                     }
                 }
             } catch (JSONException e) {

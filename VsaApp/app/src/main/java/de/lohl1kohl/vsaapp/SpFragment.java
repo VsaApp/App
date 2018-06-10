@@ -44,24 +44,9 @@ public class SpFragment extends Fragment {
             subjectsSymbols.put(pair[0], pair[1]);
         }
 
-        Log.i("firstOpen", String.valueOf(firstOpen));
-        if (firstOpen) {
-            // Try to refresh the sp...
-            syncSp();
-            firstOpen = false;
-        } else {
-            // Show saved sp...
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-            String savedSP = sharedPref.getString("pref_sp", "-1");
+        // Try to refresh the sp...
+        syncSp();
 
-            if (!savedSP.equals("-1")) {
-                try {
-                    fillSp(savedSP);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
         return spView;
     }
 
@@ -111,10 +96,22 @@ public class SpFragment extends Fragment {
                 }
             }
         };
+        if (firstOpen) {
+            // Send request to server...
+            server.updateSp(classname, callback);
+            firstOpen = false;
+        } else {
+            // Show saved sp...
+            String savedSP = sharedPref.getString("pref_sp", "-1");
 
-        // Send request to server...
-        server.updateSp(classname, callback);
-
+            if (!savedSP.equals("-1")) {
+                try {
+                    fillSp(savedSP);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void fillSp(String spData) throws JSONException {
@@ -124,7 +121,8 @@ public class SpFragment extends Fragment {
         Log.i("VsaApp/fillSp", grade);
         Log.i("spData", spData);
         ViewPager pager = spView.findViewById(R.id.sp_viewpager);
-        pager.setAdapter(new DayAdapter(getFragmentManager(), new JSONArray(spData), subjectsSymbols));
+        DayAdapter adapter = new DayAdapter(getFragmentManager(), new JSONArray(spData), subjectsSymbols);
+        pager.setAdapter(adapter);
         TabLayout tabLayout = spView.findViewById(R.id.sp_tabs);
         tabLayout.setupWithViewPager(pager);
     }
