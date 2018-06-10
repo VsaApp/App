@@ -233,14 +233,14 @@ public class VpFragment extends Fragment {
 
         if (tutorNormal.length() > 0) {
             if (shortNames.contains(lesson.tutor)) {
-                tutorNormal = longNames.get(shortNames.indexOf(lesson.tutor));
+                tutorNormal = longNames.get(shortNames.indexOf(tutorNormal));
                 tutorNormal = tutorNormal.replace("Herr", "Herrn");
             }
         }
 
         if (tutorNow.length() > 0) {
             if (shortNames.contains(lesson.tutor)) {
-                tutorNow = longNames.get(shortNames.indexOf(lesson.tutor));
+                tutorNow = longNames.get(shortNames.indexOf(tutorNow));
                 tutorNow = tutorNow.replace("Herr", "Herrn");
             }
         }
@@ -264,5 +264,4 @@ public class VpFragment extends Fragment {
         loginDialog.show();
         loginDialog.getWindow().setAttributes(lWindowParams);
     }
-
 }
