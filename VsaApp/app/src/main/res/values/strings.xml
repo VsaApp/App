@@ -65,7 +65,7 @@
 
 
     <string name="vpInfoDialogTitle">Vertretung</string>
-    <string name="vpStand">Aktualesiere…</string>
+    <string name="vpStand">Aktualisiere…</string>
     <string name="preferenceCategory_appPref">Appeinstellungen</string>
     <string name="preferenceTitle_showVpInSp">Vertretungsplan im Stundenplan anzeigen</string>
     <string name="preferenceSummary_showVpInSp">Im Stundenplan werden alle Änderungen vom Vertretungsplan angezeigt</string>
