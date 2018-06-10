@@ -31,6 +31,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static boolean firstOpen = true;
     private final Server server = new Server();
     private final MainActivity mainActivity = this;
     private boolean showSettings = false;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         // Show the vpFragment as the start fragment...
         displayView(R.id.nav_sp);

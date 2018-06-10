@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/spLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:visibility="visible">
 
-    <GridView
-        android:id="@+id/spGrid"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/sp_tabs"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:columnWidth="65dp"
-        android:gravity="center"
-        android:horizontalSpacing="5dp"
-        android:numColumns="5"
-        android:padding="10dp"
-        android:stretchMode="spacingWidth"
-        android:verticalSpacing="5dp" />
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/colorAccent"
+        app:tabTextColor="#FFF" />
 
-</android.support.v4.widget.SwipeRefreshLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/sp_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
