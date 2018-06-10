@@ -54,7 +54,7 @@ public class SpFragment extends Fragment {
         // Try to refresh the sp...
         syncSp();
 
-        SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) spView.findViewById(R.id.spLayout);
+        SwipeRefreshLayout swipeLayout = spView.findViewById(R.id.spLayout);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                                              @Override
                                              public void onRefresh() {
@@ -86,7 +86,7 @@ public class SpFragment extends Fragment {
         days.put("Mi", "Mittwoch");
         days.put("Do", "Donnerstag");
         days.put("Fr", "Freitag");
-        textView_subjectInfo.setText("Welches Fach haben sie " + days.get(subjects.get(0).day) + " in der " + subjects.get(0).lesson + ". Stunde?");
+        textView_subjectInfo.setText("Welches Fach haben sie " + days.get(subjects.get(0).day) + " in der " + subjects.get(0).unit + ". Stunde?");
 
         chooseSubjectGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -152,7 +152,7 @@ public class SpFragment extends Fragment {
             public void onConnectionFailed() {
                 Log.e("VsaApp/Server", "Failed");
                 Toast.makeText(mainActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
-                SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) spView.findViewById(R.id.spLayout);
+                SwipeRefreshLayout swipeLayout = spView.findViewById(R.id.spLayout);
 
                 // Show saved sp...
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
@@ -199,7 +199,7 @@ public class SpFragment extends Fragment {
                         String subjectName = subject.getString("lesson");
                         String room = subject.getString("room");
                         String tutor = subject.getString("tutor");
-                        Lesson lessonObject = new Lesson(name, Integer.toString(j + 1), subjectName, room, tutor, subjectsSymbols);
+                        Lesson lessonObject = new Lesson(name, j + 1, subjectName, room, tutor, subjectsSymbols);
                         lessonObjects.add(lessonObject);
                     }
 

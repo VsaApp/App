@@ -48,7 +48,7 @@
         <item>CH:Chemie</item>
         <item>PH:Physik</item>
         <item>DB:NW</item>
-        <item>DP:Powi</item>
+        <item>DP:PoWi</item>
         <item>IF:Info</item>
         <item>S8:Spanisch</item>
         <item>MU:Musik</item>
@@ -64,10 +64,15 @@
         <item>BI:Bio</item>
         <item>UC:U. Chor</item>
         <item>UC:U. Chor</item>
+        <item>EK:Erdkunde</item>
+        <item>KU:Kunst</item>
+        <item>SW:SoWi</item>
+        <item>PL:Philosophie</item>
     </string-array>
 
 
-    <string name="vpStand">Stand vom: </string>
+    <string name="vpInfoDialogTitle">Vertretung</string>
+    <string name="vpStand">Aktualesiere...</string>
     <string name="chooseSubjectInfo">Wählen Sie ihren Kurs aus:</string>
     <string name="preferenceCategory_appPref">Appeinstellungen</string>
     <string name="preferenceTitle_showVpInSp">Vertretungsplan im Stundenplan anzeigen</string>

@@ -1,6 +1,8 @@
 package de.lohl1kohl.vsaapp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -11,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,12 +24,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class VpFragment extends Fragment {
     Activity mainActivity;
+    VpAdapter vpAdapter;
     View vpView;
     Server server = new Server();
     private Map<String, String> subjectsSymbols = new HashMap<>();
@@ -38,6 +46,18 @@ public class VpFragment extends Fragment {
 
         // Update vp...
         syncVp();
+
+        // Add click listener...
+        ListView listView = vpView.findViewById(R.id.vpList);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Lesson clickedLesson = vpAdapter.getLesson(position);
+                showVpInfoDialog(clickedLesson);
+            }
+        });
+
 
         // Create dictionary with all subject symbols...
         String[] subjects = getResources().getStringArray(R.array.nameOfSubjects);
@@ -89,10 +109,10 @@ public class VpFragment extends Fragment {
 
                 // Show saved sp...
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-                String savedSP = sharedPref.getString("pref_sp", "-1");
+                String savedVP = sharedPref.getString("pref_vp", "-1");
 
-                if (!savedSP.equals("-1")) {
-                    fillVp(savedSP);
+                if (!savedVP.equals("-1")) {
+                    fillVp(savedVP);
                 }
 
                 swipeLayout.setRefreshing(false);
@@ -101,6 +121,44 @@ public class VpFragment extends Fragment {
 
         // Send request to server...
         server.updateVp(classname, callback, "today");
+    }
+
+    private Lesson getLesson(String weekday, int unit, String normalLesson) {
+
+        normalLesson = normalLesson.split(" ")[0].toLowerCase();
+
+        // Get saved sp...
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+        String savedSP = sharedPref.getString("pref_sp", "-1");
+
+        try {
+            JSONArray jsonarray = new JSONArray(savedSP);
+            for (int i = 0; i < jsonarray.length(); i++) {
+                JSONObject day = jsonarray.getJSONObject(i);
+
+                if (day.getString("name").equals(weekday)) {
+                    JSONArray lessons = new JSONArray(day.getString("lessons"));
+                    JSONArray lesson = lessons.getJSONArray(unit - 1);
+
+                    ArrayList<Lesson> lessonObjects = new ArrayList<Lesson>();
+
+                    for (int x = 0; x < lesson.length(); x++) {
+                        JSONObject subject = lesson.getJSONObject(x);
+                        String name = subject.getString("lesson");
+                        String room = subject.getString("room");
+                        String tutor = subject.getString("tutor");
+                        if (name.toLowerCase().equals(normalLesson)) {
+                            return new Lesson(weekday, unit, name, room, tutor, subjectsSymbols);
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.i("VsaApp/SpFragment", "Cannont convert output to array!");
+        }
+
+        Log.e("VsaApp/VpFragment", "There is no lesson with the given params!");
+        return new Lesson(weekday, unit, normalLesson, "?", "?", subjectsSymbols);
     }
 
     private void fillVp(String output) {
@@ -123,14 +181,18 @@ public class VpFragment extends Fragment {
                 weekday = entry.getString("weekday");
                 int unit = Integer.valueOf(entry.getString("unit"));
                 time = entry.getString("time");
+                String normalLesson = entry.getString("lesson");
                 JSONObject changed = new JSONObject(entry.getString("changed"));
 
                 String info = changed.getString("info");
                 String tutor = changed.getString("tutor");
                 String room = changed.getString("room");
 
+                if (subjectsSymbols.containsKey(info.split(" ")[0].toUpperCase())) {
+                    info = info.replace(info.split(" ")[0], subjectsSymbols.get(info.split(" ")[0].toUpperCase()));
+                }
 
-                Lesson lesson = new Lesson(date, unit, "Deutsch", "222", "Egl", subjectsSymbols);
+                Lesson lesson = getLesson(weekday, unit, normalLesson);
                 lesson.changes = new Lesson(date, unit, info, room, tutor, subjectsSymbols);
 
                 lessons.add(lesson);
@@ -146,7 +208,61 @@ public class VpFragment extends Fragment {
         }
 
         ListView gridview = vpView.findViewById(R.id.vpList);
-        VpAdapter vpAdapter = new VpAdapter(mainActivity, lessons);
+        vpAdapter = new VpAdapter(mainActivity, lessons);
         gridview.setAdapter(vpAdapter);
     }
+
+    @SuppressLint("SetTextI18n")
+    private void showVpInfoDialog(Lesson lesson) {
+        final Dialog loginDialog = new Dialog(mainActivity);
+        WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
+        lWindowParams.copyFrom(Objects.requireNonNull(loginDialog.getWindow()).getAttributes());
+        lWindowParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        loginDialog.setContentView(R.layout.dialog_vp_info);
+        loginDialog.setCancelable(true);
+        loginDialog.setTitle(R.string.vpInfoDialogTitle);
+
+        String tutorNormal = lesson.tutor;
+        String tutorNow = lesson.changes.tutor;
+
+        // Get long teacher name for normal lesson...
+        List<String> shortNames = new ArrayList<String>(Arrays.asList(Objects.requireNonNull(getContext()).getResources().getStringArray(R.array.short_names)));
+        List<String> longNames = new ArrayList<String>(Arrays.asList(getContext().getResources().getStringArray(R.array.long_names)));
+
+        if (tutorNormal.length() > 0) {
+            if (shortNames.contains(lesson.tutor)) {
+                tutorNormal = longNames.get(shortNames.indexOf(lesson.tutor));
+                tutorNormal = tutorNormal.replace("Herr", "Herrn");
+            }
+        }
+
+        if (tutorNow.length() > 0) {
+            if (shortNames.contains(lesson.tutor)) {
+                tutorNow = longNames.get(shortNames.indexOf(lesson.tutor));
+                tutorNow = tutorNow.replace("Herr", "Herrn");
+            }
+        }
+
+        // Get all TextViews...
+        final TextView tV_units = loginDialog.findViewById(R.id.lbl_unit);
+        final TextView tV_normal = loginDialog.findViewById(R.id.lbl_normal);
+        final TextView tV_changed = loginDialog.findViewById(R.id.lbl_changed);
+
+
+        tV_units.setText(Integer.toString(lesson.unit) + ". Stunde");
+        tV_normal.setText(String.format("Mit %s %s in Raum %s", tutorNormal, lesson.getName(), lesson.room));
+
+        String text = "";
+        if (lesson.changes.tutor.length() > 0)
+            text = String.format("Jetzt mit %s: %s", tutorNow, lesson.changes.name);
+        else text = String.format("Jetzt %s", lesson.changes.getName());
+        if (lesson.changes.room.length() > 0) text += "im Raum " + lesson.changes.room;
+        tV_changed.setText(text);
+
+        loginDialog.show();
+        loginDialog.getWindow().setAttributes(lWindowParams);
+    }
+
 }

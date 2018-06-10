@@ -9,7 +9,7 @@
         android:id="@+id/vpStand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/vpStand"/>
+        android:text="@string/vpStand" />
 
     <include layout="@layout/vp_list_layout" />
 

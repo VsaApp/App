@@ -44,7 +44,7 @@ public class Server implements AsyncResponse {
         }
     }
 
-    private void vpFinish(String output){
+    private void vpFinish(String output) {
         if (output == null) {
             vpCallback.onConnectionFailed();
         } else {

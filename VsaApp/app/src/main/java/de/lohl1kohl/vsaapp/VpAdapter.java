@@ -30,6 +30,10 @@ public class VpAdapter extends BaseAdapter {
         return position;
     }
 
+    public Lesson getLesson(int position) {
+        return listStorage.get(position);
+    }
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -44,7 +48,7 @@ public class VpAdapter extends BaseAdapter {
             listViewHolder = new ViewHolder();
             convertView = layoutinflater.inflate(R.layout.vp_line, parent, false);
             listViewHolder.lessonInListView = convertView.findViewById(R.id.vp_lesson);
-            //listViewHolder.normalInListView = (TextView) convertView.findViewById(R.id.vp_normal);
+            listViewHolder.normalInListView = convertView.findViewById(R.id.vp_normal);
             listViewHolder.changesInListView = convertView.findViewById(R.id.vp_changes);
             convertView.setTag(listViewHolder);
         } else {
@@ -54,10 +58,13 @@ public class VpAdapter extends BaseAdapter {
         Lesson cLesson = listStorage.get(position).changes;
 
         String normal = String.format("%s im Raum %s", nLesson.getName(), nLesson.room);
-        String changes = String.format("%s %s", cLesson.tutor, cLesson.name);
+        String changes = String.format("%s", cLesson.name);
+
+        if (cLesson.room.length() > 0)
+            changes = String.format("%s (%s)", cLesson.name, cLesson.room);
 
         listViewHolder.lessonInListView.setText(nLesson.unit + ".");
-        //listViewHolder.normalInListView.setText(normal);
+        listViewHolder.normalInListView.setText(normal);
         listViewHolder.changesInListView.setText(changes);
 
         return convertView;
@@ -65,7 +72,7 @@ public class VpAdapter extends BaseAdapter {
 
     static class ViewHolder {
         TextView lessonInListView;
-        //TextView normalInListView;
+        TextView normalInListView;
         TextView changesInListView;
     }
 
