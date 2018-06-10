@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,12 +49,9 @@ public class VpFragment extends Fragment {
         // Add click listener...
         ListView listView = vpView.findViewById(R.id.vpList);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Lesson clickedLesson = vpAdapter.getLesson(position);
-                showVpInfoDialog(clickedLesson);
-            }
+        listView.setOnItemClickListener((adapterView, view, position, l) -> {
+            Lesson clickedLesson = vpAdapter.getLesson(position);
+            showVpInfoDialog(clickedLesson);
         });
 
 
@@ -140,8 +136,6 @@ public class VpFragment extends Fragment {
                     JSONArray lessons = new JSONArray(day.getString("lessons"));
                     JSONArray lesson = lessons.getJSONArray(unit - 1);
 
-                    ArrayList<Lesson> lessonObjects = new ArrayList<Lesson>();
-
                     for (int x = 0; x < lesson.length(); x++) {
                         JSONObject subject = lesson.getJSONObject(x);
                         String name = subject.getString("lesson");
@@ -154,7 +148,7 @@ public class VpFragment extends Fragment {
                 }
             }
         } catch (JSONException e) {
-            Log.i("VsaApp/SpFragment", "Cannont convert output to array!");
+            Log.i("VsaApp/SpFragment", "Cannot convert output to array!");
         }
 
         Log.e("VsaApp/VpFragment", "There is no lesson with the given params!");
@@ -228,8 +222,8 @@ public class VpFragment extends Fragment {
         String tutorNow = lesson.changes.tutor;
 
         // Get long teacher name for normal lesson...
-        List<String> shortNames = new ArrayList<String>(Arrays.asList(Objects.requireNonNull(getContext()).getResources().getStringArray(R.array.short_names)));
-        List<String> longNames = new ArrayList<String>(Arrays.asList(getContext().getResources().getStringArray(R.array.long_names)));
+        List<String> shortNames = new ArrayList<>(Arrays.asList(Objects.requireNonNull(getContext()).getResources().getStringArray(R.array.short_names)));
+        List<String> longNames = new ArrayList<>(Arrays.asList(getContext().getResources().getStringArray(R.array.long_names)));
 
         if (tutorNormal.length() > 0) {
             if (shortNames.contains(lesson.tutor)) {
@@ -254,11 +248,11 @@ public class VpFragment extends Fragment {
         tV_units.setText(Integer.toString(lesson.unit) + ". Stunde");
         tV_normal.setText(String.format("Mit %s %s in Raum %s", tutorNormal, lesson.getName(), lesson.room));
 
-        String text = "";
+        String text;
         if (lesson.changes.tutor.length() > 0)
             text = String.format("Jetzt mit %s: %s", tutorNow, lesson.changes.name);
         else text = String.format("Jetzt %s", lesson.changes.getName());
-        if (lesson.changes.room.length() > 0) text += "im Raum " + lesson.changes.room;
+        if (lesson.changes.room.length() > 0) text += " im Raum " + lesson.changes.room;
         tV_changed.setText(text);
 
         loginDialog.show();
