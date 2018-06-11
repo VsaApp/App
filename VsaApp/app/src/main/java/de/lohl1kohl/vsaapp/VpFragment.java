@@ -196,7 +196,7 @@ public class VpFragment extends Fragment {
             textView.setText(String.format("Für %s den %s (Von: %s)", weekday, date, time));
 
         } catch (JSONException e) {
-            Log.i("VsaApp/SpFragment", "Cannont convert output to array!");
+            Log.i("VsaApp/SpFragment", "Cannot convert output to array!");
         }
 
         ListView gridview = vpView.findViewById(R.id.vpList);

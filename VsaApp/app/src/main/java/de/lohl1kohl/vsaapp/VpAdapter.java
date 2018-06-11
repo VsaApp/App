@@ -9,6 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class VpAdapter extends BaseAdapter {
 
@@ -54,14 +57,25 @@ public class VpAdapter extends BaseAdapter {
         } else {
             listViewHolder = (ViewHolder) convertView.getTag();
         }
-        Lesson nLesson = listStorage.get(position);
-        Lesson cLesson = listStorage.get(position).changes;
+        Lesson nLesson = getLesson(position);
+        Lesson cLesson = getLesson(position).changes;
+
+        String tutorNow = cLesson.tutor;
 
         String normal = String.format("%s im Raum %s", nLesson.getName(), nLesson.room);
-        String changes = String.format("%s", cLesson.name);
+        List<String> shortNames = new ArrayList<>(Arrays.asList(Objects.requireNonNull(convertView.getResources().getStringArray(R.array.short_names))));
+        List<String> longNames = new ArrayList<>(Arrays.asList(convertView.getResources().getStringArray(R.array.long_names)));
+
+        if (tutorNow.length() > 0) {
+            if (shortNames.contains(tutorNow)) {
+                tutorNow = longNames.get(shortNames.indexOf(tutorNow));
+                tutorNow = tutorNow.replace("Herr", "Herrn");
+            }
+        }
+        String changes = String.format("%s %s", tutorNow, cLesson.name);
 
         if (cLesson.room.length() > 0)
-            changes = String.format("%s (%s)", cLesson.name, cLesson.room);
+            changes = String.format("%s %s (%s)", tutorNow, cLesson.name, cLesson.room);
 
         listViewHolder.lessonInListView.setText(nLesson.unit + ".");
         listViewHolder.normalInListView.setText(normal);
