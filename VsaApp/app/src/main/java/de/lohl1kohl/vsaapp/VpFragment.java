@@ -193,8 +193,6 @@ public class VpFragment extends Fragment {
             }
 
             TextView textView = vpView.findViewById(R.id.vpStand);
-            String[] parts = date.substring(0, 10).split("-");
-            date = parts[2] + "." + parts[1] + "." + parts[0];
             textView.setText(String.format("Für %s den %s (Von: %s)", weekday, date, time));
 
         } catch (JSONException e) {
