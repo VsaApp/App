@@ -29,10 +29,12 @@ import android.widget.Toast;
 
 import java.util.Objects;
 
+import de.lohl1kohl.vsaapp.server.Callbacks;
+import de.lohl1kohl.vsaapp.server.Login;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static boolean firstOpen = true;
-    private final Server server = new Server();
     private final MainActivity mainActivity = this;
     private boolean showSettings = false;
 
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (username.equals("-1") || password.equals("-1")) {
             showLoginScreen();
         } else {
-            Server.credentialsCallback callback = new Server.credentialsCallback() {
+            Callbacks.credentialsCallback callback = new Callbacks.credentialsCallback() {
                 @Override
                 public void onSuccess() {
                     Log.i("VsaApp/Server", "Password success");
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(mainActivity, R.string.no_connection, Toast.LENGTH_LONG).show();
                 }
             };
-            server.login(username, password, callback);
+            new Login().login(username, password, callback);
         }
         Intent i = getIntent();
         if (i.getStringExtra("page") != null) {
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final Button btn_login = loginDialog.findViewById(R.id.btn_loginOk);
         final Button btn_grade = loginDialog.findViewById(R.id.btn_loginGrade);
         final EditText username = loginDialog.findViewById(R.id.login_username);
-        final EditText password = loginDialog.findViewById(R.id.login_passwort);
+        final EditText password = loginDialog.findViewById(R.id.login_password);
         final TextView feedback = loginDialog.findViewById(R.id.lbl_loginFeedback);
 
         String[] grades = getResources().getStringArray(R.array.nameOfGrades);
@@ -158,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         btn_login.setOnClickListener(view -> {
-            Server.credentialsCallback callback = new Server.credentialsCallback() {
+            Callbacks.credentialsCallback callback = new Callbacks.credentialsCallback() {
                 @Override
                 public void onSuccess() {
                     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mainActivity);
@@ -183,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     feedback.setText(R.string.no_connection);
                 }
             };
-            server.login(username.getText().toString(), password.getText().toString(), callback);
+            new Login().login(username.getText().toString(), password.getText().toString(), callback);
         });
         loginDialog.show();
         loginDialog.getWindow().setAttributes(lWindowParams);

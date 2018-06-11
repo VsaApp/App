@@ -3,19 +3,19 @@ package de.lohl1kohl.vsaapp;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,13 +30,75 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import de.lohl1kohl.vsaapp.server.Callbacks;
+import de.lohl1kohl.vsaapp.server.vp.Today;
+import de.lohl1kohl.vsaapp.server.vp.Tomorrow;
+
 
 public class VpFragment extends Fragment {
     Activity mainActivity;
-    VpAdapter vpAdapter;
     View vpView;
-    Server server = new Server();
     private Map<String, String> subjectsSymbols = new HashMap<>();
+    private List<Lesson> lessonsToday = new ArrayList<>();
+    private List<Lesson> lessonsTomorrow = new ArrayList<>();
+    private String weekdayToday, dateToday, timeToday;
+    private String weekdayTomorrow, dateTomorrow, timeTomorrow;
+    private int lessonsGot = 0;
+
+    @SuppressLint("SetTextI18n")
+    static void showVpInfoDialog(Context context, Lesson lesson) {
+        final Dialog loginDialog = new Dialog(context);
+        WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
+        lWindowParams.copyFrom(Objects.requireNonNull(loginDialog.getWindow()).getAttributes());
+        lWindowParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        loginDialog.setContentView(R.layout.dialog_vp_info);
+        loginDialog.setCancelable(true);
+        loginDialog.setTitle(R.string.vpInfoDialogTitle);
+
+        String tutorNormal = lesson.tutor;
+        String tutorNow = lesson.changes.tutor;
+
+        // Get long teacher name for normal lesson...
+        List<String> shortNames = new ArrayList<>(Arrays.asList(context.getResources().getStringArray(R.array.short_names)));
+        List<String> longNames = new ArrayList<>(Arrays.asList(context.getResources().getStringArray(R.array.long_names)));
+
+        if (tutorNormal.length() > 0) {
+            if (shortNames.contains(lesson.tutor)) {
+                tutorNormal = longNames.get(shortNames.indexOf(tutorNormal));
+                tutorNormal = tutorNormal.replace(context.getString(R.string.mister), context.getString(R.string.mister_gen));
+            }
+        }
+
+        if (tutorNow.length() > 0) {
+            if (shortNames.contains(lesson.tutor)) {
+                tutorNow = longNames.get(shortNames.indexOf(tutorNow));
+                tutorNow = tutorNow.replace(context.getString(R.string.mister), context.getString(R.string.mister_gen));
+            }
+        }
+
+        // Get all TextViews...
+        final TextView tV_units = loginDialog.findViewById(R.id.lbl_unit);
+        final TextView tV_normal = loginDialog.findViewById(R.id.lbl_normal);
+        final TextView tV_changed = loginDialog.findViewById(R.id.lbl_changed);
+
+
+        tV_units.setText(Integer.toString(lesson.unit) + context.getString(R.string.dot_unit));
+        tV_normal.setText(String.format(context.getString(R.string.with_s_s_in_room_s), tutorNormal, lesson.getName(), lesson.room));
+        tV_normal.setPaintFlags(tV_normal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        String text;
+        if (lesson.changes.tutor.length() > 0)
+            text = String.format(context.getString(R.string.now_with_s_s), tutorNow, lesson.changes.name);
+        else text = String.format(context.getString(R.string.now_s), lesson.changes.getName());
+        if (lesson.changes.room.length() > 0)
+            text += context.getString(R.string.in_room) + lesson.changes.room;
+        tV_changed.setText(text);
+
+        loginDialog.show();
+        loginDialog.getWindow().setAttributes(lWindowParams);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,16 +107,8 @@ public class VpFragment extends Fragment {
         mainActivity = getActivity();
 
         // Update vp...
-        syncVp();
-
-        // Add click listener...
-        ListView listView = vpView.findViewById(R.id.vpList);
-
-        listView.setOnItemClickListener((adapterView, view, position, l) -> {
-            Lesson clickedLesson = vpAdapter.getLesson(position);
-            showVpInfoDialog(clickedLesson);
-        });
-
+        syncVp(true);
+        syncVp(false);
 
         // Create dictionary with all subject symbols...
         String[] subjects = getResources().getStringArray(R.array.nameOfSubjects);
@@ -64,37 +118,31 @@ public class VpFragment extends Fragment {
             subjectsSymbols.put(pair[0], pair[1]);
         }
 
-        // Add refresh listener...
-        SwipeRefreshLayout swipeLayout = vpView.findViewById(R.id.vpListLayout);
-        swipeLayout.setOnRefreshListener(this::syncVp);
-
         return vpView;
     }
 
-    private void syncVp() {
-        // Get classname...
+    private void syncVp(boolean today) {
+        // Get gradename...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-        String classname = sharedPref.getString("pref_grade", "-1");
+        String gradename = sharedPref.getString("pref_grade", "-1");
 
-        // Check if a classname is set...
-        if (classname.equals("-1")) {
+        // Check if a gradename is set...
+        if (gradename.equals("-1")) {
             Toast.makeText(mainActivity, R.string.no_class, Toast.LENGTH_LONG).show();
             return;
         }
 
         // Create callback...
-        Server.vpCallback callback = new Server.vpCallback() {
+        Callbacks.vpCallback callback = new Callbacks.vpCallback() {
             @Override
             public void onReceived(String output) {
-                fillVp(output);
+                fillVp(output, today);
                 Log.v("VsaApp/Server", "Success");
-                SwipeRefreshLayout swipeLayout = vpView.findViewById(R.id.vpListLayout);
-                swipeLayout.setRefreshing(false);
 
                 // Save the current sp...
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mainActivity);
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putString("pref_vp", output);
+                editor.putString("pref_vp_" + (today ? "today" : "tomorrow"), output);
                 editor.apply();
             }
 
@@ -102,22 +150,23 @@ public class VpFragment extends Fragment {
             public void onConnectionFailed() {
                 Log.e("VsaApp/Server", "Failed");
                 Toast.makeText(mainActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
-                SwipeRefreshLayout swipeLayout = vpView.findViewById(R.id.vpListLayout);
 
                 // Show saved sp...
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-                String savedVP = sharedPref.getString("pref_vp", "-1");
+                String savedVP = sharedPref.getString("pref_vp_" + (today ? "today" : "tomorrow"), "-1");
 
                 if (!savedVP.equals("-1")) {
-                    fillVp(savedVP);
+                    fillVp(savedVP, today);
                 }
-
-                swipeLayout.setRefreshing(false);
             }
         };
 
         // Send request to server...
-        server.updateVp(classname, callback, "today");
+        if (today) {
+            new Today().updateVp(gradename, callback);
+        } else {
+            new Tomorrow().updateVp(gradename, callback);
+        }
     }
 
     private Lesson getLesson(String weekday, int unit, String normalLesson) {
@@ -156,18 +205,17 @@ public class VpFragment extends Fragment {
         return new Lesson(weekday, unit, normalLesson, "?", "?", subjectsSymbols);
     }
 
-    private void fillVp(String output) {
-        ArrayList<Lesson> lessons = new ArrayList<>();
+    private void fillVp(String output, boolean today) {
+        List<Lesson> lessons = new ArrayList<>();
+
+        String weekday = null;
+        String date = null;
+        String time = null;
 
         try {
-            String weekday = "";
-            String date = "";
-            String time = "";
-
             JSONArray jsonarray = new JSONArray(output);
+            lessonsGot++;
             if (jsonarray.length() == 0) {
-                TextView textView = vpView.findViewById(R.id.vpStand);
-                textView.setText(R.string.no_vp);
                 return;
             }
             for (int i = 0; i < jsonarray.length(); i++) {
@@ -193,70 +241,29 @@ public class VpFragment extends Fragment {
                 lessons.add(lesson);
             }
 
-            TextView textView = vpView.findViewById(R.id.vpStand);
-            textView.setText(String.format(getString(R.string.for_s_the_s_from_s), weekday, date, time));
-
         } catch (JSONException e) {
             Log.i("VsaApp/SpFragment", "Cannot convert output to array!");
         }
 
-        ListView gridview = vpView.findViewById(R.id.vpList);
-        vpAdapter = new VpAdapter(mainActivity, lessons);
-        gridview.setAdapter(vpAdapter);
-    }
-
-    @SuppressLint("SetTextI18n")
-    private void showVpInfoDialog(Lesson lesson) {
-        final Dialog loginDialog = new Dialog(mainActivity);
-        WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
-        lWindowParams.copyFrom(Objects.requireNonNull(loginDialog.getWindow()).getAttributes());
-        lWindowParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        lWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-        loginDialog.setContentView(R.layout.dialog_vp_info);
-        loginDialog.setCancelable(true);
-        loginDialog.setTitle(R.string.vpInfoDialogTitle);
-
-        String tutorNormal = lesson.tutor;
-        String tutorNow = lesson.changes.tutor;
-
-        // Get long teacher name for normal lesson...
-        List<String> shortNames = new ArrayList<>(Arrays.asList(Objects.requireNonNull(getContext()).getResources().getStringArray(R.array.short_names)));
-        List<String> longNames = new ArrayList<>(Arrays.asList(getContext().getResources().getStringArray(R.array.long_names)));
-
-        if (tutorNormal.length() > 0) {
-            if (shortNames.contains(lesson.tutor)) {
-                tutorNormal = longNames.get(shortNames.indexOf(tutorNormal));
-                tutorNormal = tutorNormal.replace(getString(R.string.mister), getString(R.string.mister_gen));
-            }
+        if (today) {
+            lessonsToday = lessons;
+            weekdayToday = weekday;
+            dateToday = date;
+            timeToday = time;
+        } else {
+            lessonsTomorrow = lessons;
+            weekdayTomorrow = weekday;
+            dateTomorrow = date;
+            timeTomorrow = time;
         }
-
-        if (tutorNow.length() > 0) {
-            if (shortNames.contains(lesson.tutor)) {
-                tutorNow = longNames.get(shortNames.indexOf(tutorNow));
-                tutorNow = tutorNow.replace(getString(R.string.mister), getString(R.string.mister_gen));
-            }
+        if (lessonsGot == 2) {
+            ViewPager pager = vpView.findViewById(R.id.vp_viewpager);
+            VpDayAdapter adapter = new VpDayAdapter(getFragmentManager());
+            adapter.setDataToday(lessonsToday);
+            adapter.setDataTomorrow(lessonsTomorrow);
+            adapter.setInfoToday(weekdayToday, dateToday, timeToday);
+            adapter.setInfoTomorrow(weekdayTomorrow, dateTomorrow, timeTomorrow);
+            pager.setAdapter(adapter);
         }
-
-        // Get all TextViews...
-        final TextView tV_units = loginDialog.findViewById(R.id.lbl_unit);
-        final TextView tV_normal = loginDialog.findViewById(R.id.lbl_normal);
-        final TextView tV_changed = loginDialog.findViewById(R.id.lbl_changed);
-
-
-        tV_units.setText(Integer.toString(lesson.unit) + getString(R.string.dot_unit));
-        tV_normal.setText(String.format(getString(R.string.with_s_s_in_room_s), tutorNormal, lesson.getName(), lesson.room));
-        tV_normal.setPaintFlags(tV_normal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
-        String text;
-        if (lesson.changes.tutor.length() > 0)
-            text = String.format(getString(R.string.now_with_s_s), tutorNow, lesson.changes.name);
-        else text = String.format(getString(R.string.now_s), lesson.changes.getName());
-        if (lesson.changes.room.length() > 0)
-            text += getString(R.string.in_room) + lesson.changes.room;
-        tV_changed.setText(text);
-
-        loginDialog.show();
-        loginDialog.getWindow().setAttributes(lWindowParams);
     }
 }

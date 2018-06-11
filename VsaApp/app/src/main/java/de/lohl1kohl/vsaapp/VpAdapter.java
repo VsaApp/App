@@ -16,10 +16,10 @@ import java.util.Objects;
 
 public class VpAdapter extends BaseAdapter {
 
-    private ArrayList<Lesson> listStorage;
+    private List<Lesson> listStorage;
     private LayoutInflater layoutinflater;
 
-    VpAdapter(Context context, ArrayList<Lesson> lessonList) {
+    VpAdapter(Context context, List<Lesson> lessonList) {
         layoutinflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         listStorage = lessonList;
     }

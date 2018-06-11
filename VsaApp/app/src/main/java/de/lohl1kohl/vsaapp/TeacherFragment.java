@@ -74,7 +74,7 @@ public class TeacherFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 new Thread(() -> {
                     Objects.requireNonNull(getActivity()).runOnUiThread(list::removeAllViews);
-                    List<Teacher> teachers = searchTeacher(s.toString());
+                    List<Teacher> teachers = searchTeacher(search.getText().toString());
                     listTeachers(getActivity(), teachers);
                 }).start();
             }

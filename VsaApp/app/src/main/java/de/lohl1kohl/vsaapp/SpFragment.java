@@ -20,13 +20,15 @@ import org.json.JSONException;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.lohl1kohl.vsaapp.server.Callbacks;
+import de.lohl1kohl.vsaapp.server.Sp;
+
 import static de.lohl1kohl.vsaapp.MainActivity.firstOpen;
 
 
 public class SpFragment extends Fragment {
     private Activity mainActivity;
     private View spView;
-    private Server server = new Server();
     private Map<String, String> subjectsSymbols = new HashMap<>();
 
     @Override
@@ -51,18 +53,18 @@ public class SpFragment extends Fragment {
     }
 
     public void syncSp() {
-        // Get classname...
+        // Get gradename...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-        String classname = sharedPref.getString("pref_grade", "-1");
+        String gradename = sharedPref.getString("pref_grade", "-1");
 
-        // Check if a classname is set...
-        if (classname.equals("-1")) {
+        // Check if a gradename is set...
+        if (gradename.equals("-1")) {
             Toast.makeText(mainActivity, R.string.no_class, Toast.LENGTH_LONG).show();
             return;
         }
 
         // Create callback...
-        Server.spCallback callback = new Server.spCallback() {
+        Callbacks.spCallback callback = new Callbacks.spCallback() {
             @Override
             public void onReceived(String output) {
                 try {
@@ -98,7 +100,7 @@ public class SpFragment extends Fragment {
         };
         if (firstOpen) {
             // Send request to server...
-            server.updateSp(classname, callback);
+            new Sp().updateSp(gradename, callback);
             firstOpen = false;
         } else {
             // Show saved sp...

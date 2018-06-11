@@ -14,9 +14,30 @@
     <string name="OK">OK</string>
     <string name="loginDialog_status">Zugangsdaten eingeben:</string>
     <string name="loginDialog_statusFailed">Benutzername oder Passwort ist falsch</string>
-
     <string name="preferenceCategory_userInfo">Persönliche Daten</string>
     <string name="preferenceTitle_classname">Klasse</string>
+    <string name="vpInfoDialogTitle">Vertretung</string>
+    <string name="vpStand">Aktualisiere…</string>
+    <string name="preferenceCategory_appPref">Appeinstellungen</string>
+    <string name="preferenceTitle_showVpInSp">Vertretungsplan im Stundenplan anzeigen</string>
+    <string name="preferenceSummary_showVpInSp">Im Stundenplan werden alle Änderungen vom Vertretungsplan angezeigt</string>
+    <string name="login_success">Erfolgreich angemeldet</string>
+    <string name="no_connection">Verbindung zum Server vehlgeschagen</string>
+    <string name="no_class">Keine Klasse gesetzt</string>
+    <string name="choose_grade">Klasse auswählen</string>
+    <string name="search_teacher">Lehrer mit Namen oder Kürzel suchen</string>
+    <string name="send_email">Email senden</string>
+    <string name="no_vp">Es gibt keine Vertretungsplan für dich</string>
+    <string name="for_s_the_s_from_s">Für %s den %s (Von: %s)</string>
+    <string name="mister">Herr</string>
+    <string name="mister_gen">Herrn</string>
+    <string name="s_in_room_s">%s im Raum %s</string>
+    <string name="dot_unit">. Stunde</string>
+    <string name="with_s_s_in_room_s">Mit %s %s in Raum %s</string>
+    <string name="now_with_s_s">Jetzt mit %s: %s</string>
+    <string name="now_s">Jetzt %s</string>
+    <string name="in_room">im Raum</string>
+
     <string-array name="nameOfGrades">
         <item>5a</item>
         <item>5b</item>
@@ -67,30 +88,6 @@
         <item>VD:Vertiefung Deutsch</item>
         <item>VE:Vertiefung Englisch</item>
     </string-array>
-
-
-    <string name="vpInfoDialogTitle">Vertretung</string>
-    <string name="vpStand">Aktualisiere…</string>
-    <string name="preferenceCategory_appPref">Appeinstellungen</string>
-    <string name="preferenceTitle_showVpInSp">Vertretungsplan im Stundenplan anzeigen</string>
-    <string name="preferenceSummary_showVpInSp">Im Stundenplan werden alle Änderungen vom Vertretungsplan angezeigt</string>
-    <string name="login_success">Erfolgreich angemeldet</string>
-    <string name="no_connection">Verbindung zum Server vehlgeschagen</string>
-    <string name="no_class">Keine Klasse gesetzt</string>
-    <string name="choose_grade">Klasse auswählen</string>
-    <string name="search_teacher">Lehrer mit Namen oder Kürzel suchen</string>
-    <string name="send_email">Email senden</string>
-    <string name="no_vp">Es gibt keine Vertretungsplan für dich</string>
-    <string name="for_s_the_s_from_s">Für %s den %s (Von: %s)</string>
-    <string name="mister">Herr</string>
-    <string name="mister_gen">Herrn</string>
-    <string name="s_in_room_s">%s im Raum %s</string>
-    <string name="dot_unit">. Stunde</string>
-    <string name="with_s_s_in_room_s">Mit %s %s in Raum %s</string>
-    <string name="now_with_s_s">Jetzt mit %s: %s</string>
-    <string name="now_s">Jetzt %s</string>
-    <string name="in_room">im Raum</string>
-
     <string-array name="short_names">
         <item>ALV</item>
         <item>AND</item>
