@@ -63,14 +63,14 @@ public class VpAdapter extends BaseAdapter {
 
         String tutorNow = cLesson.tutor;
 
-        String normal = String.format("%s im Raum %s", nLesson.getName(), nLesson.room);
+        String normal = String.format(convertView.getResources().getString(R.string.s_in_room_s), nLesson.getName(), nLesson.room);
         List<String> shortNames = new ArrayList<>(Arrays.asList(Objects.requireNonNull(convertView.getResources().getStringArray(R.array.short_names))));
         List<String> longNames = new ArrayList<>(Arrays.asList(convertView.getResources().getStringArray(R.array.long_names)));
 
         if (tutorNow.length() > 0) {
             if (shortNames.contains(tutorNow)) {
                 tutorNow = longNames.get(shortNames.indexOf(tutorNow));
-                tutorNow = tutorNow.replace("Herr", "Herrn");
+                tutorNow = tutorNow.replace(convertView.getResources().getString(R.string.mister), convertView.getResources().getString(R.string.mister_gen));
             }
         }
         String changes = String.format("%s %s", tutorNow, cLesson.name);

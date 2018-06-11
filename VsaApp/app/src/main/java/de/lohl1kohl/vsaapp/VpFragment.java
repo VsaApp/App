@@ -194,7 +194,7 @@ public class VpFragment extends Fragment {
             }
 
             TextView textView = vpView.findViewById(R.id.vpStand);
-            textView.setText(String.format("Für %s den %s (Von: %s)", weekday, date, time));
+            textView.setText(String.format(getString(R.string.for_s_the_s_from_s), weekday, date, time));
 
         } catch (JSONException e) {
             Log.i("VsaApp/SpFragment", "Cannot convert output to array!");
@@ -227,14 +227,14 @@ public class VpFragment extends Fragment {
         if (tutorNormal.length() > 0) {
             if (shortNames.contains(lesson.tutor)) {
                 tutorNormal = longNames.get(shortNames.indexOf(tutorNormal));
-                tutorNormal = tutorNormal.replace("Herr", "Herrn");
+                tutorNormal = tutorNormal.replace(getString(R.string.mister), getString(R.string.mister_gen));
             }
         }
 
         if (tutorNow.length() > 0) {
             if (shortNames.contains(lesson.tutor)) {
                 tutorNow = longNames.get(shortNames.indexOf(tutorNow));
-                tutorNow = tutorNow.replace("Herr", "Herrn");
+                tutorNow = tutorNow.replace(getString(R.string.mister), getString(R.string.mister_gen));
             }
         }
 
@@ -244,15 +244,16 @@ public class VpFragment extends Fragment {
         final TextView tV_changed = loginDialog.findViewById(R.id.lbl_changed);
 
 
-        tV_units.setText(Integer.toString(lesson.unit) + ". Stunde");
-        tV_normal.setText(String.format("Mit %s %s in Raum %s", tutorNormal, lesson.getName(), lesson.room));
+        tV_units.setText(Integer.toString(lesson.unit) + getString(R.string.dot_unit));
+        tV_normal.setText(String.format(getString(R.string.with_s_s_in_room_s), tutorNormal, lesson.getName(), lesson.room));
         tV_normal.setPaintFlags(tV_normal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         String text;
         if (lesson.changes.tutor.length() > 0)
-            text = String.format("Jetzt mit %s: %s", tutorNow, lesson.changes.name);
-        else text = String.format("Jetzt %s", lesson.changes.getName());
-        if (lesson.changes.room.length() > 0) text += " im Raum " + lesson.changes.room;
+            text = String.format(getString(R.string.now_with_s_s), tutorNow, lesson.changes.name);
+        else text = String.format(getString(R.string.now_s), lesson.changes.getName());
+        if (lesson.changes.room.length() > 0)
+            text += getString(R.string.in_room) + lesson.changes.room;
         tV_changed.setText(text);
 
         loginDialog.show();
