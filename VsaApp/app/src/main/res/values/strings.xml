@@ -44,6 +44,7 @@
         <item>DP:PoWi</item>
         <item>IF:Info</item>
         <item>S8:Spanisch</item>
+        <item>S0:Spanisch</item>
         <item>MU:Musik</item>
         <item>SP:Sport</item>
         <item>F6:Französisch</item>
@@ -61,6 +62,10 @@
         <item>KU:Kunst</item>
         <item>SW:SoWi</item>
         <item>PL:Philosophie</item>
+        <item>GE:Geschichte</item>
+        <item>VM:Vertiefung Mathe</item>
+        <item>VD:Vertiefung Deutsch</item>
+        <item>VE:Vertiefung Englisch</item>
     </string-array>
 
 
