@@ -1,43 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <TextView
         android:id="@+id/vp_lesson"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center"
+        android:gravity="start|center_vertical"
         android:padding="5dp"
-        android:text="1."
-        android:textSize="23sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="300dp"
         android:layout_height="match_parent"
-        android:gravity="center"
+        android:gravity="start"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/vp_normal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="start"
             android:padding="5dp"
-            android:paddingBottom="10dp"
-            android:text="Deutsch im Raum 222"
-            android:textSize="17sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/vp_changes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="start"
             android:padding="5dp"
-            android:text="Herr Egl m.Aufg."
-            android:textSize="17sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
 

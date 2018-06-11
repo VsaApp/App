@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -245,6 +246,7 @@ public class VpFragment extends Fragment {
 
         tV_units.setText(Integer.toString(lesson.unit) + ". Stunde");
         tV_normal.setText(String.format("Mit %s %s in Raum %s", tutorNormal, lesson.getName(), lesson.room));
+        tV_normal.setPaintFlags(tV_normal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         String text;
         if (lesson.changes.tutor.length() > 0)

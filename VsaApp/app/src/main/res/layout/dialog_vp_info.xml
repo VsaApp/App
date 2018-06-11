@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:ems="10"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp">
@@ -13,9 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:gravity="center"
-        android:text="3. Stunde"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/lbl_normal"
@@ -23,8 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:gravity="center"
-        android:text="3. Stunde"
-        android:textSize="15sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/lbl_changed"
@@ -32,8 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:gravity="center"
-        android:text="3. Stunde"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
 

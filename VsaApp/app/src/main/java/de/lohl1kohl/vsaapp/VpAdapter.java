@@ -2,6 +2,7 @@ package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +80,7 @@ public class VpAdapter extends BaseAdapter {
 
         listViewHolder.lessonInListView.setText(nLesson.unit + ".");
         listViewHolder.normalInListView.setText(normal);
+        listViewHolder.normalInListView.setPaintFlags(listViewHolder.normalInListView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         listViewHolder.changesInListView.setText(changes);
 
         return convertView;
