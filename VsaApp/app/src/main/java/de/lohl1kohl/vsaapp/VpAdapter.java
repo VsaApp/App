@@ -16,12 +16,12 @@ import java.util.Objects;
 
 public class VpAdapter extends BaseAdapter {
 
-    private List<Unit> listStorage;
+    private List<Subject> listStorage;
     private LayoutInflater layoutinflater;
 
-    VpAdapter(Context context, List<Unit> unitList) {
+    VpAdapter(Context context, List<Subject> subjectList) {
         layoutinflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        listStorage = unitList;
+        listStorage = subjectList;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class VpAdapter extends BaseAdapter {
         return position;
     }
 
-    public Unit getUnit(int position) {
+    public Subject getSubject(int position) {
         return listStorage.get(position);
     }
 
@@ -58,12 +58,12 @@ public class VpAdapter extends BaseAdapter {
         } else {
             listViewHolder = (ViewHolder) convertView.getTag();
         }
-        Unit nUnit = getUnit(position);
-        Unit cUnit = getUnit(position).changes;
+        Subject nSubject = getSubject(position);
+        Subject cSubject = getSubject(position).changes;
 
-        String tutorNow = cUnit.tutor;
+        String tutorNow = cSubject.tutor;
 
-        String normal = String.format(convertView.getResources().getString(R.string.s_in_room_s), nUnit.getName(), nUnit.room);
+        String normal = String.format(convertView.getResources().getString(R.string.s_in_room_s), nSubject.getName(), nSubject.room);
         List<String> shortNames = new ArrayList<>(Arrays.asList(Objects.requireNonNull(convertView.getResources().getStringArray(R.array.short_names))));
         List<String> longNames = new ArrayList<>(Arrays.asList(convertView.getResources().getStringArray(R.array.long_names)));
 
@@ -73,12 +73,12 @@ public class VpAdapter extends BaseAdapter {
                 tutorNow = tutorNow.replace(convertView.getResources().getString(R.string.mister), convertView.getResources().getString(R.string.mister_gen));
             }
         }
-        String changes = String.format("%s %s", tutorNow, cUnit.name);
+        String changes = String.format("%s %s", tutorNow, cSubject.name);
 
-        if (cUnit.room.length() > 0)
-            changes = String.format("%s %s (%s)", tutorNow, cUnit.name, cUnit.room);
+        if (cSubject.room.length() > 0)
+            changes = String.format("%s %s (%s)", tutorNow, cSubject.name, cSubject.room);
 
-        listViewHolder.lessonInListView.setText(nUnit.unit + ".");
+        listViewHolder.lessonInListView.setText(nSubject.unit + ".");
         listViewHolder.normalInListView.setText(normal);
         listViewHolder.normalInListView.setPaintFlags(listViewHolder.normalInListView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         listViewHolder.changesInListView.setText(changes);

@@ -2,9 +2,6 @@ package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,8 +38,8 @@ public class SpDayAdapter extends BaseAdapter {
         return position;
     }
 
-    public Unit getUnit(int position) {
-        return listStorage.get(position).getUnit();
+    public Subject getSubject(int position) {
+        return listStorage.get(position).getSubject();
     }
 
     @Override
@@ -69,10 +66,10 @@ public class SpDayAdapter extends BaseAdapter {
         }
 
         Lesson lesson = listStorage.get(position);
-        Unit unit = lesson.getUnit();
+        Subject subject = lesson.getSubject();
 
-        // If there is only one unit hide the buttons...
-        if (lesson.numberOfUnits() == 1) {
+        // If there is only one subject hide the buttons...
+        if (lesson.numberOfSubjects() == 1) {
             listViewHolder.leftButton.setEnabled(false);
             listViewHolder.leftButton.setVisibility(ImageButton.INVISIBLE);
             listViewHolder.rightButton.setEnabled(false);
@@ -83,8 +80,8 @@ public class SpDayAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View view) {
                     Lesson clickedLesson = listStorage.get(position);
-                    clickedLesson.setUnit(-1);
-                    clickedLesson.saveUnit(context);
+                    clickedLesson.setSubject(-1);
+                    clickedLesson.saveSubject(context);
                     adapter.notifyDataSetChanged();
 
                 }
@@ -93,8 +90,8 @@ public class SpDayAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View view) {
                     Lesson clickedLesson = listStorage.get(position);
-                    clickedLesson.setUnit(+1);
-                    clickedLesson.saveUnit(context);
+                    clickedLesson.setSubject(+1);
+                    clickedLesson.saveSubject(context);
                     adapter.notifyDataSetChanged();
                 }
             });
@@ -104,7 +101,7 @@ public class SpDayAdapter extends BaseAdapter {
         List<String> shortNames = new ArrayList<String>(Arrays.asList(Objects.requireNonNull(convertView.getResources().getStringArray(R.array.short_names))));
         List<String> longNames = new ArrayList<String>(Arrays.asList(convertView.getResources().getStringArray(R.array.long_names)));
 
-        String tutor = unit.tutor;
+        String tutor = subject.tutor;
         if (tutor.length() > 0) {
             if (shortNames.contains(tutor)) {
                 tutor = longNames.get(shortNames.indexOf(tutor));
@@ -112,9 +109,9 @@ public class SpDayAdapter extends BaseAdapter {
             }
         }
 
-        listViewHolder.lessonInListView.setText(unit.getName());
+        listViewHolder.lessonInListView.setText(subject.getName());
         listViewHolder.tutorInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), tutor));
-        listViewHolder.roomInListView.setText(convertView.getResources().getString(R.string.in_room) + " " + unit.room);
+        listViewHolder.roomInListView.setText(convertView.getResources().getString(R.string.in_room) + " " + subject.room);
 
         return convertView;
     }

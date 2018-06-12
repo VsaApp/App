@@ -3,59 +3,57 @@ package de.lohl1kohl.vsaapp;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.util.List;
-import java.util.Map;
 
 public class Lesson {
     private int currentIndex = 0;
-    private List<Unit> units;
+    private List<Subject> subjects;
 
-    Lesson(List<Unit> units) {
-        this.units = units;
+    Lesson(List<Subject> subjects) {
+        this.subjects = subjects;
     }
 
-    public void addUnit(Unit unit){
-        units.add(unit);
+    public void addSubject(Subject subject){
+        subjects.add(subject);
     }
 
-    public int numberOfUnits(){
-        return units.size();
+    public int numberOfSubjects(){
+        return subjects.size();
     }
 
-    public void setUnit(int operation){
-        currentIndex = (currentIndex + operation) % units.size();
-        if (currentIndex < 0) currentIndex += units.size();
+    public void setSubject(int operation){
+        currentIndex = (currentIndex + operation) % subjects.size();
+        if (currentIndex < 0) currentIndex += subjects.size();
     }
 
-    public Unit getUnit() {
-        return units.get(currentIndex);
+    public Subject getSubject() {
+        return subjects.get(currentIndex);
     }
 
-    public void saveUnit(Context context){
-        // Get unit...
-        Unit unit = getUnit();
+    public void saveSubject(Context context){
+        // Get subject...
+        Subject subject = getSubject();
 
         // Save the current sp...
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = settings.edit();
-        String prefName = String.format("pref_selectedUnit%s:%s:%s", settings.getString("pref_grade", "-1"), unit.day, Integer.toString(unit.unit));
-        String prefValue = String.format("%s:%s", unit.name, unit.tutor);
+        String prefName = String.format("pref_selectedSubject%s:%s:%s", settings.getString("pref_grade", "-1"), subject.day, Integer.toString(subject.unit));
+        String prefValue = String.format("%s:%s", subject.name, subject.tutor);
         editor.putString(prefName, prefValue);
         editor.apply();
     }
 
-    public void readSavedUnit(Context context){
-        // Get the saved unit...
+    public void readSavedSubject(Context context){
+        // Get the saved Subject...
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        String prefName = String.format("pref_selectedUnit%s:%s:%s", settings.getString("pref_grade", "-1"), getUnit().day, Integer.toString(getUnit().unit));
-        String savedUnit = settings.getString(prefName,"-1");
+        String prefName = String.format("pref_selectedSubject%s:%s:%s", settings.getString("pref_grade", "-1"), getSubject().day, Integer.toString(getSubject().unit));
+        String savedSubject = settings.getString(prefName,"-1");
 
-        if (!savedUnit.equals("-1")){
-            String[] values = savedUnit.split(":");
-            for (Unit unit : units){
-                if (unit.name.equals(values[0]) && unit.tutor.equals(values[1])) currentIndex = units.indexOf(unit);
+        if (!savedSubject.equals("-1")){
+            String[] values = savedSubject.split(":");
+            for (Subject subject : subjects){
+                if (subject.name.equals(values[0]) && subject.tutor.equals(values[1])) currentIndex = subjects.indexOf(subject);
             }
         }
     }

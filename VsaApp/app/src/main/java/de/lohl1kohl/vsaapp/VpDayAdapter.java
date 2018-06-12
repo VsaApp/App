@@ -14,11 +14,11 @@ public class VpDayAdapter extends FragmentStatePagerAdapter {
         super(fm);
     }
 
-    public void setDataToday(List<Unit> data) {
+    public void setDataToday(List<Subject> data) {
         fragments[0].setData(data);
     }
 
-    public void setDataTomorrow(List<Unit> data) {
+    public void setDataTomorrow(List<Subject> data) {
         fragments[1].setData(data);
     }
 

@@ -2,17 +2,17 @@ package de.lohl1kohl.vsaapp;
 
 import java.util.Map;
 
-public class Unit {
+public class Subject {
     public String day;
     public int unit;
     public String name;
     public String room;
     public String tutor;
-    public Unit changes;
+    public Subject changes;
     boolean changed = false;
     private Map<String, String> subjectSymbols;
 
-    Unit(String day, int unit, String name, String room, String tutor, Map<String, String> subjectSymbols) {
+    Subject(String day, int unit, String name, String room, String tutor, Map<String, String> subjectSymbols) {
         this.day = day;
         this.unit = unit;
         this.name = name;

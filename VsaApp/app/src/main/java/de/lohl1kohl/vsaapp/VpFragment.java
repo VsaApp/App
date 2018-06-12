@@ -39,14 +39,14 @@ public class VpFragment extends Fragment {
     Activity mainActivity;
     View vpView;
     private Map<String, String> subjectsSymbols = new HashMap<>();
-    private List<Unit> unitsToday = new ArrayList<>();
-    private List<Unit> unitsTomorrow = new ArrayList<>();
+    private List<Subject> subjectsToday = new ArrayList<>();
+    private List<Subject> subjectsTomorrow = new ArrayList<>();
     private String weekdayToday, dateToday, timeToday;
     private String weekdayTomorrow, dateTomorrow, timeTomorrow;
-    private int unitsGot = 0;
+    private int subjectsGot = 0;
 
     @SuppressLint("SetTextI18n")
-    static void showVpInfoDialog(Context context, Unit unit) {
+    static void showVpInfoDialog(Context context, Subject subject) {
         final Dialog loginDialog = new Dialog(context);
         WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
         lWindowParams.copyFrom(Objects.requireNonNull(loginDialog.getWindow()).getAttributes());
@@ -57,22 +57,22 @@ public class VpFragment extends Fragment {
         loginDialog.setCancelable(true);
         loginDialog.setTitle(R.string.vpInfoDialogTitle);
 
-        String tutorNormal = unit.tutor;
-        String tutorNow = unit.changes.tutor;
+        String tutorNormal = subject.tutor;
+        String tutorNow = subject.changes.tutor;
 
         // Get long teacher name for normal lesson...
         List<String> shortNames = new ArrayList<>(Arrays.asList(context.getResources().getStringArray(R.array.short_names)));
         List<String> longNames = new ArrayList<>(Arrays.asList(context.getResources().getStringArray(R.array.long_names)));
 
         if (tutorNormal.length() > 0) {
-            if (shortNames.contains(unit.tutor)) {
+            if (shortNames.contains(subject.tutor)) {
                 tutorNormal = longNames.get(shortNames.indexOf(tutorNormal));
                 tutorNormal = tutorNormal.replace(context.getString(R.string.mister), context.getString(R.string.mister_gen));
             }
         }
 
         if (tutorNow.length() > 0) {
-            if (shortNames.contains(unit.tutor)) {
+            if (shortNames.contains(subject.tutor)) {
                 tutorNow = longNames.get(shortNames.indexOf(tutorNow));
                 tutorNow = tutorNow.replace(context.getString(R.string.mister), context.getString(R.string.mister_gen));
             }
@@ -84,16 +84,16 @@ public class VpFragment extends Fragment {
         final TextView tV_changed = loginDialog.findViewById(R.id.lbl_changed);
 
 
-        tV_units.setText(Integer.toString(unit.unit) + context.getString(R.string.dot_unit));
-        tV_normal.setText(String.format(context.getString(R.string.with_s_s_in_room_s), tutorNormal, unit.getName(), unit.room));
+        tV_units.setText(Integer.toString(subject.unit) + context.getString(R.string.dot_unit));
+        tV_normal.setText(String.format(context.getString(R.string.with_s_s_in_room_s), tutorNormal, subject.getName(), subject.room));
         tV_normal.setPaintFlags(tV_normal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         String text;
-        if (unit.changes.tutor.length() > 0)
-            text = String.format(context.getString(R.string.now_with_s_s), tutorNow, unit.changes.name);
-        else text = String.format(context.getString(R.string.now_s), unit.changes.getName());
-        if (unit.changes.room.length() > 0)
-            text += context.getString(R.string.in_room) + unit.changes.room;
+        if (subject.changes.tutor.length() > 0)
+            text = String.format(context.getString(R.string.now_with_s_s), tutorNow, subject.changes.name);
+        else text = String.format(context.getString(R.string.now_s), subject.changes.getName());
+        if (subject.changes.room.length() > 0)
+            text += context.getString(R.string.in_room) + subject.changes.room;
         tV_changed.setText(text);
 
         loginDialog.show();
@@ -169,9 +169,9 @@ public class VpFragment extends Fragment {
         }
     }
 
-    private Unit getUnit(String weekday, int unit, String normalUnit) {
+    private Subject getSubject(String weekday, int unit, String normalSubject) {
 
-        normalUnit = normalUnit.split(" ")[0].toLowerCase();
+        normalSubject = normalSubject.split(" ")[0].toLowerCase();
 
         // Get saved sp...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
@@ -191,8 +191,8 @@ public class VpFragment extends Fragment {
                         String name = subject.getString("lesson");
                         String room = subject.getString("room");
                         String tutor = subject.getString("tutor");
-                        if (name.toLowerCase().equals(normalUnit)) {
-                            return new Unit(weekday, unit, name, room, tutor, subjectsSymbols);
+                        if (name.toLowerCase().equals(normalSubject)) {
+                            return new Subject(weekday, unit, name, room, tutor, subjectsSymbols);
                         }
                     }
                 }
@@ -202,11 +202,11 @@ public class VpFragment extends Fragment {
         }
 
         Log.e("VsaApp/VpFragment", "There is no lesson with the given params!");
-        return new Unit(weekday, unit, normalUnit, "?", "?", subjectsSymbols);
+        return new Subject(weekday, unit, normalSubject, "?", "?", subjectsSymbols);
     }
 
     private void fillVp(String output, boolean today) {
-        List<Unit> units = new ArrayList<>();
+        List<Subject> subjects = new ArrayList<>();
 
         String weekday = null;
         String date = null;
@@ -214,7 +214,7 @@ public class VpFragment extends Fragment {
 
         try {
             JSONArray jsonarray = new JSONArray(output);
-            unitsGot++;
+            subjectsGot++;
             if (jsonarray.length() == 0) {
                 return;
             }
@@ -235,10 +235,10 @@ public class VpFragment extends Fragment {
                     info = info.replace(info.split(" ")[0], subjectsSymbols.get(info.split(" ")[0].toUpperCase()));
                 }
 
-                Unit lesson = getUnit(weekday, unit, normalLesson);
-                lesson.changes = new Unit(date, unit, info, room, tutor, subjectsSymbols);
+                Subject lesson = getSubject(weekday, unit, normalLesson);
+                lesson.changes = new Subject(date, unit, info, room, tutor, subjectsSymbols);
 
-                units.add(lesson);
+                subjects.add(lesson);
             }
 
         } catch (JSONException e) {
@@ -246,21 +246,21 @@ public class VpFragment extends Fragment {
         }
 
         if (today) {
-            unitsToday = units;
+            subjectsToday = subjects;
             weekdayToday = weekday;
             dateToday = date;
             timeToday = time;
         } else {
-            unitsTomorrow = units;
+            subjectsTomorrow = subjects;
             weekdayTomorrow = weekday;
             dateTomorrow = date;
             timeTomorrow = time;
         }
-        if (unitsGot == 2) {
+        if (subjectsGot == 2) {
             ViewPager pager = vpView.findViewById(R.id.vp_viewpager);
             VpDayAdapter adapter = new VpDayAdapter(getFragmentManager());
-            adapter.setDataToday(unitsToday);
-            adapter.setDataTomorrow(unitsTomorrow);
+            adapter.setDataToday(subjectsToday);
+            adapter.setDataTomorrow(subjectsTomorrow);
             adapter.setInfoToday(weekdayToday, dateToday, timeToday);
             adapter.setInfoTomorrow(weekdayTomorrow, dateTomorrow, timeTomorrow);
             pager.setAdapter(adapter);

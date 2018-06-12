@@ -40,21 +40,21 @@ public class DayFragment extends Fragment {
                 JSONArray l = data.getJSONArray("lessons");
                 for (int j = 0; j < l.length(); j++) {
                     JSONArray g = l.getJSONArray(j);
-                    Lesson ls = new Lesson(new ArrayList<Unit>());
+                    Lesson ls = new Lesson(new ArrayList<Subject>());
                     if (g.length() > 0) {
                         if (g.length() > 1) {
                             for (int k = 0; k < g.length(); k++) {
-                                Unit unit = new Unit(data.getString("name"), j + 1, g.getJSONObject(k).getString("lesson"), g.getJSONObject(k).getString("room"), g.getJSONObject(k).getString("tutor"), subjectsSymbols);
-                                ls.addUnit(unit);
+                                Subject subject = new Subject(data.getString("name"), j + 1, g.getJSONObject(k).getString("lesson"), g.getJSONObject(k).getString("room"), g.getJSONObject(k).getString("tutor"), subjectsSymbols);
+                                ls.addSubject(subject);
                             }
                         } else {
-                            Unit unit = new Unit(data.getString("name"), j + 1, g.getJSONObject(0).getString("lesson"), g.getJSONObject(0).getString("room"), g.getJSONObject(0).getString("tutor"), subjectsSymbols);
-                            ls.addUnit(unit);
+                            Subject subject = new Subject(data.getString("name"), j + 1, g.getJSONObject(0).getString("lesson"), g.getJSONObject(0).getString("room"), g.getJSONObject(0).getString("tutor"), subjectsSymbols);
+                            ls.addSubject(subject);
                         }
                     }
 
-                    if (ls.numberOfUnits() > 0) {
-                        ls.readSavedUnit(getContext());
+                    if (ls.numberOfSubjects() > 0) {
+                        ls.readSavedSubject(getContext());
                         spDay.add(ls);
                     }
                 }
