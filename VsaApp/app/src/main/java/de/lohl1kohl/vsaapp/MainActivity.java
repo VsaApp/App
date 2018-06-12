@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static boolean firstOpen = true;
     private final MainActivity mainActivity = this;
     private boolean showSettings = false;
+    private int currentNavId = 0;
 
     @SuppressLint("SetTextI18n")
     @SuppressWarnings("deprecation")
@@ -198,14 +199,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Set new fragment...
         displayView(id);
+
+        // Close the navigator...
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
     private void displayView(int viewId) {
 
         // If the logindata is correct, open fragment...
-        Fragment fragment = null;
         SettingsFragment settingsFragment = null;
+        Fragment fragment = null;
         String title = getString(R.string.app_name);
 
         // Get new fragment...
@@ -224,7 +230,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_settings:
                 settingsFragment = new SettingsFragment();
+                settingsFragment.setActivity(this);
         }
+
+        // If the new fragment is the same like the new break up...
+        if (viewId == currentNavId){return;}
 
         // Set new fragment...
         if (fragment != null) {
@@ -240,27 +250,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ft.commit();
         }
 
+        // set the toolbar title...
+        if (getSupportActionBar() != null && !showSettings) {
+            getSupportActionBar().setTitle(title);
+        }
+
         if (settingsFragment != null) {
             if (!showSettings) {
                 // remove current fragment...
                 getSupportFragmentManager().beginTransaction().
                         remove(getSupportFragmentManager().findFragmentById(R.id.content_frame)).commit();
                 showSettings = true;
+
+                // Add settings fragment...
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, settingsFragment)
+                        .commit();
             }
-
-            // Add settings fragment...
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, new SettingsFragment())
-                    .commit();
         }
 
-        // set the toolbar title...
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(title);
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        currentNavId = viewId;
     }
 
     @Override
