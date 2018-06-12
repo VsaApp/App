@@ -1,83 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:paddingRight="10dp"
-    android:paddingTop="5dp">
+    android:layout_height="wrap_content">
 
     <ImageButton
         android:id="@+id/sp_left"
-        android:layout_width="28dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:paddingLeft="8dp"
-        android:paddingStart="8dp"
-        android:contentDescription="@string/spContentLeft"
-        android:cropToPadding="false"
-        android:gravity="center_vertical"
-        android:src="@drawable/go_left"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="@null"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        android:adjustViewBounds="true"/>
+        android:src="@drawable/go_left"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/sp_lesson"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:maxWidth="100dp"
-        android:minWidth="100dp"
-        android:padding="5dp"
-        android:textColor="@color/colorPrimaryDark"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="10dp"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/sp_left"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:ignore="RelativeOverlap" />
 
     <TextView
         android:id="@+id/sp_tutor"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:gravity="center"
-        android:maxWidth="100dp"
-        android:minWidth="100dp"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toStartOf="@+id/sp_room"
-        app:layout_constraintStart_toEndOf="@+id/sp_lesson" />
+        android:layout_below="@id/sp_lesson"
+        android:layout_centerHorizontal="true"
+        android:textSize="18sp"
+        tools:ignore="RelativeOverlap" />
 
     <TextView
         android:id="@+id/sp_room"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:gravity="center"
-        android:maxWidth="100dp"
-        android:minWidth="100dp"
-        android:padding="5dp"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toStartOf="@+id/sp_right" />
+        android:layout_below="@id/sp_tutor"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="10dp"
+        android:textSize="18sp"
+        tools:ignore="RelativeOverlap" />
 
     <ImageButton
         android:id="@+id/sp_right"
-        android:layout_width="28dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:paddingRight="8dp"
-        android:paddingEnd="8dp"
-        android:contentDescription="@string/spContentRight"
-        android:gravity="center_vertical"
-        android:src="@drawable/go_right"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@null"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        android:adjustViewBounds="true"/>
+        android:src="@drawable/go_right"
+        tools:ignore="ContentDescription" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

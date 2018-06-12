@@ -35,12 +35,12 @@ public class DayFragment extends Fragment {
         View root = inflater.inflate(R.layout.sp_day, container, false);
         new Thread(() -> {
             ListView lV = root.findViewById(R.id.sp_day);
-            List<Lesson> spDay = new ArrayList<Lesson>();
+            List<Lesson> spDay = new ArrayList<>();
             try {
                 JSONArray l = data.getJSONArray("lessons");
                 for (int j = 0; j < l.length(); j++) {
                     JSONArray g = l.getJSONArray(j);
-                    Lesson ls = new Lesson(new ArrayList<Subject>());
+                    Lesson ls = new Lesson(new ArrayList<>());
                     if (g.length() > 0) {
                         if (g.length() > 1) {
                             for (int k = 0; k < g.length(); k++) {
@@ -61,7 +61,7 @@ public class DayFragment extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Objects.requireNonNull(getActivity()).runOnUiThread(() -> lV.setAdapter(new SpDayAdapter(getContext(), spDay)));
+            Objects.requireNonNull(getActivity()).runOnUiThread(() -> lV.setAdapter(new SpDayAdapter(Objects.requireNonNull(getContext()), spDay)));
         }).start();
 
         return root;
