@@ -17,7 +17,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     Activity activity;
 
-    public void setActivity(Activity activity) {this.activity = activity;}
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         }
     }
 
+    @SuppressLint("SetTextI18n")
     public void syncSp() {
 
         // Get gradename...
@@ -48,7 +51,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             return;
         }
 
-        TextView textView =  activity.findViewById(R.id.header_name);
+        FirebaseHandler.unsubscribeAll(getActivity().getApplicationContext());
+        FirebaseHandler.subscribe(getActivity().getApplicationContext(), gradename);
+
+        TextView textView = activity.findViewById(R.id.header_name);
         textView.setText(getResources().getString(R.string.app_name) + " - " + gradename);
 
         // Create callback...
