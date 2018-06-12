@@ -17,8 +17,11 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import de.lohl1kohl.vsaapp.server.Callbacks;
 import de.lohl1kohl.vsaapp.server.Sp;
@@ -127,5 +130,13 @@ public class SpFragment extends Fragment {
         pager.setAdapter(adapter);
         TabLayout tabLayout = spView.findViewById(R.id.sp_tabs);
         tabLayout.setupWithViewPager(pager);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
+        if (weekday >= 5) {
+            weekday = 0;
+        }
+        TabLayout.Tab tab = tabLayout.getTabAt(weekday);
+        Objects.requireNonNull(tab).select();
     }
 }
