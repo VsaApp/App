@@ -14,24 +14,24 @@ public class Lesson {
         this.subjects = subjects;
     }
 
-    public void addSubject(Subject subject){
+    public void addSubject(Subject subject) {
         subjects.add(subject);
     }
 
-    public int numberOfSubjects(){
+    public int numberOfSubjects() {
         return subjects.size();
-    }
-
-    public void setSubject(int operation){
-        currentIndex = (currentIndex + operation) % subjects.size();
-        if (currentIndex < 0) currentIndex += subjects.size();
     }
 
     public Subject getSubject() {
         return subjects.get(currentIndex);
     }
 
-    public void saveSubject(Context context){
+    public void setSubject(int operation) {
+        currentIndex = (currentIndex + operation) % subjects.size();
+        if (currentIndex < 0) currentIndex += subjects.size();
+    }
+
+    public void saveSubject(Context context) {
         // Get subject...
         Subject subject = getSubject();
 
@@ -44,16 +44,17 @@ public class Lesson {
         editor.apply();
     }
 
-    public void readSavedSubject(Context context){
+    public void readSavedSubject(Context context) {
         // Get the saved Subject...
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        String prefName = String.format("pref_selectedSubject%s:%s:%s", settings.getString("pref_grade", "-1"), getSubject().day, Integer.toString(getSubject().unit));
-        String savedSubject = settings.getString(prefName,"-1");
+        String prefName = String.format("pref_selectedSubject%s:%s:%s", settings.getString("pref_grade", "-1"), getSubject().day, Integer.toString(getSubject().unit - 1));
+        String savedSubject = settings.getString(prefName, "-1");
 
-        if (!savedSubject.equals("-1")){
+        if (!savedSubject.equals("-1")) {
             String[] values = savedSubject.split(":");
-            for (Subject subject : subjects){
-                if (subject.name.equals(values[0]) && subject.tutor.equals(values[1])) currentIndex = subjects.indexOf(subject);
+            for (Subject subject : subjects) {
+                if (subject.name.equals(values[0]) && subject.tutor.equals(values[1]))
+                    currentIndex = subjects.indexOf(subject);
             }
         }
     }

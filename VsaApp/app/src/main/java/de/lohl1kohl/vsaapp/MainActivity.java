@@ -234,7 +234,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // If the new fragment is the same like the new break up...
-        if (viewId == currentNavId){return;}
+        if (viewId == currentNavId) {
+            return;
+        }
 
         // Set new fragment...
         if (fragment != null) {

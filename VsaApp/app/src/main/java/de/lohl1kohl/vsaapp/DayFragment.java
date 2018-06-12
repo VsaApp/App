@@ -3,6 +3,7 @@ package de.lohl1kohl.vsaapp;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,10 +54,12 @@ public class DayFragment extends Fragment {
                         }
                     }
 
-                    if (ls.numberOfSubjects() > 0) {
+                    Log.i(data.getString("name") + " " + j, String.valueOf(ls.numberOfSubjects()));
+
+                    if (ls.numberOfSubjects() > 1) {
                         ls.readSavedSubject(getContext());
-                        spDay.add(ls);
                     }
+                    spDay.add(ls);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import de.lohl1kohl.vsaapp.DayFragment;
-
 public class DayAdapter extends FragmentStatePagerAdapter {
 
     private List<DayFragment> fragments = new ArrayList<>();
