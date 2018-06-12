@@ -14,13 +14,13 @@ import java.util.Objects;
 
 public class VpDayFragment extends Fragment {
 
-    private List<Lesson> data;
+    private List<Unit> data;
     private String weekday;
     private String date;
     private String time;
     private boolean hasInfo = false;
 
-    public void setData(List<Lesson> data) {
+    public void setData(List<Unit> data) {
         this.data = data;
     }
 
@@ -39,7 +39,7 @@ public class VpDayFragment extends Fragment {
 
         // Add click listener...
         listView.setOnItemClickListener((adapterView, view, position, l) -> {
-            Lesson clickedLesson = vpAdapter.getLesson(position);
+            Unit clickedLesson = vpAdapter.getUnit(position);
             VpFragment.showVpInfoDialog(getActivity(), clickedLesson);
         });
         if (this.hasInfo) {

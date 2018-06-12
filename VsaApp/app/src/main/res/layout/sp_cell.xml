@@ -1,33 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/spBackgroundColor"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:layout_height="70dp"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingRight="10dp"
+    android:paddingTop="5dp">
+
+    <ImageButton
+        android:id="@+id/sp_left"
+        android:layout_width="28dp"
+        android:layout_height="match_parent"
+        android:paddingLeft="8dp"
+        android:paddingStart="8dp"
+        android:contentDescription="@string/spContentLeft"
+        android:cropToPadding="false"
+        android:gravity="center_vertical"
+        android:src="@drawable/go_left"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"/>
 
     <TextView
         android:id="@+id/sp_lesson"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/textColor"
-        android:textSize="15sp" />
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:maxWidth="100dp"
+        android:minWidth="100dp"
+        android:padding="5dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/sp_left"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/sp_tutor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/textColor"
-        android:textSize="15sp" />
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:maxWidth="100dp"
+        android:minWidth="100dp"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/sp_room"
+        app:layout_constraintStart_toEndOf="@+id/sp_lesson" />
 
     <TextView
         android:id="@+id/sp_room"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/textColor"
-        android:textSize="15sp" />
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        android:maxWidth="100dp"
+        android:minWidth="100dp"
+        android:padding="5dp"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/sp_right" />
 
-</LinearLayout>
+    <ImageButton
+        android:id="@+id/sp_right"
+        android:layout_width="28dp"
+        android:layout_height="match_parent"
+        android:paddingRight="8dp"
+        android:paddingEnd="8dp"
+        android:contentDescription="@string/spContentRight"
+        android:gravity="center_vertical"
+        android:src="@drawable/go_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"/>
+
+</android.support.constraint.ConstraintLayout>

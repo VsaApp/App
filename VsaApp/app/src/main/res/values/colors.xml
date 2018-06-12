@@ -5,5 +5,5 @@
     <color name="colorAccent">#5bc638</color>
     <color name="textColor">#ffffff</color>
     <color name="spChangedColor">#af0000</color>
-    <color name="spBackgroundColor">#5bc638</color>
+    <color name="spBackgroundColor">#ededed</color>
 </resources>
