@@ -1,4 +1,17 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="button_appPref"
+        android:title="@string/preferenceCategory_appPref">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_showVpOnlyForYou"
+            android:summary="@string/preferenceSummary_showVpOnlyForYou"
+            android:title="@string/preferenceTitle_showVpOnlyForYou" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:key="button_userInfo"
         android:title="@string/preferenceCategory_userInfo">
@@ -13,17 +26,10 @@
             android:summary="@string/choose_grade"
             android:title="@string/preferenceTitle_classname" />
 
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:key="button_appPref"
-        android:title="@string/preferenceCategory_appPref">
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="pref_showVpOnlyForYou"
-            android:summary="@string/preferenceSummary_showVpOnlyForYou"
-            android:title="@string/preferenceTitle_showVpOnlyForYou" />
+        <Preference
+            android:key="pref_logout"
+            android:summary="@string/logout_summary"
+            android:title="@string/logout" />
 
     </PreferenceCategory>
 

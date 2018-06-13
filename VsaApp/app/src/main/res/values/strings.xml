@@ -42,6 +42,9 @@
     <string name="lesson_pause">Mittagspause</string>
     <string name="lesson_free">Freistunde</string>
     <string name="noSp">Es gibt keinen Stundenplan für dich</string>
+    <string name="logout">Abmelden</string>
+    <string name="logout_summary">Von der VsaApp abmelden</string>
+    <string name="really_logout">Willst du dich wirklich abmelden?</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>
