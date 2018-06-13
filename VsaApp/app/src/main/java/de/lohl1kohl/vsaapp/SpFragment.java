@@ -75,8 +75,9 @@ public class SpFragment extends BaseFragment {
 
                 // Save the current sp...
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
+                String grade = sharedPref.getString("pref_grade", "-1");
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putString("pref_sp", output);
+                editor.putString("pref_sp_" + grade, output);
                 editor.apply();
             }
 
@@ -86,7 +87,8 @@ public class SpFragment extends BaseFragment {
                 Toast.makeText(mActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
                 // Show saved sp...
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
-                String savedSP = sharedPref.getString("pref_sp", "-1");
+                String grade = sharedPref.getString("pref_grade", "-1");
+                String savedSP = sharedPref.getString("pref_sp_" + grade, "-1");
 
                 if (!savedSP.equals("-1")) {
                     try {
@@ -103,7 +105,8 @@ public class SpFragment extends BaseFragment {
             firstOpen = false;
         } else {
             // Show saved sp...
-            String savedSP = sharedPref.getString("pref_sp", "-1");
+            String grade = sharedPref.getString("pref_grade", "-1");
+            String savedSP = sharedPref.getString("pref_sp_" + grade, "-1");
 
             if (!savedSP.equals("-1")) {
                 try {
