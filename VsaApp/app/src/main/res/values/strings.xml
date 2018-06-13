@@ -19,8 +19,8 @@
     <string name="vpInfoDialogTitle">Vertretung</string>
     <string name="vpStand">Aktualisiere…</string>
     <string name="preferenceCategory_appPref">Appeinstellungen</string>
-    <string name="preferenceTitle_showVpInSp">Vertretungsplan im Stundenplan anzeigen</string>
-    <string name="preferenceSummary_showVpInSp">Im Stundenplan werden alle Änderungen vom Vertretungsplan angezeigt</string>
+    <string name="preferenceTitle_showVpOnlyForYou">Im Vertretungsplan nur deine Kurse  anzeigen</string>
+    <string name="preferenceSummary_showVpOnlyForYou">Im Vertretungsplan werden nur die von die ausgewählten Kurse angezeigt</string>
     <string name="login_success">Erfolgreich angemeldet</string>
     <string name="no_connection">Verbindung zum Server vehlgeschagen</string>
     <string name="no_class">Keine Klasse gesetzt</string>
@@ -38,6 +38,9 @@
     <string name="now_s">Jetzt %s</string>
     <string name="in_room">im Raum</string>
     <string name="with_s">mit %s</string>
+    <string name="no_unit_in_this_lesson">-</string>
+    <string name="lesson_pause">Mittagspause</string>
+    <string name="lesson_free">Freistunde</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>

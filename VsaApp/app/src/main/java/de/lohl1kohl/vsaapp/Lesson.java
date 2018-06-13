@@ -31,6 +31,12 @@ public class Lesson {
         if (currentIndex < 0) currentIndex += subjects.size();
     }
 
+    public String toString(){
+        String output = "";
+        for (Subject subject : subjects){output += subject.getName() + ":";}
+        return output;
+    }
+
     public void saveSubject(Context context) {
         // Get subject...
         Subject subject = getSubject();
@@ -45,9 +51,10 @@ public class Lesson {
     }
 
     public void readSavedSubject(Context context) {
+
         // Get the saved Subject...
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        String prefName = String.format("pref_selectedSubject%s:%s:%s", settings.getString("pref_grade", "-1"), getSubject().day, Integer.toString(getSubject().unit - 1));
+        String prefName = String.format("pref_selectedSubject%s:%s:%s", settings.getString("pref_grade", "-1"), getSubject().day, Integer.toString(getSubject().unit));
         String savedSubject = settings.getString(prefName, "-1");
 
         if (!savedSubject.equals("-1")) {

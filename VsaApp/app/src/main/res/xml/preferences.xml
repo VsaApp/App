@@ -21,9 +21,9 @@
 
         <CheckBoxPreference
             android:defaultValue="true"
-            android:key="pref_showVpInSp"
-            android:summary="@string/preferenceSummary_showVpInSp"
-            android:title="@string/preferenceTitle_showVpInSp" />
+            android:key="pref_showVpOnlyForYou"
+            android:summary="@string/preferenceSummary_showVpOnlyForYou"
+            android:title="@string/preferenceTitle_showVpOnlyForYou" />
 
     </PreferenceCategory>
 
