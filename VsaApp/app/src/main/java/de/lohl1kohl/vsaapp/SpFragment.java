@@ -104,7 +104,9 @@ public class SpFragment extends BaseFragment {
             public void onNoSp() {
                 TabLayout tabLayout = spView.findViewById(R.id.sp_tabs);
                 tabLayout.setVisibility(View.GONE);
-                ((TextView) spView.findViewById(R.id.noSp)).setText(R.string.noSp);
+                TextView text = spView.findViewById(R.id.noSp);
+                text.setVisibility(View.VISIBLE);
+                text.setText(R.string.noSp);
             }
         };
         if (!loggingin) {

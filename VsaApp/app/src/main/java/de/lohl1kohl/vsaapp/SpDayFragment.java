@@ -66,7 +66,7 @@ public class SpDayFragment extends BaseFragment {
             }
 
             // Ignore the last free lessons...
-            for (int i = spDay.size()-1; i >= 0; i--){
+            for (int i = spDay.size() - 1; i >= 0; i--) {
                 if (spDay.get(i).numberOfSubjects() > 0) break;
                 else spDay.remove(i);
             }
@@ -83,9 +83,7 @@ public class SpDayFragment extends BaseFragment {
                 }
             }
 
-            Objects.requireNonNull(mActivity).runOnUiThread(() -> {
-                lV.setAdapter(new SpDayListAdapter(Objects.requireNonNull(mActivity.getApplicationContext()), spDay));
-            });
+            Objects.requireNonNull(mActivity).runOnUiThread(() -> lV.setAdapter(new SpDayListAdapter(Objects.requireNonNull(mActivity.getApplicationContext()), spDay)));
         }).start();
 
         return root;

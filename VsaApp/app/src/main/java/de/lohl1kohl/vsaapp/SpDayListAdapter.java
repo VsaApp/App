@@ -77,9 +77,9 @@ public class SpDayListAdapter extends BaseAdapter {
             listViewHolder.relativeLayout.setOnTouchListener((v, event) -> {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     int update = 0;
-                    if (event.getX() < listViewHolder.relativeLayout.getWidth() / 3) {
+                    if (event.getX() < listViewHolder.relativeLayout.getWidth() / 4) {
                         update = -1;
-                    } else if (event.getX() > listViewHolder.relativeLayout.getWidth() / 3 * 2) {
+                    } else if (event.getX() > listViewHolder.relativeLayout.getWidth() / 4 * 3) {
                         update = 1;
                     }
                     if (update != 0) {
