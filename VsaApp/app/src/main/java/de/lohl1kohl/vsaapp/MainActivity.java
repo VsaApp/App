@@ -164,11 +164,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         btn_login.setOnClickListener(view -> {
             if (username.getText().toString().equals("")) {
-                feedback.setText("Kein Nutzername gesetzt");
+                feedback.setText(R.string.no_username_set);
                 return;
             }
             if (password.getText().toString().equals("")) {
-                feedback.setText("Kein Passwort gesetzt");
+                feedback.setText(R.string.no_password_set);
                 return;
             }
             if (w[0] == -1) {
