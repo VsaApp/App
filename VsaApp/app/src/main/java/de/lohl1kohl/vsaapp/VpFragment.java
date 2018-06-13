@@ -234,6 +234,9 @@ public class VpFragment extends BaseFragment {
                     JSONObject entry = jsonarray.getJSONObject(i);
                     int unit = Integer.valueOf(entry.getString("unit"));
                     String normalLesson = entry.getString("lesson");
+                    date = entry.getString("date");
+                    weekday = entry.getString("weekday");
+                    time = entry.getString("time");
                     JSONObject changed = new JSONObject(entry.getString("changed"));
 
                     String info = changed.getString("info");
