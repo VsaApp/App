@@ -28,7 +28,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         PendingIntent i = PendingIntent.getActivity(getApplicationContext(), generator.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), String.valueOf(channel))
-                .setSmallIcon(R.drawable.logo_white)
+                .setSmallIcon(R.mipmap.logo_white)
                 .setContentTitle(title)
                 .setContentText(text.split("\n")[0])
                 .setColor(getResources().getColor(R.color.colorPrimary))
