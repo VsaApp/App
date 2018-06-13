@@ -26,6 +26,7 @@ import de.lohl1kohl.vsaapp.server.Callbacks;
 import de.lohl1kohl.vsaapp.server.Sp;
 
 import static de.lohl1kohl.vsaapp.MainActivity.firstOpen;
+import static de.lohl1kohl.vsaapp.MainActivity.loggingin;
 
 
 public class SpFragment extends BaseFragment {
@@ -59,7 +60,6 @@ public class SpFragment extends BaseFragment {
 
         // Check if a gradename is set...
         if (grade.equals("-1")) {
-            Toast.makeText(mActivity, R.string.no_class, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -107,19 +107,21 @@ public class SpFragment extends BaseFragment {
                 ((TextView) spView.findViewById(R.id.noSp)).setText(R.string.noSp);
             }
         };
-        if (firstOpen) {
-            // Send request to server...
-            new Sp().updateSp(grade, callback);
-            firstOpen = false;
-        } else {
-            // Show saved sp...
-            String savedSP = sharedPref.getString("pref_sp_" + grade, "-1");
+        if (!loggingin) {
+            if (firstOpen) {
+                // Send request to server...
+                new Sp().updateSp(grade, callback);
+                firstOpen = false;
+            } else {
+                // Show saved sp...
+                String savedSP = sharedPref.getString("pref_sp_" + grade, "-1");
 
-            if (!savedSP.equals("-1")) {
-                try {
-                    fillSp(savedSP);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (!savedSP.equals("-1")) {
+                    try {
+                        fillSp(savedSP);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

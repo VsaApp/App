@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final MainActivity mainActivity = this;
     private boolean showSettings = false;
     private int currentNavId = 0;
+    public static boolean loggingin = false;
+    private Fragment currentFragment;
 
     @SuppressLint("SetTextI18n")
     @SuppressWarnings("deprecation")
@@ -142,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final TextView feedback = loginDialog.findViewById(R.id.lbl_loginFeedback);
 
         String[] grades = getResources().getStringArray(R.array.nameOfGrades);
-        final int[] w = {0};
+        final int[] w = {-1};
 
         btn_grade.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -161,6 +163,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         btn_login.setOnClickListener(view -> {
+            if (username.getText().toString().equals("")) {
+                feedback.setText("Kein Nutzername gesetzt");
+                return;
+            }
+            if (password.getText().toString().equals("")) {
+                feedback.setText("Kein Passwort gesetzt");
+                return;
+            }
+            if (w[0] == -1) {
+                feedback.setText(R.string.no_class);
+                return;
+            }
             Callbacks.credentialsCallback callback = new Callbacks.credentialsCallback() {
                 @Override
                 public void onSuccess() {
@@ -173,6 +187,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     ((TextView) findViewById(R.id.header_name)).setText(getString(R.string.app_name) + " - " + grades[w[0]]);
                     editor.apply();
                     loginDialog.cancel();
+                    loggingin = false;
+                    ((SpFragment) currentFragment).syncSp();
                     Toast.makeText(mainActivity, R.string.login_success, Toast.LENGTH_SHORT).show();
                 }
 
@@ -211,21 +227,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // If the logindata is correct, open fragment...
         SettingsFragment settingsFragment = null;
-        Fragment fragment = null;
         String title = getString(R.string.app_name);
 
         // Get new fragment...
         switch (viewId) {
             case R.id.nav_vp:
-                fragment = new VpFragment();
+                currentFragment = new VpFragment();
                 title = getString(R.string.vp);
                 break;
             case R.id.nav_sp:
-                fragment = new SpFragment();
+                currentFragment = new SpFragment();
                 title = getString(R.string.sp);
                 break;
             case R.id.nav_teacher:
-                fragment = new TeacherFragment();
+                currentFragment = new TeacherFragment();
                 title = getString(R.string.teacher);
                 break;
             case R.id.nav_settings:
@@ -238,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // Set new fragment...
-        if (fragment != null) {
+        if (currentFragment != null) {
             if (showSettings) {
                 // remove settings fragment...
                 getFragmentManager().beginTransaction().
@@ -247,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, fragment);
+            ft.replace(R.id.content_frame, currentFragment);
             ft.commit();
         }
 
