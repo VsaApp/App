@@ -13,6 +13,8 @@ public class Sp implements AsyncResponse {
     public void processFinish(String output) {
         if (output == null) {
             spCallback.onConnectionFailed();
+        } else if (output.equals("404")) {
+            spCallback.onNoSp();
         } else {
             spCallback.onReceived(output);
         }

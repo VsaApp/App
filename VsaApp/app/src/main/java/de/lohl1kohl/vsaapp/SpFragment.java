@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -54,10 +55,10 @@ public class SpFragment extends BaseFragment {
     public void syncSp() {
         // Get gradename...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        String gradename = sharedPref.getString("pref_grade", "-1");
+        String grade = sharedPref.getString("pref_grade", "-1");
 
         // Check if a gradename is set...
-        if (gradename.equals("-1")) {
+        if (grade.equals("-1")) {
             Toast.makeText(mActivity, R.string.no_class, Toast.LENGTH_LONG).show();
             return;
         }
@@ -98,14 +99,20 @@ public class SpFragment extends BaseFragment {
                     }
                 }
             }
+
+            @Override
+            public void onNoSp() {
+                TabLayout tabLayout = spView.findViewById(R.id.sp_tabs);
+                tabLayout.setVisibility(View.GONE);
+                ((TextView) spView.findViewById(R.id.noSp)).setText(R.string.noSp);
+            }
         };
         if (firstOpen) {
             // Send request to server...
-            new Sp().updateSp(gradename, callback);
+            new Sp().updateSp(grade, callback);
             firstOpen = false;
         } else {
             // Show saved sp...
-            String grade = sharedPref.getString("pref_grade", "-1");
             String savedSP = sharedPref.getString("pref_sp_" + grade, "-1");
 
             if (!savedSP.equals("-1")) {

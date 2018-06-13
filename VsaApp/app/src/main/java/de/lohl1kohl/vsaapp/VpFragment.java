@@ -174,7 +174,8 @@ public class VpFragment extends BaseFragment {
 
         // Get saved sp...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-        String savedSP = sharedPref.getString("pref_sp", "-1");
+        String grade = sharedPref.getString("pref_grade", "-1");
+        String savedSP = sharedPref.getString("pref_sp_" + grade, "-1");
 
         try {
             JSONArray jsonarray = new JSONArray(savedSP);

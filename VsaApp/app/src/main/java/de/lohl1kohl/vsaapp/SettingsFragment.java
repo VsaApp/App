@@ -55,8 +55,9 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
             public void onReceived(String output) {
                 // Save the current sp...
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
+                String grade = sharedPref.getString("pref_grade", "-1");
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putString("pref_sp", output);
+                editor.putString("pref_sp_" + grade, output);
                 editor.apply();
             }
 
@@ -64,6 +65,11 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
             public void onConnectionFailed() {
                 Log.e("VsaApp/Server", "Failed");
                 Toast.makeText(mActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNoSp() {
+
             }
         };
 

@@ -12,6 +12,8 @@ public class Callbacks {
         void onReceived(String output);
 
         void onConnectionFailed();
+
+        void onNoSp();
     }
 
     public interface credentialsCallback {
