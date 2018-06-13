@@ -3,10 +3,13 @@ package de.lohl1kohl.vsaapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -43,7 +46,7 @@ public class SpDayListAdapter extends BaseAdapter {
         return position;
     }
 
-    @SuppressLint({"SetTextI18n", "ViewHolder"})
+    @SuppressLint({"SetTextI18n", "ViewHolder", "ClickableViewAccessibility"})
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -57,6 +60,7 @@ public class SpDayListAdapter extends BaseAdapter {
         listViewHolder.tutorInListView = convertView.findViewById(R.id.sp_tutor);
         listViewHolder.roomInListView = convertView.findViewById(R.id.sp_room);
         listViewHolder.rightButton = convertView.findViewById(R.id.sp_right);
+        listViewHolder.relativeLayout = convertView.findViewById(R.id.sp_rl);
         convertView.setTag(listViewHolder);
 
         // Get the current lesson...
@@ -70,32 +74,38 @@ public class SpDayListAdapter extends BaseAdapter {
             listViewHolder.rightButton.setVisibility(ImageButton.INVISIBLE);
 
         } else if (lesson.numberOfSubjects() > 1) {
-            listViewHolder.leftButton.setOnClickListener(view -> {
-                Lesson clickedLesson = listStorage.get(position);
-                clickedLesson.setSubject(-1);
-                clickedLesson.saveSubject(context);
-                adapter.notifyDataSetChanged();
-
-            });
-            listViewHolder.rightButton.setOnClickListener(view -> {
-                Lesson clickedLesson = listStorage.get(position);
-                clickedLesson.setSubject(+1);
-                clickedLesson.saveSubject(context);
-                adapter.notifyDataSetChanged();
+            listViewHolder.relativeLayout.setOnTouchListener((v, event) -> {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    int update = 0;
+                    if (event.getX() < listViewHolder.relativeLayout.getWidth() / 3) {
+                        update = -1;
+                    } else if (event.getX() > listViewHolder.relativeLayout.getWidth() / 3 * 2) {
+                        update = 1;
+                    }
+                    if (update != 0) {
+                        Lesson clickedLesson = listStorage.get(position);
+                        clickedLesson.setSubject(update);
+                        clickedLesson.saveSubject(context);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+                return true;
             });
         }
 
         // Set the TextViews...
         if (lesson.numberOfSubjects() == 0) {
             listViewHolder.lessonInListView.setText("");
-            if (position == 5) listViewHolder.tutorInListView.setText(convertView.getResources().getString(R.string.lesson_pause));
-            else listViewHolder.tutorInListView.setText(convertView.getResources().getString(R.string.no_unit_in_this_lesson));
+            if (position == 5)
+                listViewHolder.tutorInListView.setText(convertView.getResources().getString(R.string.lesson_pause));
+            else
+                listViewHolder.tutorInListView.setText(convertView.getResources().getString(R.string.no_unit_in_this_lesson));
             listViewHolder.roomInListView.setText("");
-        } else if (lesson.getSubject().name.equals(convertView.getResources().getString(R.string.lesson_free))){
+        } else if (lesson.getSubject().name.equals(convertView.getResources().getString(R.string.lesson_free))) {
             listViewHolder.lessonInListView.setText("");
             listViewHolder.tutorInListView.setText(lesson.getSubject().name);
             listViewHolder.roomInListView.setText("");
-        }else {
+        } else {
             List<String> shortNames = new ArrayList<>(Arrays.asList(Objects.requireNonNull(convertView.getResources().getStringArray(R.array.short_names))));
             List<String> longNames = new ArrayList<>(Arrays.asList(convertView.getResources().getStringArray(R.array.long_names)));
 
@@ -117,11 +127,12 @@ public class SpDayListAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        ImageButton leftButton;
+        ImageView leftButton;
         TextView lessonInListView;
         TextView tutorInListView;
         TextView roomInListView;
-        ImageButton rightButton;
+        ImageView rightButton;
+        RelativeLayout relativeLayout;
     }
 
 }
