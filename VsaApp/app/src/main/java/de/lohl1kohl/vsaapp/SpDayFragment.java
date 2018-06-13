@@ -1,11 +1,9 @@
 package de.lohl1kohl.vsaapp;
 
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class DayFragment extends BaseFragment {
+public class SpDayFragment extends BaseFragment {
 
     JSONObject data;
     private Map<String, String> subjectsSymbols;
@@ -86,7 +84,7 @@ public class DayFragment extends BaseFragment {
             }
 
             Objects.requireNonNull(mActivity).runOnUiThread(() -> {
-                lV.setAdapter(new SpDayAdapter(Objects.requireNonNull(mActivity.getApplicationContext()), spDay));
+                lV.setAdapter(new SpDayListAdapter(Objects.requireNonNull(mActivity.getApplicationContext()), spDay));
             });
         }).start();
 

@@ -122,7 +122,7 @@ public class SpFragment extends BaseFragment {
         Log.i("VsaApp/fillSp", grade);
         Log.i("spData", spData);
         ViewPager pager = spView.findViewById(R.id.sp_viewpager);
-        DayAdapter adapter = new DayAdapter(getFragmentManager(), new JSONArray(spData), subjectsSymbols);
+        SpDayAdapter adapter = new SpDayAdapter(getFragmentManager(), new JSONArray(spData), subjectsSymbols);
         pager.setAdapter(adapter);
         TabLayout tabLayout = spView.findViewById(R.id.sp_tabs);
         tabLayout.setupWithViewPager(pager);
