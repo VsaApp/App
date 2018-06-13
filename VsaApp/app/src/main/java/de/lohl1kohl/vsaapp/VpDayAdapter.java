@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import org.json.JSONException;
+
 import java.util.List;
 
 public class VpDayAdapter extends FragmentStatePagerAdapter {
@@ -38,5 +40,10 @@ public class VpDayAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return fragments.length;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return fragments[position].weekday;
     }
 }
