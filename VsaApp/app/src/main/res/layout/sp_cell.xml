@@ -23,6 +23,7 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:paddingTop="10dp"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         tools:ignore="RelativeOverlap" />
@@ -33,6 +34,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/sp_lesson"
         android:layout_centerHorizontal="true"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         tools:ignore="RelativeOverlap" />
 
@@ -43,6 +45,7 @@
         android:layout_below="@id/sp_tutor"
         android:layout_centerHorizontal="true"
         android:paddingBottom="10dp"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         tools:ignore="RelativeOverlap" />
 

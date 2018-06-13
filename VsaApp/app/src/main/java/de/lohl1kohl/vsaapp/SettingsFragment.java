@@ -1,10 +1,8 @@
 package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.TextView;
@@ -13,13 +11,7 @@ import android.widget.Toast;
 import de.lohl1kohl.vsaapp.server.Callbacks;
 import de.lohl1kohl.vsaapp.server.Sp;
 
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-
-    Activity activity;
-
-    public void setActivity(Activity activity) {
-        this.activity = activity;
-    }
+public class SettingsFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,7 +19,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
-        PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
+        PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext()).registerOnSharedPreferenceChangeListener(this);
     }
 
     @SuppressLint("SetTextI18n")
@@ -42,19 +34,19 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void syncSp() {
 
         // Get gradename...
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
         String gradename = sharedPref.getString("pref_grade", "-1");
 
         // Check if a gradename is set...
         if (gradename.equals("-1")) {
-            Toast.makeText(activity, R.string.no_class, Toast.LENGTH_LONG).show();
+            Toast.makeText(mActivity, R.string.no_class, Toast.LENGTH_LONG).show();
             return;
         }
 
-        FirebaseHandler.unsubscribeAll(getActivity().getApplicationContext());
-        FirebaseHandler.subscribe(getActivity().getApplicationContext(), gradename);
+        FirebaseHandler.unsubscribeAll(mActivity.getApplicationContext());
+        FirebaseHandler.subscribe(mActivity.getApplicationContext(), gradename);
 
-        TextView textView = activity.findViewById(R.id.header_name);
+        TextView textView = mActivity.findViewById(R.id.header_name);
         textView.setText(getResources().getString(R.string.app_name) + " - " + gradename);
 
         // Create callback...
@@ -62,7 +54,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             @Override
             public void onReceived(String output) {
                 // Save the current sp...
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(activity);
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("pref_sp", output);
                 editor.apply();
@@ -71,7 +63,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             @Override
             public void onConnectionFailed() {
                 Log.e("VsaApp/Server", "Failed");
-                Toast.makeText(activity, R.string.no_connection, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
             }
         };
 

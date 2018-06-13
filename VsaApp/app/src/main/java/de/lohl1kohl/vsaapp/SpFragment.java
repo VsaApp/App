@@ -1,12 +1,10 @@
 package de.lohl1kohl.vsaapp;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,8 +27,7 @@ import de.lohl1kohl.vsaapp.server.Sp;
 import static de.lohl1kohl.vsaapp.MainActivity.firstOpen;
 
 
-public class SpFragment extends Fragment {
-    private Activity mainActivity;
+public class SpFragment extends BaseFragment {
     private View spView;
     private Map<String, String> subjectsSymbols = new HashMap<>();
 
@@ -39,7 +36,6 @@ public class SpFragment extends Fragment {
         // Inflate the layout for this fragment
         spView = inflater.inflate(R.layout.fragment_sp, container, false);
 
-        mainActivity = getActivity();
 
         // Create dictionary with all subject symbols...
         String[] subjects = getResources().getStringArray(R.array.nameOfSubjects);
@@ -57,12 +53,12 @@ public class SpFragment extends Fragment {
 
     public void syncSp() {
         // Get gradename...
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
         String gradename = sharedPref.getString("pref_grade", "-1");
 
         // Check if a gradename is set...
         if (gradename.equals("-1")) {
-            Toast.makeText(mainActivity, R.string.no_class, Toast.LENGTH_LONG).show();
+            Toast.makeText(mActivity, R.string.no_class, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -78,7 +74,7 @@ public class SpFragment extends Fragment {
                 Log.i("VsaApp/Server", "Success");
 
                 // Save the current sp...
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("pref_sp", output);
                 editor.apply();
@@ -87,9 +83,9 @@ public class SpFragment extends Fragment {
             @Override
             public void onConnectionFailed() {
                 Log.e("VsaApp/Server", "Failed");
-                Toast.makeText(mainActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
                 // Show saved sp...
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
                 String savedSP = sharedPref.getString("pref_sp", "-1");
 
                 if (!savedSP.equals("-1")) {
@@ -121,7 +117,7 @@ public class SpFragment extends Fragment {
 
     public void fillSp(String spData) throws JSONException {
         // Get current subjects...
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
         String grade = sharedPref.getString("pref_grade", "-1");
         Log.i("VsaApp/fillSp", grade);
         Log.i("spData", spData);

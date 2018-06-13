@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,7 +34,7 @@ import de.lohl1kohl.vsaapp.server.vp.Today;
 import de.lohl1kohl.vsaapp.server.vp.Tomorrow;
 
 
-public class VpFragment extends Fragment {
+public class VpFragment extends BaseFragment {
     Activity mainActivity;
     View vpView;
     private Map<String, String> subjectsSymbols = new HashMap<>();
@@ -104,7 +103,7 @@ public class VpFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         vpView = inflater.inflate(R.layout.fragment_vp, container, false);
-        mainActivity = getActivity();
+        mainActivity = mActivity;
 
         // Update vp...
         syncVp(true);

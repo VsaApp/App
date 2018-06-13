@@ -230,7 +230,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_settings:
                 settingsFragment = new SettingsFragment();
-                settingsFragment.setActivity(this);
         }
 
         // If the new fragment is the same like the new break up...

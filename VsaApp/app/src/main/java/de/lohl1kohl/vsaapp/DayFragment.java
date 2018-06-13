@@ -2,8 +2,6 @@ package de.lohl1kohl.vsaapp;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class DayFragment extends Fragment {
+public class DayFragment extends BaseFragment {
 
     JSONObject data;
     private Map<String, String> subjectsSymbols;
@@ -54,8 +52,6 @@ public class DayFragment extends Fragment {
                         }
                     }
 
-                    Log.i(data.getString("name") + " " + j, String.valueOf(ls.numberOfSubjects()));
-
                     if (ls.numberOfSubjects() > 1) {
                         ls.readSavedSubject(getContext());
                     }
@@ -64,7 +60,9 @@ public class DayFragment extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Objects.requireNonNull(getActivity()).runOnUiThread(() -> lV.setAdapter(new SpDayAdapter(Objects.requireNonNull(getContext()), spDay)));
+            Objects.requireNonNull(mActivity).runOnUiThread(() -> {
+                lV.setAdapter(new SpDayAdapter(Objects.requireNonNull(mActivity.getApplicationContext()), spDay));
+            });
         }).start();
 
         return root;
