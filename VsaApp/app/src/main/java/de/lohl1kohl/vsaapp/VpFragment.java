@@ -224,19 +224,15 @@ public class VpFragment extends BaseFragment {
             try {
                 subjects = new ArrayList<>();
                 String output = (j == 1) ? outputTomorrow : outputToday;
-                JSONArray jsonarray = new JSONArray(output);
-                /*JSONObject header = new JSONObject(output);
+                JSONObject header = new JSONObject(output);
                 date = header.getString("date");
                 weekday = header.getString("weekday");
                 time = header.getString("time");
-                JSONArray jsonarray = new JSONArray(header.getString("changes")); */
+                JSONArray jsonarray = new JSONArray(header.getString("changes"));
                 for (int i = 0; i < jsonarray.length(); i++) {
                     JSONObject entry = jsonarray.getJSONObject(i);
                     int unit = Integer.valueOf(entry.getString("unit"));
                     String normalLesson = entry.getString("lesson");
-                    date = entry.getString("date");
-                    weekday = entry.getString("weekday");
-                    time = entry.getString("time");
                     JSONObject changed = new JSONObject(entry.getString("changed"));
 
                     String info = changed.getString("info");
