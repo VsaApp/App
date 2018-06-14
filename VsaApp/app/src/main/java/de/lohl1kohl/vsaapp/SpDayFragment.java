@@ -83,7 +83,7 @@ public class SpDayFragment extends BaseFragment {
                 }
             }
 
-            Objects.requireNonNull(mActivity).runOnUiThread(() -> lV.setAdapter(new SpDayListAdapter(Objects.requireNonNull(mActivity.getApplicationContext()), spDay)));
+            mActivity.runOnUiThread(() -> lV.setAdapter(new SpDayListAdapter(Objects.requireNonNull(mActivity.getApplicationContext()), spDay)));
         }).start();
 
         return root;

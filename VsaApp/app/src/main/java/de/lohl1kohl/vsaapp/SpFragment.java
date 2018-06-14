@@ -40,7 +40,7 @@ public class SpFragment extends BaseFragment {
 
 
         // Create dictionary with all subject symbols...
-        String[] subjects = getResources().getStringArray(R.array.nameOfSubjects);
+        String[] subjects = mActivity.getResources().getStringArray(R.array.nameOfSubjects);
         for (String subject : subjects) {
             String[] pair = subject.split(":");
 

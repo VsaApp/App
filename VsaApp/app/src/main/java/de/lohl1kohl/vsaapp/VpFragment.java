@@ -1,7 +1,6 @@
 package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -25,8 +24,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +35,6 @@ import de.lohl1kohl.vsaapp.server.vp.Tomorrow;
 
 
 public class VpFragment extends BaseFragment {
-    Activity mainActivity;
     View vpView;
     String outputToday = null;
     String outputTomorrow = null;
@@ -103,7 +99,6 @@ public class VpFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         vpView = inflater.inflate(R.layout.fragment_vp, container, false);
-        mainActivity = mActivity;
 
         // Update vp...
         syncVp(true);
@@ -122,12 +117,12 @@ public class VpFragment extends BaseFragment {
 
     private void syncVp(boolean today) {
         // Get gradename...
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
         String gradename = sharedPref.getString("pref_grade", "-1");
 
         // Check if a gradename is set...
         if (gradename.equals("-1")) {
-            Toast.makeText(mainActivity, R.string.no_class, Toast.LENGTH_LONG).show();
+            Toast.makeText(mActivity, R.string.no_class, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -137,11 +132,12 @@ public class VpFragment extends BaseFragment {
             public void onReceived(String output) {
                 if (today) outputToday = output;
                 else outputTomorrow = output;
-                if (outputTomorrow != null && outputToday != null) fillVp(outputToday, outputTomorrow);
+                if (outputTomorrow != null && outputToday != null)
+                    fillVp(outputToday, outputTomorrow);
                 Log.v("VsaApp/Server", "Success");
 
                 // Save the current sp...
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("pref_vp_" + (today ? "today" : "tomorrow"), output);
                 editor.apply();
@@ -150,16 +146,17 @@ public class VpFragment extends BaseFragment {
             @Override
             public void onConnectionFailed() {
                 Log.e("VsaApp/Server", "Failed");
-                Toast.makeText(mainActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
 
                 // Show saved sp...
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
                 String savedVP = sharedPref.getString("pref_vp_" + (today ? "today" : "tomorrow"), "-1");
 
                 if (!savedVP.equals("-1")) {
                     if (today) outputToday = savedVP;
                     else outputTomorrow = savedVP;
-                    if (outputTomorrow != null && outputToday != null) fillVp(outputToday, outputTomorrow);
+                    if (outputTomorrow != null && outputToday != null)
+                        fillVp(outputToday, outputTomorrow);
                 }
             }
         };
@@ -177,7 +174,7 @@ public class VpFragment extends BaseFragment {
         normalSubject = normalSubject.split(" ")[0].toLowerCase();
 
         // Get saved sp...
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
         String grade = sharedPref.getString("pref_grade", "-1");
         String savedSP = sharedPref.getString("pref_sp_" + grade, "-1");
 
@@ -212,9 +209,9 @@ public class VpFragment extends BaseFragment {
     private void fillVp(String outputToday, String outputTomorrow) {
         List<Subject> subjects;
 
-        String weekday = "";
-        String date = "";
-        String time = "";
+        String weekday;
+        String date;
+        String time;
         List<Subject> subjectsToday = new ArrayList<>();
         List<Subject> subjectsTomorrow = new ArrayList<>();
         String weekdayToday = "", dateToday = "", timeToday = "";
