@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ public class SpDayFragment extends BaseFragment {
 
     JSONObject data;
     private Map<String, String> subjectsSymbols;
+    private List<String> weekdays;
 
     public void setData(JSONObject data) {
         this.data = data;
@@ -43,6 +45,7 @@ public class SpDayFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.sp_day, container, false);
+        weekdays = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.weekdays)));
         long time = getTimePassed();
         new Thread(() -> {
             String day = "";
@@ -70,7 +73,10 @@ public class SpDayFragment extends BaseFragment {
                         ls.readSavedSubject(mActivity);
                     }
                     try {
-                        if (LessonUtils.getEndTime(ls) < time) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(new Date());
+                        int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
+                        if (LessonUtils.getEndTime(ls) < time && weekdays.indexOf(ls.getSubject().day) <= weekday) {
                             ls.setGray(true);
                         }
                     } catch (Exception ignored) {

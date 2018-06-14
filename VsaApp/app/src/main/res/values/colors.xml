@@ -6,4 +6,5 @@
     <color name="textColor">#ffffff</color>
     <color name="spChangedColor">#af0000</color>
     <color name="spBackgroundColor">#ededed</color>
+    <color name="spPassedLesson">#919191</color>
 </resources>

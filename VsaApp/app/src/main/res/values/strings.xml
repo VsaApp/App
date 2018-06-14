@@ -233,4 +233,11 @@
         <item>Frau Wiswedel</item>
         <item>Herr Wörner</item>
     </string-array>
+    <string-array name="weekdays">
+        <item>Montag</item>
+        <item>Dienstag</item>
+        <item>Mittwoch</item>
+        <item>Donnerstag</item>
+        <item>Freitag</item>
+    </string-array>
 </resources>
