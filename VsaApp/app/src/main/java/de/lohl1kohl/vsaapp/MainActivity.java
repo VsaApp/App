@@ -292,6 +292,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Objects.requireNonNull(notificationManager).cancelAll();
+        notificationManager.cancelAll();
     }
 }

@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class TeacherFragment extends BaseFragment {
@@ -38,7 +37,7 @@ public class TeacherFragment extends BaseFragment {
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + teacher.sName.toLowerCase() + "@viktoriaschule-aachen.de"));
                 activity.startActivity(Intent.createChooser(emailIntent, activity.getApplicationContext().getString(R.string.send_email)));
             });
-            Objects.requireNonNull(activity).runOnUiThread(() -> list.addView(v));
+            activity.runOnUiThread(() -> list.addView(v));
         }
     }
 

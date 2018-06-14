@@ -15,7 +15,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class SpDayListAdapter extends BaseAdapter {
 
@@ -106,7 +105,7 @@ public class SpDayListAdapter extends BaseAdapter {
             listViewHolder.tutorInListView.setText(lesson.getSubject().name);
             listViewHolder.roomInListView.setText("");
         } else {
-            List<String> shortNames = new ArrayList<>(Arrays.asList(Objects.requireNonNull(convertView.getResources().getStringArray(R.array.short_names))));
+            List<String> shortNames = new ArrayList<>(Arrays.asList(convertView.getResources().getStringArray(R.array.short_names)));
             List<String> longNames = new ArrayList<>(Arrays.asList(convertView.getResources().getStringArray(R.array.long_names)));
 
             Subject subject = lesson.getSubject();

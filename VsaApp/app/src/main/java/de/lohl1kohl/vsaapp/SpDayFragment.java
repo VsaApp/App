@@ -16,7 +16,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class SpDayFragment extends BaseFragment {
 
@@ -83,7 +82,7 @@ public class SpDayFragment extends BaseFragment {
                 }
             }
 
-            mActivity.runOnUiThread(() -> lV.setAdapter(new SpDayListAdapter(Objects.requireNonNull(mActivity.getApplicationContext()), spDay)));
+            mActivity.runOnUiThread(() -> lV.setAdapter(new SpDayListAdapter(mActivity, spDay)));
         }).start();
 
         return root;
