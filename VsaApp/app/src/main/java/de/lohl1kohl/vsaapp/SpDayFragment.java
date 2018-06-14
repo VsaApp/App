@@ -24,7 +24,6 @@ public class SpDayFragment extends BaseFragment {
 
     JSONObject data;
     private Map<String, String> subjectsSymbols;
-    private List<String> weekdays;
 
     public void setData(JSONObject data) {
         this.data = data;
@@ -34,19 +33,9 @@ public class SpDayFragment extends BaseFragment {
         this.subjectsSymbols = subjectsSymbols;
     }
 
-    private long getTimePassed() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 9);
-        Date startDate = cal.getTime();
-        long diff = new Date().getTime() - startDate.getTime();
-        return diff / 1000 / 60;
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.sp_day, container, false);
-        weekdays = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.weekdays)));
-        long time = getTimePassed();
         new Thread(() -> {
             String day = "";
             ListView lV = root.findViewById(R.id.sp_day);
@@ -73,10 +62,7 @@ public class SpDayFragment extends BaseFragment {
                         ls.readSavedSubject(mActivity);
                     }
                     try {
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.setTime(new Date());
-                        int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
-                        if (LessonUtils.getEndTime(ls) < time && weekdays.indexOf(ls.getSubject().day) <= weekday) {
+                        if (LessonUtils.isLessonPassed(ls.getSubject().unit) && LessonUtils.isDayInFuture(ls.getSubject().day)) {
                             ls.setGray(true);
                         }
                     } catch (Exception ignored) {

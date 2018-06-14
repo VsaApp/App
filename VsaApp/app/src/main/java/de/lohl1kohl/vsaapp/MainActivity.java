@@ -27,6 +27,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 import de.lohl1kohl.vsaapp.server.Callbacks;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final MainActivity mainActivity = this;
     private boolean showSettings = false;
     private int currentNavId = 0;
+    private int oldNavId = 0;
     public static boolean loggingin = false;
     private Fragment currentFragment;
 
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        LessonUtils.setWeekdays(new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.weekdays))));
 
         // Show the vpFragment as the start fragment...
         displayView(R.id.nav_sp);
@@ -62,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(0).setChecked(true);
 
         // Check the login data...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -104,7 +107,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (oldNavId != 0) displayView(oldNavId);
+            else super.onBackPressed();
         }
     }
 
@@ -228,22 +232,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // If the logindata is correct, open fragment...
         SettingsFragment settingsFragment = null;
         String title = getString(R.string.app_name);
+        oldNavId = currentNavId;
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
 
         // Get new fragment...
         switch (viewId) {
             case R.id.nav_vp:
+                navigationView.getMenu().getItem(1).setChecked(true);
                 currentFragment = new VpFragment();
                 title = getString(R.string.vp);
                 break;
             case R.id.nav_sp:
+                navigationView.getMenu().getItem(0).setChecked(true);
                 currentFragment = new SpFragment();
                 title = getString(R.string.sp);
                 break;
             case R.id.nav_teacher:
+                navigationView.getMenu().getItem(2).setChecked(true);
                 currentFragment = new TeacherFragment();
                 title = getString(R.string.teacher);
                 break;
             case R.id.nav_settings:
+                navigationView.getMenu().getItem(3).setChecked(true);
                 settingsFragment = new SettingsFragment();
         }
 
