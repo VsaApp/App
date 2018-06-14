@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final MainActivity mainActivity = this;
     private boolean showSettings = false;
     private int currentNavId = 0;
-    private int oldNavId = 0;
     public static boolean loggingin = false;
     private Fragment currentFragment;
 
@@ -107,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (oldNavId != 0) displayView(oldNavId);
+            if (currentNavId != R.id.nav_sp) displayView(R.id.nav_sp);
             else super.onBackPressed();
         }
     }
@@ -232,7 +231,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // If the logindata is correct, open fragment...
         SettingsFragment settingsFragment = null;
         String title = getString(R.string.app_name);
-        oldNavId = currentNavId;
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
