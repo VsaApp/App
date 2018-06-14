@@ -76,7 +76,7 @@ public class SpDayListAdapter extends BaseAdapter {
 
         } else if (lesson.numberOfSubjects() > 1) {
             listViewHolder.relativeLayout.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     int update = 0;
                     if (event.getX() < listViewHolder.relativeLayout.getWidth() / 4) {
                         update = -1;
@@ -125,7 +125,9 @@ public class SpDayListAdapter extends BaseAdapter {
         }
 
         if (lesson.isGray()) {
-            listViewHolder.relativeLayout.setBackgroundColor(GRAY);
+            listViewHolder.lessonInListView.setTextColor(convertView.getResources().getColor(R.color.spPassedLesson));
+            listViewHolder.tutorInListView.setTextColor(convertView.getResources().getColor(R.color.spPassedLesson));
+            listViewHolder.roomInListView.setTextColor(convertView.getResources().getColor(R.color.spPassedLesson));
         }
 
         return convertView;
