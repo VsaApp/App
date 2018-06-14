@@ -76,7 +76,7 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
         FirebaseHandler.subscribe(mActivity.getApplicationContext(), gradename);
 
         TextView textView = mActivity.findViewById(R.id.header_name);
-        textView.setText(getResources().getString(R.string.app_name) + " - " + gradename);
+        textView.setText(mActivity.getResources().getString(R.string.app_name) + " - " + gradename);
 
         // Create callback...
         Callbacks.spCallback callback = new Callbacks.spCallback() {

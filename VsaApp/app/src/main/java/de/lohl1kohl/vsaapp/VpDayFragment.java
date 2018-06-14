@@ -9,7 +9,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Objects;
 
 public class VpDayFragment extends BaseFragment {
 
@@ -33,7 +32,7 @@ public class VpDayFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.vp_day, container, false);
         ListView listView = root.findViewById(R.id.vpList);
-        VpAdapter vpAdapter = new VpAdapter(Objects.requireNonNull(mActivity).getApplicationContext(), data);
+        VpAdapter vpAdapter = new VpAdapter(mActivity, data);
         listView.setAdapter(vpAdapter);
 
         // Add click listener...
