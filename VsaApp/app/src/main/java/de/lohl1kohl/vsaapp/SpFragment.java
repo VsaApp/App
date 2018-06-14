@@ -143,6 +143,7 @@ public class SpFragment extends BaseFragment {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
+        if (LessonUtils.isLessonPassed(7)) weekday++;
         if (weekday >= 5) {
             weekday = 0;
         }
