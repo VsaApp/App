@@ -14,6 +14,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -31,9 +33,18 @@ public class SpDayFragment extends BaseFragment {
         this.subjectsSymbols = subjectsSymbols;
     }
 
+    private long getTimePassed() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 9);
+        Date startDate = cal.getTime();
+        long diff = new Date().getTime() - startDate.getTime();
+        return diff / 1000 / 60;
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.sp_day, container, false);
+        long time = getTimePassed();
         new Thread(() -> {
             String day = "";
             ListView lV = root.findViewById(R.id.sp_day);
@@ -58,6 +69,13 @@ public class SpDayFragment extends BaseFragment {
 
                     if (ls.numberOfSubjects() > 1) {
                         ls.readSavedSubject(mActivity);
+                    }
+                    try {
+                        if (LessonUtils.getEndTime(ls) < time) {
+                            ls.setGray(true);
+                        }
+                    } catch (Exception ignored) {
+
                     }
                     spDay.add(ls);
                 }

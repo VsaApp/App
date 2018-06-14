@@ -8,10 +8,19 @@ import java.util.List;
 
 public class Lesson {
     private int currentIndex = 0;
-    private List<Subject> subjects;
+    List<Subject> subjects;
+    private boolean gray;
 
     Lesson(List<Subject> subjects) {
         this.subjects = subjects;
+    }
+
+    public boolean isGray() {
+        return gray;
+    }
+
+    public void setGray(boolean gray) {
+        this.gray = gray;
     }
 
     public void addSubject(Subject subject) {
@@ -31,10 +40,12 @@ public class Lesson {
         if (currentIndex < 0) currentIndex += subjects.size();
     }
 
-    public String toString(){
-        String output = "";
-        for (Subject subject : subjects){output += subject.getName() + ":";}
-        return output;
+    public String toString() {
+        StringBuilder output = new StringBuilder();
+        for (Subject subject : subjects) {
+            output.append(subject.getName()).append(":");
+        }
+        return output.toString();
     }
 
     public void saveSubject(Context context) {

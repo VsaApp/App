@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static android.graphics.Color.GRAY;
+
 public class SpDayListAdapter extends BaseAdapter {
 
     private List<Lesson> listStorage;
@@ -121,6 +123,10 @@ public class SpDayListAdapter extends BaseAdapter {
             listViewHolder.lessonInListView.setText(subject.getName());
             listViewHolder.tutorInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), tutor));
             listViewHolder.roomInListView.setText(convertView.getResources().getString(R.string.in_room) + " " + subject.room);
+        }
+
+        if (lesson.isGray()) {
+            listViewHolder.relativeLayout.setBackgroundColor(GRAY);
         }
 
         return convertView;
