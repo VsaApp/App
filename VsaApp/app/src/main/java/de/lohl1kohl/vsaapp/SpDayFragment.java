@@ -62,7 +62,8 @@ public class SpDayFragment extends BaseFragment {
                         ls.readSavedSubject(mActivity);
                     }
                     try {
-                        if (LessonUtils.isLessonPassed(ls.getSubject().unit) && LessonUtils.isDayInFuture(ls.getSubject().day)) {
+                        if (LessonUtils.isDayPassed(ls.getSubject().day)) ls.setGray(true);
+                        else if (LessonUtils.isLessonPassed(ls.getSubject().unit) && !LessonUtils.isDayInFuture(ls.getSubject().day)) {
                             ls.setGray(true);
                         }
                     } catch (Exception ignored) {

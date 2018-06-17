@@ -142,11 +142,9 @@ public class SpFragment extends BaseFragment {
         tabLayout.setupWithViewPager(pager);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
-        if (LessonUtils.isLessonPassed(7)) weekday++;
-        if (weekday >= 5) {
-            weekday = 0;
-        }
+        int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        if (weekday == 0 | weekday == 6) weekday = 0;
+        else if (LessonUtils.isLessonPassed(7)) weekday++;
         TabLayout.Tab tab = tabLayout.getTabAt(weekday);
         Objects.requireNonNull(tab).select();
     }
