@@ -88,7 +88,7 @@ public class VpFragment extends BaseFragment {
             text = String.format(context.getString(R.string.now_with_s_s), tutorNow, subject.changes.name);
         else text = String.format(context.getString(R.string.now_s), subject.changes.getName());
         if (subject.changes.room.length() > 0)
-            text += context.getString(R.string.in_room) + subject.changes.room;
+            text += String.format(context.getString(R.string.in_room_s), subject.changes.room);
         tV_changed.setText(text);
 
         loginDialog.show();

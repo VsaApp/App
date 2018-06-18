@@ -119,7 +119,7 @@ public class SpDayListAdapter extends BaseAdapter {
 
             listViewHolder.lessonInListView.setText(subject.getName());
             listViewHolder.tutorInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), tutor));
-            listViewHolder.roomInListView.setText(convertView.getResources().getString(R.string.in_room) + " " + subject.room);
+            listViewHolder.roomInListView.setText(String.format(convertView.getResources().getString(R.string.in_room_s), subject.room));
         }
 
         if (lesson.isGray()) {

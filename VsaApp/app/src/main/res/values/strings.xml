@@ -31,12 +31,12 @@
     <string name="for_s_the_s_from_s">Für %s den %s (Von: %s)</string>
     <string name="mister">Herr</string>
     <string name="mister_gen">Herrn</string>
-    <string name="s_in_room_s">%s im Raum %s</string>
+    <string name="s_in_room_s">%s in Raum %s</string>
     <string name="dot_unit">. Stunde</string>
     <string name="with_s_s_in_room_s">Mit %s %s in Raum %s</string>
     <string name="now_with_s_s">Jetzt mit %s: %s</string>
     <string name="now_s">Jetzt %s</string>
-    <string name="in_room">im Raum</string>
+    <string name="in_room_s">\ in Raum %s</string>
     <string name="with_s">mit %s</string>
     <string name="no_unit_in_this_lesson">-</string>
     <string name="lesson_pause">Mittagspause</string>
@@ -67,6 +67,7 @@
         <item>EF</item>
         <item>Q1</item>
         <item>Q2</item>
+        <item>13</item>
     </string-array>
     <string-array name="nameOfSubjects">
         <item>CH:Chemie</item>
