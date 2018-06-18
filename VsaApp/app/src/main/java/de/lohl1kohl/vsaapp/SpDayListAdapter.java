@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static android.graphics.Color.GRAY;
-
 public class SpDayListAdapter extends BaseAdapter {
 
     private List<Lesson> listStorage;

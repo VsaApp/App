@@ -12,8 +12,8 @@ import java.util.List;
 
 public class VpDayFragment extends BaseFragment {
 
-    private List<Subject> data;
     public String weekday;
+    private List<Subject> data;
     private String date;
     private String time;
     private boolean hasInfo = false;

@@ -37,10 +37,10 @@ import de.lohl1kohl.vsaapp.server.Login;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static boolean firstOpen = true;
+    public static boolean loggingin = false;
     private final MainActivity mainActivity = this;
     private boolean showSettings = false;
     private int currentNavId = 0;
-    public static boolean loggingin = false;
     private Fragment currentFragment;
 
     @SuppressLint("SetTextI18n")

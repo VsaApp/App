@@ -12,7 +12,7 @@ public class LessonUtils {
     private static int[] endTimes = new int[]{60, 130, 210, 280, 360, 420, 480, 545};
     private static List<String> weekdays;
 
-    public static boolean isDayPassed(String day){
+    public static boolean isDayPassed(String day) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 1;
