@@ -1,5 +1,7 @@
 package de.lohl1kohl.vsaapp;
 
+import android.util.Log;
+
 import java.util.Map;
 
 public class Subject {
@@ -19,6 +21,7 @@ public class Subject {
         this.room = room;
         this.tutor = tutor;
         this.subjectSymbols = subjectSymbols;
+        Log.i("VsaApp/Subject", "unit: " + unit);
     }
 
     public String getName() {

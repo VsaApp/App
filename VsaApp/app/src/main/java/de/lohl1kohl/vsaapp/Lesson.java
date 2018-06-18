@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 import java.util.List;
 
 public class Lesson {
-    List<Subject> subjects;
+    private List<Subject> subjects;
     private int currentIndex = 0;
     private boolean gray;
 

@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,11 +47,11 @@ public class SpDayFragment extends BaseFragment {
                         day = data.getString("name");
                         if (g.length() > 1) {
                             for (int k = 0; k < g.length(); k++) {
-                                Subject subject = new Subject(data.getString("name"), j + 1, g.getJSONObject(k).getString("lesson"), g.getJSONObject(k).getString("room"), g.getJSONObject(k).getString("tutor"), subjectsSymbols);
+                                Subject subject = new Subject(data.getString("name"), j, g.getJSONObject(k).getString("lesson"), g.getJSONObject(k).getString("room"), g.getJSONObject(k).getString("tutor"), subjectsSymbols);
                                 ls.addSubject(subject);
                             }
                         } else {
-                            Subject subject = new Subject(data.getString("name"), j + 1, g.getJSONObject(0).getString("lesson"), g.getJSONObject(0).getString("room"), g.getJSONObject(0).getString("tutor"), subjectsSymbols);
+                            Subject subject = new Subject(data.getString("name"), j, g.getJSONObject(0).getString("lesson"), g.getJSONObject(0).getString("room"), g.getJSONObject(0).getString("tutor"), subjectsSymbols);
                             ls.addSubject(subject);
                         }
                     }
@@ -59,8 +60,11 @@ public class SpDayFragment extends BaseFragment {
                         ls.readSavedSubject(mActivity);
                     }
                     try {
+                        boolean isPassed = LessonUtils.isLessonPassed(ls.getSubject().unit);
+                        boolean isFuture = LessonUtils.isDayInFuture(ls.getSubject().day);
+                        //Log.i("VsaApp", "Day: " + ls.getSubject().day + ", Unit: " + ls.getSubject().unit + ", isPassed: " + (isPassed ? "true" : "false") + ", isFuture: " + (isFuture ? "true" : "false"));
                         if (LessonUtils.isDayPassed(ls.getSubject().day)) ls.setGray(true);
-                        else if (LessonUtils.isLessonPassed(ls.getSubject().unit) && !LessonUtils.isDayInFuture(ls.getSubject().day)) {
+                        else if (isPassed && !isFuture) {
                             ls.setGray(true);
                         }
                     } catch (Exception ignored) {
