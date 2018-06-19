@@ -241,7 +241,7 @@ public class VpFragment extends BaseFragment {
                     }
 
                     Subject lesson = getSubject(weekday, unit, normalLesson);
-                    lesson.changes = new Subject(date, unit, info, room, tutor, subjectsSymbols);
+                    lesson.changes = new Subject(weekday, unit, info, room, tutor, subjectsSymbols);
 
                     subjects.add(lesson);
                 }

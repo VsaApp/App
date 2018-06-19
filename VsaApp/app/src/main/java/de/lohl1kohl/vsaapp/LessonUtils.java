@@ -1,7 +1,5 @@
 package de.lohl1kohl.vsaapp;
 
-import android.util.Log;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
