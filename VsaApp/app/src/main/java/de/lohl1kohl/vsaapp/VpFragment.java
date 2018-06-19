@@ -276,5 +276,11 @@ public class VpFragment extends BaseFragment {
         // Add the tabs...
         TabLayout tabLayout = vpView.findViewById(R.id.vp_tabs);
         tabLayout.setupWithViewPager(pager);
+
+        if (mActivity.getIntent().getStringExtra("day") != null) {
+            if (mActivity.getIntent().getStringExtra("day").equals(weekdayTomorrow)) {
+                Objects.requireNonNull(tabLayout.getTabAt(1)).select();
+            }
+        }
     }
 }

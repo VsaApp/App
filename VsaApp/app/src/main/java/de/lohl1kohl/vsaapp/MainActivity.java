@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -93,8 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             };
             new Login().login(username, password, callback);
         }
-        Intent i = getIntent();
-        if (i.getStringExtra("page") != null) {
+        if (getIntent().getStringExtra("page") != null) {
             displayView(R.id.nav_vp);
             navigationView.getMenu().getItem(1).setChecked(true);
         }
