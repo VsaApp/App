@@ -22,7 +22,7 @@
     <string name="preferenceTitle_showVpOnlyForYou">Im Vertretungsplan nur deine Kurse  anzeigen</string>
     <string name="preferenceSummary_showVpOnlyForYou">Im Vertretungsplan werden nur die von die ausgewählten Kurse angezeigt</string>
     <string name="login_success">Erfolgreich angemeldet</string>
-    <string name="no_connection">Verbindung zum Server vehlgeschagen</string>
+    <string name="no_connection">Verbindung zum Server fehlgeschagen</string>
     <string name="no_class">Keine Klasse gesetzt</string>
     <string name="choose_grade">Klasse auswählen</string>
     <string name="search_teacher">Lehrer mit Namen oder Kürzel suchen</string>
@@ -223,7 +223,7 @@
         <item>Herr Dr. Schmidt</item>
         <item>Herr Schleifer</item>
         <item>Herr Schell</item>
-        <item>Herr Schneirder</item>
+        <item>Herr Schneider</item>
         <item>Herr Schnell</item>
         <item>Frau Seppe</item>
         <item>Frau Schneider</item>
