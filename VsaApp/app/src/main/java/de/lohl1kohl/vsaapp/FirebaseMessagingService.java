@@ -15,24 +15,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
-
-    private Map<String, String> subjectsSymbols = new HashMap<>();
-
-    @Override
-    public void onCreate() {
-        String[] subjects = getResources().getStringArray(R.array.nameOfSubjects);
-        for (String subject : subjects) {
-            String[] pair = subject.split(":");
-
-            subjectsSymbols.put(pair[0], pair[1]);
-        }
-    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {

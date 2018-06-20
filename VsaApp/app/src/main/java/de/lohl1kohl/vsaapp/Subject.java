@@ -9,7 +9,6 @@ public class Subject {
     public String room;
     public String tutor;
     public Subject changes;
-    boolean changed = false;
     private Map<String, String> subjectSymbols;
 
     Subject(String day, int unit, String name, String room, String tutor, Map<String, String> subjectSymbols) {

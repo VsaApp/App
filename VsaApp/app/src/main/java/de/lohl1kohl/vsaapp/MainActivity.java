@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        LessonUtils.setWeekdays(new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.weekdays))));
+        LessonUtils.setWeekdays(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weekdays))));
 
         // Show the vpFragment as the start fragment...
         displayView(R.id.nav_sp);
@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    @SuppressWarnings("deprecation")
     private void displayView(int viewId) {
 
         // If the logindata is correct, open fragment...
@@ -254,6 +255,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_settings:
                 navigationView.getMenu().getItem(3).setChecked(true);
                 settingsFragment = new SettingsFragment();
+                break;
         }
 
         // If the new fragment is the same like the new break up...
@@ -301,6 +303,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancelAll();
+        Objects.requireNonNull(notificationManager).cancelAll();
     }
 }
