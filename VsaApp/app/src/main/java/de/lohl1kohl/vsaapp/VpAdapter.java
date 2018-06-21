@@ -17,8 +17,8 @@ import de.lohl1kohl.vsaapp.holder.VpHolder;
 
 public class VpAdapter extends BaseAdapter {
 
+    private boolean today;
     private LayoutInflater layoutinflater;
-    boolean today;
 
     VpAdapter(Context context, boolean today) {
         layoutinflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -13,22 +13,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import de.lohl1kohl.vsaapp.holder.SpHolder;
-import de.lohl1kohl.vsaapp.server.Callbacks;
 import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
-import de.lohl1kohl.vsaapp.server.Sp;
-
-import static de.lohl1kohl.vsaapp.MainActivity.firstOpen;
-import static de.lohl1kohl.vsaapp.MainActivity.loggingin;
+import de.lohl1kohl.vsaapp.holder.SpHolder;
 
 
 public class SpFragment extends BaseFragment {

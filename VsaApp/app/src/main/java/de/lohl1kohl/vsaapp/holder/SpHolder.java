@@ -1,5 +1,6 @@
 package de.lohl1kohl.vsaapp.holder;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -8,7 +9,6 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,25 +19,26 @@ import de.lohl1kohl.vsaapp.Lesson;
 import de.lohl1kohl.vsaapp.LessonUtils;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.Subject;
-import de.lohl1kohl.vsaapp.server.Callbacks.spCallback;
 import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
+import de.lohl1kohl.vsaapp.server.Callbacks.spCallback;
 import de.lohl1kohl.vsaapp.server.Sp;
 
 public class SpHolder {
-    private static List<List<Lesson>> sp;
+    @SuppressLint("StaticFieldLeak")
     public static Activity mActivity;
     public static Map<String, String> subjectsSymbols;
+    private static List<List<Lesson>> sp;
     private static String lastGrade = "";
 
-    public static void load(){
+    public static void load() {
         load(null);
     }
 
-    public static void load(spLoadedCallback spLoadedCallback){
+    public static void load(spLoadedCallback spLoadedCallback) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
         String grade = sharedPref.getString("pref_grade", "-1");
 
-        if (grade.equals(lastGrade)){
+        if (grade.equals(lastGrade)) {
             if (spLoadedCallback != null) spLoadedCallback.onFinished();
             return;
         }
@@ -47,9 +48,9 @@ public class SpHolder {
         sp = getSavedSp();
         if (spLoadedCallback != null) spLoadedCallback.onFinished();
 
-        spCallback spCallback = new spCallback(){
+        spCallback spCallback = new spCallback() {
 
-            public void onReceived(String output){
+            public void onReceived(String output) {
                 sp = convertJsonToArray(output);
 
                 // Save the current sp in the settings...
@@ -60,19 +61,19 @@ public class SpHolder {
                 if (spLoadedCallback != null) spLoadedCallback.onFinished();
             }
 
-            public void onConnectionFailed(){
+            public void onConnectionFailed() {
                 Log.e("VsaApp/SpHolder", "No connection!");
                 sp = getSavedSp();
                 if (spLoadedCallback != null) spLoadedCallback.onConnectionFailed();
             }
 
-            public void onNoSp(){
+            public void onNoSp() {
                 Log.i("VsaApp/SpHolder", "No sp!");
 
                 // Create a empty sp...
-                sp = new ArrayList<List<Lesson>>();
+                sp = new ArrayList<>();
                 for (int i = 0; i < 5; i++) {
-                    sp.add(new ArrayList<Lesson>());
+                    sp.add(new ArrayList<>());
                 }
                 if (spLoadedCallback != null) spLoadedCallback.onNoSp();
             }
@@ -83,7 +84,7 @@ public class SpHolder {
     }
 
     @Nullable
-    private static List<List<Lesson>> getSavedSp(){
+    private static List<List<Lesson>> getSavedSp() {
         if (mActivity == null) return null;
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
@@ -95,17 +96,16 @@ public class SpHolder {
 
     @Nullable
     private static List<List<Lesson>> convertJsonToArray(String array) {
-        List<List<Lesson>> sp = new ArrayList<List<Lesson>>();
+        List<List<Lesson>> sp = new ArrayList<>();
         try {
             JSONArray jsonArray = new JSONArray(array);
-            for (int i = 0; i < jsonArray.length(); i++){
-                List<Lesson> spDay = new ArrayList<Lesson>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                List<Lesson> spDay = new ArrayList<>();
                 JSONArray l = jsonArray.getJSONObject(i).getJSONArray("lessons");
                 for (int j = 0; j < l.length(); j++) {
                     JSONArray g = l.getJSONArray(j);
                     Lesson ls = new Lesson(new ArrayList<>());
                     if (g.length() > 0) {
-                        String day = jsonArray.getJSONObject(i).getString("name");
                         if (g.length() > 1) {
                             for (int k = 0; k < g.length(); k++) {
                                 Subject subject = new Subject(jsonArray.getJSONObject(i).getString("name"), j, g.getJSONObject(k).getString("lesson"), g.getJSONObject(k).getString("room"), g.getJSONObject(k).getString("teacher"));
@@ -144,19 +144,19 @@ public class SpHolder {
         return sp;
     }
 
-    public static List<List<Lesson>> getSp(){
+    public static List<List<Lesson>> getSp() {
         return sp;
     }
 
-    public static List<Lesson> getDay(int day){
+    public static List<Lesson> getDay(int day) {
         return sp.get(day);
     }
 
-    public static Lesson getLesson(int day, int unit){
+    public static Lesson getLesson(int day, int unit) {
         return sp.get(day).get(unit);
     }
 
-    public static Subject getSubject(String weekday, int unit, String normalSubject){
+    public static Subject getSubject(String weekday, int unit, String normalSubject) {
         int day = Arrays.asList(mActivity.getResources().getStringArray(R.array.weekdays)).indexOf(weekday);
         Lesson lesson = sp.get(day).get(unit);
 

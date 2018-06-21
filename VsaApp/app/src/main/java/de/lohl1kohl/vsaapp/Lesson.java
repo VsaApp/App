@@ -37,13 +37,13 @@ public class Lesson {
         return subjects.get(currentIndex);
     }
 
-    public Subject getSubject(int i) {
-        return subjects.get(i);
-    }
-
     public void setSubject(int operation) {
         currentIndex = (currentIndex + operation) % subjects.size();
         if (currentIndex < 0) currentIndex += subjects.size();
+    }
+
+    public Subject getSubject(int i) {
+        return subjects.get(i);
     }
 
     public String toString() {

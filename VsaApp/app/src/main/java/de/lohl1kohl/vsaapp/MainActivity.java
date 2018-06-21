@@ -39,7 +39,6 @@ import de.lohl1kohl.vsaapp.server.Login;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static boolean firstOpen = true;
     public static boolean loggingin = false;
     private final MainActivity mainActivity = this;
     private boolean showSettings = false;
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         LessonUtils.setWeekdays(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weekdays))));
 
         String[] subjects = getResources().getStringArray(R.array.nameOfSubjects);
-        Map<String, String> subjectsSymbols = new HashMap<String, String>();
+        Map<String, String> subjectsSymbols = new HashMap<>();
         for (String subject : subjects) {
             String[] pair = subject.split(":");
 

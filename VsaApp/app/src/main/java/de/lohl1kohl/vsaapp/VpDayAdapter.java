@@ -4,8 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import java.util.List;
-
 import de.lohl1kohl.vsaapp.holder.VpHolder;
 
 public class VpDayAdapter extends FragmentStatePagerAdapter {

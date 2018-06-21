@@ -1,5 +1,6 @@
 package de.lohl1kohl.vsaapp.holder;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -16,32 +17,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import de.lohl1kohl.vsaapp.Lesson;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.Subject;
 import de.lohl1kohl.vsaapp.holder.Callbacks.vpLoadedCallback;
+import de.lohl1kohl.vsaapp.server.Callbacks.vpCallback;
 import de.lohl1kohl.vsaapp.server.vp.Today;
 import de.lohl1kohl.vsaapp.server.vp.Tomorrow;
-import de.lohl1kohl.vsaapp.server.Callbacks.vpCallback;
 
 public class VpHolder {
-    private static List<List<Subject>> vp;
+    @SuppressLint("StaticFieldLeak")
     public static Activity mActivity;
     public static Map<String, String> subjectsSymbols;
     public static String weekdayToday, dateToday, timeToday;
     public static String weekdayTomorrow, dateTomorrow, timeTomorrow;
+    private static List<List<Subject>> vp;
     private static int countDownloadedVps = 0;
 
-    public static void load(){
-        load(null);
-    }
-
-    public static void load(vpLoadedCallback vpLoadedCallback){
+    public static void load(vpLoadedCallback vpLoadedCallback) {
         // Get grade...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
         String grade = sharedPref.getString("pref_grade", "-1");
 
-        vp = new ArrayList<List<Subject>>();
+        vp = new ArrayList<>();
         countDownloadedVps = 0;
 
         for (int i = 0; i < 2; i++) {
@@ -67,7 +64,8 @@ public class VpHolder {
 
                     countDownloadedVps++;
 
-                    if (vpLoadedCallback != null && countDownloadedVps == 2) vpLoadedCallback.onFinished();
+                    if (vpLoadedCallback != null && countDownloadedVps == 2)
+                        vpLoadedCallback.onFinished();
                 }
 
                 @Override
@@ -79,7 +77,8 @@ public class VpHolder {
                     List<Subject> savedVP = getSavedVp(today);
                     if (savedVP != null) vp.add(today ? 0 : 1, savedVP);
 
-                    if (vpLoadedCallback != null && countDownloadedVps == 2) vpLoadedCallback.onConnectionFailed();
+                    if (vpLoadedCallback != null && countDownloadedVps == 2)
+                        vpLoadedCallback.onConnectionFailed();
                 }
             };
 
@@ -93,7 +92,7 @@ public class VpHolder {
     }
 
     @Nullable
-    private static List<Subject> getSavedVp(boolean today){
+    private static List<Subject> getSavedVp(boolean today) {
         if (mActivity == null) return null;
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
@@ -104,10 +103,9 @@ public class VpHolder {
         return convertJsonToArray(savedVP, today);
     }
 
-    private static List<Subject> convertJsonToArray(String array, boolean today){
+    private static List<Subject> convertJsonToArray(String array, boolean today) {
         List<Subject> subjects = new ArrayList<>();
         try {
-            List<Lesson> lessons = new ArrayList<>();
             JSONObject header = new JSONObject(array);
             String date = header.getString("date");
             String weekday = header.getString("weekday");
@@ -128,13 +126,14 @@ public class VpHolder {
                 }
 
                 Subject subject = SpHolder.getSubject(weekday, unit, normalLesson);
-                if (subject == null) subject = SpHolder.getLesson(Arrays.asList(mActivity.getResources().getStringArray(R.array.weekdays)).indexOf(weekday), unit).getSubject();
+                if (subject == null)
+                    subject = SpHolder.getLesson(Arrays.asList(mActivity.getResources().getStringArray(R.array.weekdays)).indexOf(weekday), unit).getSubject();
                 subject.changes = new Subject(weekday, unit, info, room, tutor);
 
                 subjects.add(subject);
             }
 
-            if (today){
+            if (today) {
                 weekdayToday = weekday;
                 dateToday = date;
                 timeToday = time;
@@ -151,15 +150,15 @@ public class VpHolder {
         return subjects;
     }
 
-    public static List<List<Subject>> getVp(){
+    public static List<List<Subject>> getVp() {
         return vp;
     }
 
-    public static List<Subject> getVp(boolean today){
+    public static List<Subject> getVp(boolean today) {
         return vp.get(today ? 0 : 1);
     }
 
-    public static Subject getSubject(boolean today, int i){
+    public static Subject getSubject(boolean today, int i) {
         Log.i("VsaApp/VpHolder", "Today: " + (today ? "true" : "false") + ", i:" + i + ", " + vp);
         return vp.get(today ? 0 : 1).get(i);
     }

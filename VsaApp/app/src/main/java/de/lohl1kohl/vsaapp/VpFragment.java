@@ -3,24 +3,17 @@ package de.lohl1kohl.vsaapp;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,17 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import de.lohl1kohl.vsaapp.holder.VpHolder;
-import de.lohl1kohl.vsaapp.server.Callbacks;
-import de.lohl1kohl.vsaapp.server.vp.Today;
-import de.lohl1kohl.vsaapp.server.vp.Tomorrow;
 import de.lohl1kohl.vsaapp.holder.Callbacks.vpLoadedCallback;
+import de.lohl1kohl.vsaapp.holder.VpHolder;
 
 
 public class VpFragment extends BaseFragment {
     View vpView;
-    String outputToday = null;
-    String outputTomorrow = null;
     private Map<String, String> subjectsSymbols = new HashMap<>();
 
     @SuppressLint("SetTextI18n")
@@ -81,7 +69,7 @@ public class VpFragment extends BaseFragment {
         final TextView tV_changed = loginDialog.findViewById(R.id.lbl_changed);
 
 
-        tV_units.setText(Integer.toString(subject.unit) + context.getString(R.string.dot_unit));
+        tV_units.setText(Integer.toString(subject.unit + 1) + context.getString(R.string.dot_unit));
         tV_normal.setText(String.format(context.getString(R.string.with_s_s_in_room_s), tutorNormal, subject.getName(), subject.room));
         tV_normal.setPaintFlags(tV_normal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
