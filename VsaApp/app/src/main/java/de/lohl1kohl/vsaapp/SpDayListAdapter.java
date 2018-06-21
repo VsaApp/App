@@ -66,14 +66,6 @@ public class SpDayListAdapter extends BaseAdapter {
         // Get the current lesson...
         Lesson lesson = listStorage.get(position);
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        String prefName = String.format("pref_selectedSubject%s:%s:%s", settings.getString("pref_grade", "-1"), lesson.getSubject().day, lesson.getSubject().unit);
-        String prefValue = settings.getString(prefName, "-1");
-        if (prefValue.equals("-1")) {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(prefName, lesson.getSubject().name + ":" + lesson.getSubject().tutor);
-            editor.apply();
-        }
         // Set the buttons...
         if (lesson.numberOfSubjects() <= 1) {
             listViewHolder.leftButton.setEnabled(false);

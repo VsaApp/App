@@ -3,6 +3,7 @@ package de.lohl1kohl.vsaapp;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class Lesson {
     private int currentIndex = 0;
     private boolean gray;
 
-    Lesson(List<Subject> subjects) {
+    public Lesson(List<Subject> subjects) {
         this.subjects = subjects;
     }
 
@@ -32,7 +33,12 @@ public class Lesson {
     }
 
     public Subject getSubject() {
+        Log.i("VsaApp/Lesson", "" + currentIndex + " " + subjects.size());
         return subjects.get(currentIndex);
+    }
+
+    public Subject getSubject(int i) {
+        return subjects.get(i);
     }
 
     public void setSubject(int operation) {

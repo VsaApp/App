@@ -29,9 +29,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import de.lohl1kohl.vsaapp.holder.VpHolder;
 import de.lohl1kohl.vsaapp.server.Callbacks;
 import de.lohl1kohl.vsaapp.server.vp.Today;
 import de.lohl1kohl.vsaapp.server.vp.Tomorrow;
+import de.lohl1kohl.vsaapp.holder.Callbacks.vpLoadedCallback;
 
 
 public class VpFragment extends BaseFragment {
@@ -101,8 +103,20 @@ public class VpFragment extends BaseFragment {
         vpView = inflater.inflate(R.layout.fragment_vp, container, false);
 
         // Update vp...
-        syncVp(true);
-        syncVp(false);
+        vpLoadedCallback callback = new vpLoadedCallback() {
+            @Override
+            public void onFinished() {
+                fillVp();
+            }
+
+            @Override
+            public void onConnectionFailed() {
+                Toast.makeText(mActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
+                fillVp();
+            }
+        };
+
+        VpHolder.load(callback);
 
         // Create dictionary with all subject symbols...
         String[] subjects = getResources().getStringArray(R.array.nameOfSubjects);
@@ -115,162 +129,9 @@ public class VpFragment extends BaseFragment {
         return vpView;
     }
 
-    private void syncVp(boolean today) {
-        // Get gradename...
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        String gradename = sharedPref.getString("pref_grade", "-1");
-
-        // Check if a gradename is set...
-        if (gradename.equals("-1")) {
-            Toast.makeText(mActivity, R.string.no_class, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        // Create callback...
-        Callbacks.vpCallback callback = new Callbacks.vpCallback() {
-            @Override
-            public void onReceived(String output) {
-                if (today) outputToday = output;
-                else outputTomorrow = output;
-                if (outputTomorrow != null && outputToday != null)
-                    fillVp(outputToday, outputTomorrow);
-                Log.v("VsaApp/Server", "Success");
-
-                // Save the current sp...
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("pref_vp_" + (today ? "today" : "tomorrow"), output);
-                editor.apply();
-            }
-
-            @Override
-            public void onConnectionFailed() {
-                Log.e("VsaApp/Server", "Failed");
-                Toast.makeText(mActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
-
-                // Show saved sp...
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
-                String savedVP = sharedPref.getString("pref_vp_" + (today ? "today" : "tomorrow"), "-1");
-
-                if (!savedVP.equals("-1")) {
-                    if (today) outputToday = savedVP;
-                    else outputTomorrow = savedVP;
-                    if (outputTomorrow != null && outputToday != null)
-                        fillVp(outputToday, outputTomorrow);
-                }
-            }
-        };
-
-        // Send request to server...
-        if (today) {
-            new Today().updateVp(gradename, callback);
-        } else {
-            new Tomorrow().updateVp(gradename, callback);
-        }
-    }
-
-    private Subject getSubject(String weekday, int unit, String normalSubject) {
-
-        normalSubject = normalSubject.split(" ")[0].toLowerCase();
-
-        // Get saved sp...
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        String grade = sharedPref.getString("pref_grade", "-1");
-        String savedSP = sharedPref.getString("pref_sp_" + grade, "-1");
-
-        try {
-            JSONArray jsonarray = new JSONArray(savedSP);
-            for (int i = 0; i < jsonarray.length(); i++) {
-                JSONObject day = jsonarray.getJSONObject(i);
-
-                if (day.getString("name").equals(weekday)) {
-                    JSONArray lessons = new JSONArray(day.getString("lessons"));
-                    JSONArray lesson = lessons.getJSONArray(unit - 1);
-
-                    for (int x = 0; x < lesson.length(); x++) {
-                        JSONObject subject = lesson.getJSONObject(x);
-                        String name = subject.getString("lesson");
-                        String room = subject.getString("room");
-                        String tutor = subject.getString("tutor");
-                        if (name.toLowerCase().equals(normalSubject)) {
-                            return new Subject(weekday, unit, name, room, tutor, subjectsSymbols);
-                        }
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            Log.i("VsaApp/SpFragment", "Cannot convert output to array!");
-        }
-
-        Log.e("VsaApp/VpFragment", "There is no lesson with the given params!");
-        return new Subject(weekday, unit, normalSubject, "?", "?", subjectsSymbols);
-    }
-
-    private void fillVp(String outputToday, String outputTomorrow) {
-        List<Subject> subjects;
-
-        String weekday;
-        String date;
-        String time;
-        List<Subject> subjectsToday = new ArrayList<>();
-        List<Subject> subjectsTomorrow = new ArrayList<>();
-        String weekdayToday = "", dateToday = "", timeToday = "";
-        String weekdayTomorrow = "", dateTomorrow = "", timeTomorrow = "";
-
-        for (int j = 0; j < 2; j++) {
-            try {
-                subjects = new ArrayList<>();
-                String output = (j == 1) ? outputTomorrow : outputToday;
-                JSONObject header = new JSONObject(output);
-                date = header.getString("date");
-                weekday = header.getString("weekday");
-                time = header.getString("time");
-                JSONArray jsonarray = new JSONArray(header.getString("changes"));
-                for (int i = 0; i < jsonarray.length(); i++) {
-                    JSONObject entry = jsonarray.getJSONObject(i);
-                    int unit = Integer.valueOf(entry.getString("unit"));
-                    String normalLesson = entry.getString("lesson");
-                    JSONObject changed = new JSONObject(entry.getString("changed"));
-
-                    String info = changed.getString("info");
-                    String tutor = changed.getString("tutor");
-                    String room = changed.getString("room");
-
-                    if (subjectsSymbols.containsKey(info.split(" ")[0].toUpperCase())) {
-                        info = info.replace(info.split(" ")[0], subjectsSymbols.get(info.split(" ")[0].toUpperCase()));
-                    }
-
-                    Subject lesson = getSubject(weekday, unit, normalLesson);
-                    lesson.changes = new Subject(weekday, unit, info, room, tutor, subjectsSymbols);
-
-                    subjects.add(lesson);
-                }
-
-            } catch (JSONException e) {
-                Log.i("VsaApp/SpFragment", "Cannot convert output to array!");
-                return;
-            }
-
-
-            if (j == 0) {
-                subjectsToday = subjects;
-                weekdayToday = weekday;
-                dateToday = date;
-                timeToday = time;
-            } else {
-                subjectsTomorrow = subjects;
-                weekdayTomorrow = weekday;
-                dateTomorrow = date;
-                timeTomorrow = time;
-            }
-        }
-
+    private void fillVp() {
         ViewPager pager = vpView.findViewById(R.id.vp_viewpager);
         VpDayAdapter adapter = new VpDayAdapter(getFragmentManager());
-        adapter.setDataToday(subjectsToday);
-        adapter.setDataTomorrow(subjectsTomorrow);
-        adapter.setInfoToday(weekdayToday, dateToday, timeToday);
-        adapter.setInfoTomorrow(weekdayTomorrow, dateTomorrow, timeTomorrow);
         pager.setAdapter(adapter);
 
         // Add the tabs...
@@ -278,7 +139,7 @@ public class VpFragment extends BaseFragment {
         tabLayout.setupWithViewPager(pager);
 
         if (mActivity.getIntent().getStringExtra("day") != null) {
-            if (mActivity.getIntent().getStringExtra("day").equals(weekdayTomorrow)) {
+            if (mActivity.getIntent().getStringExtra("day").equals(VpHolder.weekdayTomorrow)) {
                 Objects.requireNonNull(tabLayout.getTabAt(1)).select();
             }
         }

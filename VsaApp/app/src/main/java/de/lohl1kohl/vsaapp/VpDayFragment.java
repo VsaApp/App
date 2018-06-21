@@ -10,40 +10,27 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import de.lohl1kohl.vsaapp.holder.VpHolder;
+
 public class VpDayFragment extends BaseFragment {
 
-    public String weekday;
-    private List<Subject> data;
-    private String date;
-    private String time;
-    private boolean hasInfo = false;
-
-    public void setData(List<Subject> data) {
-        this.data = data;
-    }
-
-    public void setInfo(String weekday, String date, String time) {
-        this.weekday = weekday;
-        this.date = date;
-        this.time = time;
-        this.hasInfo = true;
-    }
+    public boolean today;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.vp_day, container, false);
         ListView listView = root.findViewById(R.id.vpList);
-        VpAdapter vpAdapter = new VpAdapter(mActivity, data);
+        VpAdapter vpAdapter = new VpAdapter(mActivity, today);
         listView.setAdapter(vpAdapter);
 
         // Add click listener...
         listView.setOnItemClickListener((adapterView, view, position, l) -> {
-            Subject clickedLesson = vpAdapter.getSubject(position);
+            Subject clickedLesson = VpHolder.getSubject(today, position);
             VpFragment.showVpInfoDialog(mActivity, clickedLesson);
         });
-        if (this.hasInfo) {
-            TextView textView = root.findViewById(R.id.vpStand);
-            textView.setText(String.format(getString(R.string.for_s_the_s_from_s), weekday, date, time));
-        }
+
+        TextView textView = root.findViewById(R.id.vpStand);
+        if (today) textView.setText(String.format(getString(R.string.for_s_the_s_from_s), VpHolder.weekdayToday, VpHolder.dateToday, VpHolder.timeToday));
+        else textView.setText(String.format(getString(R.string.for_s_the_s_from_s), VpHolder.weekdayTomorrow, VpHolder.dateTomorrow, VpHolder.timeTomorrow));
 
         return root;
     }

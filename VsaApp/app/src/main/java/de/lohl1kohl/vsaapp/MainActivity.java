@@ -28,8 +28,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
+import de.lohl1kohl.vsaapp.holder.SpHolder;
+import de.lohl1kohl.vsaapp.holder.VpHolder;
 import de.lohl1kohl.vsaapp.server.Callbacks;
 import de.lohl1kohl.vsaapp.server.Login;
 
@@ -52,6 +56,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         LessonUtils.setWeekdays(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weekdays))));
+
+        String[] subjects = getResources().getStringArray(R.array.nameOfSubjects);
+        Map<String, String> subjectsSymbols = new HashMap<String, String>();
+        for (String subject : subjects) {
+            String[] pair = subject.split(":");
+
+            subjectsSymbols.put(pair[0], pair[1]);
+        }
+
+        // Init spHolder...
+        SpHolder.subjectsSymbols = subjectsSymbols;
+        SpHolder.mActivity = this;
+
+        // Init vpHolder...
+        VpHolder.subjectsSymbols = subjectsSymbols;
+        VpHolder.mActivity = this;
 
         // Show the vpFragment as the start fragment...
         displayView(R.id.nav_sp);

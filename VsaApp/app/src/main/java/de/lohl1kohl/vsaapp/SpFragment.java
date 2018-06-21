@@ -22,7 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import de.lohl1kohl.vsaapp.holder.SpHolder;
 import de.lohl1kohl.vsaapp.server.Callbacks;
+import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
 import de.lohl1kohl.vsaapp.server.Sp;
 
 import static de.lohl1kohl.vsaapp.MainActivity.firstOpen;
@@ -47,6 +49,7 @@ public class SpFragment extends BaseFragment {
             subjectsSymbols.put(pair[0], pair[1]);
         }
 
+
         // Try to refresh the sp...
         syncSp();
 
@@ -64,40 +67,17 @@ public class SpFragment extends BaseFragment {
         }
 
         // Create callback...
-        Callbacks.spCallback callback = new Callbacks.spCallback() {
+        spLoadedCallback callback = new spLoadedCallback() {
             @Override
-            public void onReceived(String output) {
-                try {
-                    fillSp(output);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.i("VsaApp/Server", "Success");
-
-                // Save the current sp...
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
-                String grade = sharedPref.getString("pref_grade", "-1");
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("pref_sp_" + grade, output);
-                editor.apply();
+            public void onFinished() {
+                fillSp();
             }
 
             @Override
             public void onConnectionFailed() {
                 Log.e("VsaApp/Server", "Failed");
                 Toast.makeText(mActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
-                // Show saved sp...
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
-                String grade = sharedPref.getString("pref_grade", "-1");
-                String savedSP = sharedPref.getString("pref_sp_" + grade, "-1");
-
-                if (!savedSP.equals("-1")) {
-                    try {
-                        fillSp(savedSP);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
+                fillSp();
             }
 
             @Override
@@ -109,34 +89,13 @@ public class SpFragment extends BaseFragment {
                 text.setText(R.string.noSp);
             }
         };
-        if (!loggingin) {
-            if (firstOpen) {
-                // Send request to server...
-                new Sp().updateSp(grade, callback);
-                firstOpen = false;
-            } else {
-                // Show saved sp...
-                String savedSP = sharedPref.getString("pref_sp_" + grade, "-1");
 
-                if (!savedSP.equals("-1")) {
-                    try {
-                        fillSp(savedSP);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+        SpHolder.load(callback);
     }
 
-    public void fillSp(String spData) throws JSONException {
-        // Get current subjects...
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        String grade = sharedPref.getString("pref_grade", "-1");
-        Log.i("VsaApp/fillSp", grade);
-        Log.i("spData", spData);
+    public void fillSp() {
         ViewPager pager = spView.findViewById(R.id.sp_viewpager);
-        SpDayAdapter adapter = new SpDayAdapter(getFragmentManager(), new JSONArray(spData), subjectsSymbols);
+        SpDayAdapter adapter = new SpDayAdapter(mActivity, getFragmentManager());
         pager.setAdapter(adapter);
         TabLayout tabLayout = spView.findViewById(R.id.sp_tabs);
         tabLayout.setupWithViewPager(pager);
@@ -144,7 +103,7 @@ public class SpFragment extends BaseFragment {
         calendar.setTime(new Date());
         int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
         if (weekday == -1 | weekday == 5) weekday = 0;
-        else if (LessonUtils.isLessonPassed(7)) weekday++;
+        else if (LessonUtils.isLessonPassed(SpHolder.getDay(weekday).size() - 1)) weekday++;
         TabLayout.Tab tab = tabLayout.getTabAt(weekday);
         Objects.requireNonNull(tab).select();
     }

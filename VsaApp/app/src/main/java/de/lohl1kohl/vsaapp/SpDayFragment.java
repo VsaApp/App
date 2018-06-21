@@ -14,66 +14,27 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import de.lohl1kohl.vsaapp.holder.SpHolder;
+
 public class SpDayFragment extends BaseFragment {
 
-    JSONObject data;
-    private Map<String, String> subjectsSymbols;
+    int day;
 
-    public void setData(JSONObject data) {
-        this.data = data;
-    }
-
-    public void setSubjectSymbols(Map<String, String> subjectsSymbols) {
-        this.subjectsSymbols = subjectsSymbols;
+    public void setDay(int day) {
+        this.day = day;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.sp_day, container, false);
         new Thread(() -> {
-            String day = "";
+            List<Lesson> spDay = SpHolder.getDay(day);
+            String weekday = Arrays.asList(root.getResources().getStringArray(R.array.weekdays)).get(day);
             ListView lV = root.findViewById(R.id.sp_day);
-            List<Lesson> spDay = new ArrayList<>();
-            try {
-                JSONArray l = data.getJSONArray("lessons");
-                for (int j = 0; j < l.length(); j++) {
-                    JSONArray g = l.getJSONArray(j);
-                    Lesson ls = new Lesson(new ArrayList<>());
-                    if (g.length() > 0) {
-                        day = data.getString("name");
-                        if (g.length() > 1) {
-                            for (int k = 0; k < g.length(); k++) {
-                                Subject subject = new Subject(data.getString("name"), j, g.getJSONObject(k).getString("lesson"), g.getJSONObject(k).getString("room"), g.getJSONObject(k).getString("tutor"), subjectsSymbols);
-                                ls.addSubject(subject);
-                            }
-                        } else {
-                            Subject subject = new Subject(data.getString("name"), j, g.getJSONObject(0).getString("lesson"), g.getJSONObject(0).getString("room"), g.getJSONObject(0).getString("tutor"), subjectsSymbols);
-                            ls.addSubject(subject);
-                        }
-                    }
-
-                    if (ls.numberOfSubjects() > 1) {
-                        ls.readSavedSubject(mActivity);
-                    }
-                    try {
-                        boolean isPassed = LessonUtils.isLessonPassed(ls.getSubject().unit);
-                        boolean isFuture = LessonUtils.isDayInFuture(ls.getSubject().day);
-                        //Log.i("VsaApp", "Day: " + ls.getSubject().day + ", Unit: " + ls.getSubject().unit + ", isPassed: " + (isPassed ? "true" : "false") + ", isFuture: " + (isFuture ? "true" : "false"));
-                        if (LessonUtils.isDayPassed(ls.getSubject().day)) ls.setGray(true);
-                        else if (isPassed && !isFuture) {
-                            ls.setGray(true);
-                        }
-                    } catch (Exception ignored) {
-
-                    }
-                    spDay.add(ls);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
 
             // Ignore the last free lessons...
             for (int i = spDay.size() - 1; i >= 0; i--) {
@@ -89,7 +50,7 @@ public class SpDayFragment extends BaseFragment {
                 for (int unit = 0; unit < spDay.size(); unit++) {
                     Lesson lesson = spDay.get(unit);
                     if (unit == 5) continue;
-                    lesson.addSubject(new Subject(day, unit, getResources().getString(R.string.lesson_free), "", "", subjectsSymbols));
+                    lesson.addSubject(new Subject(weekday, unit, getResources().getString(R.string.lesson_free), "", ""));
                 }
             }
 

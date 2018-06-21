@@ -13,28 +13,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.lohl1kohl.vsaapp.holder.VpHolder;
+
 public class VpAdapter extends BaseAdapter {
 
-    private List<Subject> listStorage;
     private LayoutInflater layoutinflater;
+    boolean today;
 
-    VpAdapter(Context context, List<Subject> subjectList) {
+    VpAdapter(Context context, boolean today) {
         layoutinflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        listStorage = subjectList;
+        this.today = today;
     }
 
     @Override
     public int getCount() {
-        return listStorage.size();
+        return VpHolder.getVp(today).size();
     }
 
     @Override
     public Object getItem(int position) {
         return position;
-    }
-
-    public Subject getSubject(int position) {
-        return listStorage.get(position);
     }
 
     @Override
@@ -57,8 +55,9 @@ public class VpAdapter extends BaseAdapter {
         } else {
             listViewHolder = (ViewHolder) convertView.getTag();
         }
-        Subject nSubject = getSubject(position);
-        Subject cSubject = getSubject(position).changes;
+
+        Subject nSubject = VpHolder.getSubject(today, position);
+        Subject cSubject = nSubject.changes;
 
         String tutorNow = cSubject.tutor;
 
@@ -77,7 +76,7 @@ public class VpAdapter extends BaseAdapter {
         if (cSubject.room.length() > 0)
             changes = String.format("%s %s (%s)", tutorNow, cSubject.name, cSubject.room);
 
-        listViewHolder.lessonInListView.setText(nSubject.unit + ".");
+        listViewHolder.lessonInListView.setText((nSubject.unit + 1) + ".");
         listViewHolder.normalInListView.setText(normal);
         listViewHolder.normalInListView.setPaintFlags(listViewHolder.normalInListView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         listViewHolder.changesInListView.setText(changes);
