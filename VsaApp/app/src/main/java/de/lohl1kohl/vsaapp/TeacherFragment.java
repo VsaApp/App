@@ -54,7 +54,7 @@ public class TeacherFragment extends BaseFragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 new Thread(() -> {
                     mActivity.runOnUiThread(list::removeAllViews);
-                    listTeachers(TeacherHolder.searchTeacher(search.getText().toString()));
+                    listTeachers(TeacherHolder.searchTeachers(search.getText().toString()));
                 }).start();
             }
 

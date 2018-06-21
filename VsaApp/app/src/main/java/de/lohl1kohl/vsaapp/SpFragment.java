@@ -15,8 +15,6 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
@@ -25,25 +23,15 @@ import de.lohl1kohl.vsaapp.holder.SpHolder;
 
 public class SpFragment extends BaseFragment {
     private View spView;
-    private Map<String, String> subjectsSymbols = new HashMap<>();
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         spView = inflater.inflate(R.layout.fragment_sp, container, false);
 
-
-        // Create dictionary with all subject symbols...
-        String[] subjects = mActivity.getResources().getStringArray(R.array.nameOfSubjects);
-        for (String subject : subjects) {
-            String[] pair = subject.split(":");
-
-            subjectsSymbols.put(pair[0], pair[1]);
-        }
-
-
         // Try to refresh the sp...
-        syncSp();
+        new Thread(this::syncSp).start();
 
         return spView;
     }
@@ -86,7 +74,7 @@ public class SpFragment extends BaseFragment {
                 text.setText(R.string.noSp);
             }
         };
-        new Thread(() -> SpHolder.load(mActivity, true, callback)).start();
+        SpHolder.load(mActivity, true, callback);
     }
 
     public void fillSp() {
@@ -103,7 +91,10 @@ public class SpFragment extends BaseFragment {
                 if (weekday == -1 | weekday == 5) weekday = 0;
                 else if (LessonUtils.isLessonPassed(SpHolder.getDay(weekday).size() - 1)) weekday++;
                 TabLayout.Tab tab = tabLayout.getTabAt(weekday);
-                Objects.requireNonNull(tab).select();
+                try {
+                    Objects.requireNonNull(tab).select();
+                } catch (Exception ignored) {
+                }
             } catch (IndexOutOfBoundsException ignored) {
 
             }

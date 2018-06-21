@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.List;
+import java.util.Objects;
 
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 import de.lohl1kohl.vsaapp.holder.VpHolder;
@@ -63,9 +63,10 @@ public class VpAdapter extends BaseAdapter {
         String normal = String.format(convertView.getResources().getString(R.string.s_in_room_s), nSubject.getName(), nSubject.room);
 
         if (teacherNow.length() > 0) {
-            List<Teacher> possibleTeachers = TeacherHolder.searchTeacher(teacherNow);
-            if (possibleTeachers.size() > 0) {
-                teacherNow = possibleTeachers.get(0).getGenderizedGenitiveName();
+            try {
+                teacherNow = Objects.requireNonNull(TeacherHolder.searchTeacher(teacherNow)).getGenderizedGenitiveName();
+            } catch (Exception ignored) {
+
             }
         }
 

@@ -15,9 +15,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import de.lohl1kohl.vsaapp.holder.Callbacks.vpLoadedCallback;
@@ -27,7 +24,6 @@ import de.lohl1kohl.vsaapp.holder.VpHolder;
 
 public class VpFragment extends BaseFragment {
     View vpView;
-    private Map<String, String> subjectsSymbols = new HashMap<>();
 
     @SuppressLint("SetTextI18n")
     static void showVpInfoDialog(Context context, Subject subject) {
@@ -45,16 +41,18 @@ public class VpFragment extends BaseFragment {
         String teacherNow = subject.changes.teacher;
 
         if (teacherNormal.length() > 0) {
-            List<Teacher> possibleTeachers = TeacherHolder.searchTeacher(teacherNormal);
-            if (possibleTeachers.size() > 0) {
-                teacherNormal = possibleTeachers.get(0).getGenderizedGenitiveName();
+            try {
+                teacherNormal = Objects.requireNonNull(TeacherHolder.searchTeacher(teacherNormal)).getGenderizedGenitiveName();
+            } catch (Exception ignored) {
+
             }
         }
 
         if (teacherNow.length() > 0) {
-            List<Teacher> possibleTeachers = TeacherHolder.searchTeacher(teacherNow);
-            if (possibleTeachers.size() > 0) {
-                teacherNow = possibleTeachers.get(0).getGenderizedGenitiveName();
+            try {
+                teacherNow = Objects.requireNonNull(TeacherHolder.searchTeacher(teacherNow)).getGenderizedGenitiveName();
+            } catch (Exception ignored) {
+
             }
         }
 
@@ -103,14 +101,6 @@ public class VpFragment extends BaseFragment {
             }
         };
         new Thread(() -> VpHolder.load(mActivity, callback)).start();
-
-        // Create dictionary with all subject symbols...
-        String[] subjects = getResources().getStringArray(R.array.nameOfSubjects);
-        for (String subject : subjects) {
-            String[] pair = subject.split(":");
-
-            subjectsSymbols.put(pair[0], pair[1]);
-        }
 
         return vpView;
     }

@@ -1,6 +1,6 @@
 package de.lohl1kohl.vsaapp;
 
-import de.lohl1kohl.vsaapp.holder.SpHolder;
+import de.lohl1kohl.vsaapp.holder.SubjectSymbolsHolder;
 
 public class Subject {
     public String day;
@@ -19,8 +19,8 @@ public class Subject {
     }
 
     public String getName() {
-        if (SpHolder.subjectsSymbols.containsKey(name.toUpperCase())) {
-            return SpHolder.subjectsSymbols.get(name.toUpperCase());
+        if (SubjectSymbolsHolder.has(name.toUpperCase())) {
+            return SubjectSymbolsHolder.get(name.toUpperCase());
         }
         return name;
     }

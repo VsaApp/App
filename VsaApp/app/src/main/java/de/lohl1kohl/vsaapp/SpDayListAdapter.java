@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Objects;
 
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 
@@ -108,9 +109,10 @@ public class SpDayListAdapter extends BaseAdapter {
             Subject subject = lesson.getSubject();
             String teacher = subject.teacher;
             if (teacher.length() > 0) {
-                List<Teacher> possibleTeachers = TeacherHolder.searchTeacher(teacher);
-                if (possibleTeachers.size() > 0) {
-                    teacher = possibleTeachers.get(0).getGenderizedGenitiveName();
+                try {
+                    teacher = Objects.requireNonNull(TeacherHolder.searchTeacher(teacher)).getGenderizedGenitiveName();
+                } catch (Exception ignored) {
+
                 }
             }
 

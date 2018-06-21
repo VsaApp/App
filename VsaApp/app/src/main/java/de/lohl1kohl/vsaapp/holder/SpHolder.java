@@ -1,6 +1,5 @@
 package de.lohl1kohl.vsaapp.holder;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -13,7 +12,6 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import de.lohl1kohl.vsaapp.Lesson;
 import de.lohl1kohl.vsaapp.LessonUtils;
@@ -31,11 +29,8 @@ public class SpHolder {
     public static final int THURSDAY = 3;
     public static final int FRIDAY = 4;
 
-    public static Map<String, String> subjectsSymbols;
     private static List<List<Lesson>> sp;
     private static String lastGrade = "";
-
-    @SuppressLint("StaticFieldLeak")
 
     public static void load(Context context, boolean update) {
         load(context, update, null);

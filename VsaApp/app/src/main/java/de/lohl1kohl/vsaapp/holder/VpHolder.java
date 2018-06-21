@@ -1,6 +1,5 @@
 package de.lohl1kohl.vsaapp.holder;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -15,7 +14,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.Subject;
@@ -25,8 +23,6 @@ import de.lohl1kohl.vsaapp.server.vp.Today;
 import de.lohl1kohl.vsaapp.server.vp.Tomorrow;
 
 public class VpHolder {
-    @SuppressLint("StaticFieldLeak")
-    public static Map<String, String> subjectsSymbols;
     public static String weekdayToday, dateToday, timeToday;
     public static String weekdayTomorrow, dateTomorrow, timeTomorrow;
     private static List<List<Subject>> vp;
@@ -124,8 +120,8 @@ public class VpHolder {
                 String teacher = changed.getString("teacher");
                 String room = changed.getString("room");
 
-                if (subjectsSymbols.containsKey(info.split(" ")[0].toUpperCase())) {
-                    info = info.replace(info.split(" ")[0], subjectsSymbols.get(info.split(" ")[0].toUpperCase()));
+                if (SubjectSymbolsHolder.has(info.split(" ")[0].toUpperCase())) {
+                    info = info.replace(info.split(" ")[0], SubjectSymbolsHolder.get(info.split(" ")[0].toUpperCase()));
                 }
 
                 Subject subject = SpHolder.getSubject(context, weekday, unit, normalLesson.split(" ")[0]);

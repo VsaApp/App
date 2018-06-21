@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -28,13 +29,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
-import de.lohl1kohl.vsaapp.holder.SpHolder;
+import de.lohl1kohl.vsaapp.holder.SubjectSymbolsHolder;
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
-import de.lohl1kohl.vsaapp.holder.VpHolder;
 import de.lohl1kohl.vsaapp.server.Callbacks;
 import de.lohl1kohl.vsaapp.server.Login;
 
@@ -57,22 +55,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         LessonUtils.setWeekdays(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weekdays))));
 
-        String[] subjects = getResources().getStringArray(R.array.nameOfSubjects);
-        Map<String, String> subjectsSymbols = new HashMap<>();
-        for (String subject : subjects) {
-            String[] pair = subject.split(":");
-
-            subjectsSymbols.put(pair[0], pair[1]);
-        }
-
-        // Init spHolder...
-        SpHolder.subjectsSymbols = subjectsSymbols;
-
-        // Init vpHolder...
-        VpHolder.subjectsSymbols = subjectsSymbols;
-
         // Init teacherHolder...
         new Thread(() -> TeacherHolder.load(this, true)).start();
+
+        // Init subjectSymbolsHolder...
+        new Thread(() -> SubjectSymbolsHolder.load(this)).start();
 
         // Show the vpFragment as the start fragment...
         displayView(R.id.nav_sp);
@@ -86,33 +73,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Check the login data...
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String username = sharedPref.getString("pref_username", "-1");
-        String password = sharedPref.getString("pref_password", "-1");
-        if (username.equals("-1") || password.equals("-1")) {
-            showLoginScreen();
-        } else {
-            Callbacks.credentialsCallback callback = new Callbacks.credentialsCallback() {
-                @Override
-                public void onSuccess() {
-                    Log.i("VsaApp/Server", "Password success");
-                }
+        new Thread(() -> {
+            // Check the login data...
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            String username = sharedPref.getString("pref_username", "-1");
+            String password = sharedPref.getString("pref_password", "-1");
+            if (username.equals("-1") || password.equals("-1")) {
+                showLoginScreen();
+            } else {
+                Callbacks.credentialsCallback callback = new Callbacks.credentialsCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.i("VsaApp/Server", "Password success");
+                    }
 
-                @Override
-                public void onFailed() {
-                    Log.e("VsaApp/Server", "Password failed");
-                    showLoginScreen();
-                }
+                    @Override
+                    public void onFailed() {
+                        Log.e("VsaApp/Server", "Password failed");
+                        showLoginScreen();
+                    }
 
-                @Override
-                public void onConnectionFailed() {
-                    Log.e("VsaApp/Server", "No connection");
-                    Toast.makeText(mainActivity, R.string.no_connection, Toast.LENGTH_LONG).show();
-                }
-            };
-            new Login().login(username, password, callback);
-        }
+                    @Override
+                    public void onConnectionFailed() {
+                        Log.e("VsaApp/Server", "No connection");
+                        runOnUiThread(() -> Toast.makeText(mainActivity, R.string.no_connection, Toast.LENGTH_LONG).show());
+                    }
+                };
+                new Login().login(username, password, callback);
+            }
+        }).start();
         if (getIntent().getStringExtra("page") != null) {
             displayView(R.id.nav_vp);
             navigationView.getMenu().getItem(1).setChecked(true);
@@ -149,6 +138,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @SuppressLint("SetTextI18n")
     private void showLoginScreen() {
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+        }
         final Dialog loginDialog = new Dialog(this);
         WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
         lWindowParams.copyFrom(Objects.requireNonNull(loginDialog.getWindow()).getAttributes());
@@ -226,8 +218,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             };
             new Login().login(username.getText().toString(), password.getText().toString(), callback);
         });
-        loginDialog.show();
-        loginDialog.getWindow().setAttributes(lWindowParams);
+        runOnUiThread(() -> {
+            loginDialog.show();
+            loginDialog.getWindow().setAttributes(lWindowParams);
+        });
     }
 
     @Override
