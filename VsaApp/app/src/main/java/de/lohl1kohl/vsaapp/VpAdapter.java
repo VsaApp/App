@@ -75,9 +75,11 @@ public class VpAdapter extends BaseAdapter {
             changes = String.format("%s %s (%s)", teacherNow, cSubject.name, cSubject.room);
 
         listViewHolder.lessonInListView.setText((nSubject.unit + 1) + ".");
-        listViewHolder.normalInListView.setText(normal);
         listViewHolder.normalInListView.setPaintFlags(listViewHolder.normalInListView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         listViewHolder.changesInListView.setText(changes);
+
+        if (nSubject.room.equals("?")) listViewHolder.normalInListView.setVisibility(TextView.GONE);
+        else listViewHolder.normalInListView.setText(normal);
 
         return convertView;
     }

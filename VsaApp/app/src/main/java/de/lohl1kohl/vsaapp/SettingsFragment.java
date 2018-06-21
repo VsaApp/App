@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.widget.TextView;
 
 import java.util.Objects;
 
@@ -55,6 +56,8 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
             FirebaseHandler.unsubscribeAll(mActivity.getApplicationContext());
             FirebaseHandler.subscribe(mActivity.getApplicationContext(), gradename);
             new Thread(() -> SpHolder.load(mActivity, true)).start();
+            TextView headerName = mActivity.findViewById(R.id.header_name);
+            headerName.setText(String.format("%s - %s", mActivity.getResources().getString(R.string.app_name), gradename));
         }
     }
 }

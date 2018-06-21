@@ -65,8 +65,12 @@ public class VpFragment extends BaseFragment {
 
 
         tV_units.setText(Integer.toString(subject.unit + 1) + context.getString(R.string.dot_unit));
-        tV_normal.setText(String.format(context.getString(R.string.with_s_s_in_room_s), teacherNormal, subject.getName(), subject.room));
-        tV_normal.setPaintFlags(tV_normal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        if (subject.room.equals("?")) tV_normal.setVisibility(TextView.GONE);
+        else {
+            tV_normal.setText(String.format(context.getString(R.string.with_s_s_in_room_s), teacherNormal, subject.getName(), subject.room));
+            tV_normal.setPaintFlags(tV_normal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
 
         String text;
         if (subject.changes.teacher.length() > 0)

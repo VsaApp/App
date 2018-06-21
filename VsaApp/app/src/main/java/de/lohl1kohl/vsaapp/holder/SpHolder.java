@@ -172,7 +172,7 @@ public class SpHolder {
         Lesson lesson = sp.get(day).get(unit);
 
         for (int i = 0; i < lesson.numberOfSubjects(); i++) {
-            if (lesson.getSubject(i).name.toLowerCase().equals(normalSubject)) {
+            if (lesson.getSubject(i).name.toLowerCase().equals(normalSubject.toLowerCase())) {
                 return lesson.getSubject(i);
             }
         }
