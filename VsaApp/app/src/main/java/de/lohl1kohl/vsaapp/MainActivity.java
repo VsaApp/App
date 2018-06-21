@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import de.lohl1kohl.vsaapp.holder.SpHolder;
+import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 import de.lohl1kohl.vsaapp.holder.VpHolder;
 import de.lohl1kohl.vsaapp.server.Callbacks;
 import de.lohl1kohl.vsaapp.server.Login;
@@ -66,11 +67,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Init spHolder...
         SpHolder.subjectsSymbols = subjectsSymbols;
-        SpHolder.mActivity = this;
 
         // Init vpHolder...
         VpHolder.subjectsSymbols = subjectsSymbols;
-        VpHolder.mActivity = this;
+
+        // Init teacherHolder...
+        new Thread(() -> TeacherHolder.load(this, true)).start();
 
         // Show the vpFragment as the start fragment...
         displayView(R.id.nav_sp);

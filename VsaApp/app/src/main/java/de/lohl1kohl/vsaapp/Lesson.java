@@ -3,7 +3,6 @@ package de.lohl1kohl.vsaapp;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.util.List;
 
@@ -33,7 +32,6 @@ public class Lesson {
     }
 
     public Subject getSubject() {
-        Log.i("VsaApp/Lesson", "" + currentIndex + " " + subjects.size());
         return subjects.get(currentIndex);
     }
 
@@ -62,7 +60,7 @@ public class Lesson {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = settings.edit();
         String prefName = String.format("pref_selectedSubject%s:%s:%s", settings.getString("pref_grade", "-1"), subject.day, Integer.toString(subject.unit));
-        String prefValue = String.format("%s:%s", subject.name, subject.tutor);
+        String prefValue = String.format("%s:%s", subject.name, subject.teacher);
         editor.putString(prefName, prefValue);
         editor.apply();
     }
@@ -77,7 +75,7 @@ public class Lesson {
         if (!savedSubject.equals("-1")) {
             String[] values = savedSubject.split(":");
             for (Subject subject : subjects) {
-                if (subject.name.equals(values[0]) && subject.tutor.equals(values[1]))
+                if (subject.name.equals(values[0]) && subject.teacher.equals(values[1]))
                     currentIndex = subjects.indexOf(subject);
             }
         }

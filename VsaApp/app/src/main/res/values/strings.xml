@@ -31,6 +31,7 @@
     <string name="for_s_the_s_from_s">Für %s den %s (Von: %s)</string>
     <string name="mister">Herr</string>
     <string name="mister_gen">Herrn</string>
+    <string name="misses">Frau</string>
     <string name="s_in_room_s">%s in Raum %s</string>
     <string name="dot_unit">. Stunde</string>
     <string name="with_s_s_in_room_s">Mit %s %s in Raum %s</string>
@@ -100,140 +101,6 @@
         <item>VE:Vertiefung Englisch</item>
     </string-array>
 
-    <string-array name="short_names">
-        <item>ALV</item>
-        <item>AND</item>
-        <item>AYM</item>
-        <item>BAC</item>
-        <item>BEM</item>
-        <item>BÖL</item>
-        <item>BOR</item>
-        <item>CLA</item>
-        <item>DNB</item>
-        <item>EGL</item>
-        <item>EWE</item>
-        <item>FEL</item>
-        <item>FES</item>
-        <item>GIL</item>
-        <item>GÖB</item>
-        <item>GRE</item>
-        <item>HER</item>
-        <item>HIM</item>
-        <item>HNZ</item>
-        <item>HIN</item>
-        <item>HOM</item>
-        <item>JAC</item>
-        <item>JAK</item>
-        <item>JAN</item>
-        <item>JAR</item>
-        <item>JEF</item>
-        <item>KAT</item>
-        <item>KAN</item>
-        <item>KER</item>
-        <item>KLN</item>
-        <item>KLS</item>
-        <item>KLF</item>
-        <item>KLI</item>
-        <item>KLU</item>
-        <item>KOH</item>
-        <item>KRA</item>
-        <item>KBN</item>
-        <item>KUC</item>
-        <item>LAS</item>
-        <item>LIC</item>
-        <item>MAR</item>
-        <item>MAY</item>
-        <item>MEN</item>
-        <item>MÖL</item>
-        <item>MOR</item>
-        <item>NEM</item>
-        <item>NIE</item>
-        <item>PJU</item>
-        <item>PRN</item>
-        <item>RAM</item>
-        <item>RIC</item>
-        <item>SAL</item>
-        <item>SCH</item>
-        <item>SLF</item>
-        <item>SLL</item>
-        <item>SND</item>
-        <item>SNL</item>
-        <item>SEP</item>
-        <item>SER</item>
-        <item>STO</item>
-        <item>SOM</item>
-        <item>WEB</item>
-        <item>WEL</item>
-        <item>WIS</item>
-        <item>WÖR</item>
-    </string-array>
-    <string-array name="long_names">
-        <item>Frau Alvarez-Brückmann</item>
-        <item>Frau Andre</item>
-        <item>Krenne</item>
-        <item>Herr Bachem</item>
-        <item>Frau Bemberg</item>
-        <item>Herr Bölling</item>
-        <item>Frau Borgetto-Kamp</item>
-        <item>Frau Claßen</item>
-        <item>Frau Dornebusch</item>
-        <item>Herr Egerland</item>
-        <item>Frau Ewen</item>
-        <item>Frau Feldhues</item>
-        <item>Herr Festag</item>
-        <item>Frau Gillessen</item>
-        <item>Frau Göbel</item>
-        <item>Herr Dr. Greschik</item>
-        <item>Herr Hermsdorff</item>
-        <item>Herr Hiltmann</item>
-        <item>Herr Hinz</item>
-        <item>Frau Hinz</item>
-        <item>Frau Homm</item>
-        <item>Frau Jachmann</item>
-        <item>Frau Jakobs</item>
-        <item>Frau Jantzen</item>
-        <item>Frau Dr. Jarminowski</item>
-        <item>Frau Jeffcoat</item>
-        <item>Herr Dr. Katthage</item>
-        <item>Frau Kleiber</item>
-        <item>Herr Kern</item>
-        <item>Frau Klein</item>
-        <item>Frau Kleines</item>
-        <item>Herr Kleinfeld</item>
-        <item>Herr Klier</item>
-        <item>Frau Kluge</item>
-        <item>Herr Kohring</item>
-        <item>Herr Kramer</item>
-        <item>Frau Krugel-Bentzin</item>
-        <item>Frau Kuck</item>
-        <item>Herr Lausch</item>
-        <item>Frau Licata</item>
-        <item>Herr Maresch</item>
-        <item>Herr May</item>
-        <item>Herr Mentjes</item>
-        <item>Herr Möller</item>
-        <item>Frau Morjan-Drees</item>
-        <item>Frau Nemnich</item>
-        <item>Frau Nießen</item>
-        <item>Frau Petereit</item>
-        <item>Herr Prenzlau</item>
-        <item>Frau Ramirez</item>
-        <item>Herr Dr. Richter</item>
-        <item>Herr Salber</item>
-        <item>Herr Dr. Schmidt</item>
-        <item>Herr Schleifer</item>
-        <item>Herr Schell</item>
-        <item>Herr Schneider</item>
-        <item>Herr Schnell</item>
-        <item>Frau Seppe</item>
-        <item>Frau Schneider</item>
-        <item>Frau Stoffers</item>
-        <item>Frau Sommerfeld</item>
-        <item>Herr Weber</item>
-        <item>Herr Welter</item>
-        <item>Frau Wiswedel</item>
-        <item>Herr Wörner</item>
-    </string-array>
     <string-array name="weekdays">
         <item>Montag</item>
         <item>Dienstag</item>

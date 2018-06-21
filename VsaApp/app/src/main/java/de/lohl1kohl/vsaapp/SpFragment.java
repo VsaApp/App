@@ -61,7 +61,12 @@ public class SpFragment extends BaseFragment {
         // Create callback...
         spLoadedCallback callback = new spLoadedCallback() {
             @Override
-            public void onFinished() {
+            public void onOldLoaded() {
+                fillSp();
+            }
+
+            @Override
+            public void onNewLoaded() {
                 fillSp();
             }
 
@@ -81,22 +86,27 @@ public class SpFragment extends BaseFragment {
                 text.setText(R.string.noSp);
             }
         };
-
-        SpHolder.load(callback);
+        new Thread(() -> SpHolder.load(mActivity, true, callback)).start();
     }
 
     public void fillSp() {
-        ViewPager pager = spView.findViewById(R.id.sp_viewpager);
-        SpDayAdapter adapter = new SpDayAdapter(mActivity, getFragmentManager());
-        pager.setAdapter(adapter);
-        TabLayout tabLayout = spView.findViewById(R.id.sp_tabs);
-        tabLayout.setupWithViewPager(pager);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
-        if (weekday == -1 | weekday == 5) weekday = 0;
-        else if (LessonUtils.isLessonPassed(SpHolder.getDay(weekday).size() - 1)) weekday++;
-        TabLayout.Tab tab = tabLayout.getTabAt(weekday);
-        Objects.requireNonNull(tab).select();
+        mActivity.runOnUiThread(() -> {
+            ViewPager pager = spView.findViewById(R.id.sp_viewpager);
+            SpDayAdapter adapter = new SpDayAdapter(mActivity, getFragmentManager());
+            pager.setAdapter(adapter);
+            TabLayout tabLayout = spView.findViewById(R.id.sp_tabs);
+            tabLayout.setupWithViewPager(pager);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
+            try {
+                if (weekday == -1 | weekday == 5) weekday = 0;
+                else if (LessonUtils.isLessonPassed(SpHolder.getDay(weekday).size() - 1)) weekday++;
+                TabLayout.Tab tab = tabLayout.getTabAt(weekday);
+                Objects.requireNonNull(tab).select();
+            } catch (IndexOutOfBoundsException ignored) {
+
+            }
+        });
     }
 }

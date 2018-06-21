@@ -4,8 +4,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -18,68 +16,130 @@ import org.json.JSONObject;
 import java.util.Objects;
 import java.util.Random;
 
+import de.lohl1kohl.vsaapp.holder.Callbacks;
+import de.lohl1kohl.vsaapp.holder.SpHolder;
+
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
+
+    public void onNoSp(JSONArray changes, String weekday) throws JSONException {
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < changes.length(); i++) {
+            JSONObject change = changes.getJSONObject(i);
+            text.append(change.getString("unit")).append(". Stunde ").append(change.getJSONObject("changed").getString("teacher")).append(" ").append(change.getJSONObject("changed").getString("info")).append(" ").append(change.getJSONObject("changed").getString("room")).append("\n");
+        }
+        this.notifyUser(weekday, text.toString());
+    }
+
+    public void notifyUser(String title, String text) {
+        if (text.length() != 0) {
+            text = text.substring(0, text.length() - 1);
+
+            String tText = text;
+            if (tText.split("\n").length > 1) {
+                tText = tText.split("\n").length + " Änderungen";
+            }
+
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("page", "vp");
+            intent.putExtra("day", title);
+            Random generator = new Random();
+
+            PendingIntent i = PendingIntent.getActivity(getApplicationContext(), generator.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), String.valueOf(generator.nextInt()))
+                    .setSmallIcon(R.mipmap.logo_white)
+                    .setContentTitle(title)
+                    .setContentText(tText)
+                    .setColor(getResources().getColor(R.color.colorPrimary))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
+                    .setVibrate(new long[]{250, 250, 250, 250})
+                    .setContentIntent(i);
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            Objects.requireNonNull(notificationManager).notify(generator.nextInt(), builder.build());
+        }
+
+    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         try {
-            String title;
-            StringBuilder text = new StringBuilder();
             JSONObject jsonObject = new JSONObject(remoteMessage.getData().get("data"));
             Log.i("JSON", jsonObject.toString());
             String weekday = jsonObject.getString("weekday");
             JSONArray changes = jsonObject.getJSONArray("changes");
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            for (int i = 0; i < changes.length(); i++) {
-                JSONObject change = changes.getJSONObject(i);
-                String prefName = String.format("pref_selectedSubject%s:%s:%s", settings.getString("pref_grade", "-1"), weekday, Integer.parseInt(change.getString("unit")) - 1);
-                String prefValue = settings.getString(prefName, "-1");
-                boolean display = false;
-                if (!prefValue.equals("-1")) {
-                    Log.i(prefName, prefValue);
-                    String subject = prefValue.split(":")[0];
-                    String tutor = prefValue.split(":")[1];
-                    String changedTutor = change.getJSONObject("changed").getString("tutor");
-                    if (changedTutor.equals("")) {
-                        changedTutor = tutor;
-                    }
-                    Log.i(tutor, changedTutor);
-                    Log.i(change.getString("lesson"), subject);
-                    if (changedTutor.equals(tutor) && change.getString("lesson").equals(subject)) {
-                        display = true;
+            FirebaseMessagingService service = this;
+            SpHolder.load(getApplicationContext(), false, new Callbacks.spLoadedCallback() {
+                @Override
+                public void onOldLoaded() {
+                    try {
+                        service.onSp(changes, weekday);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
-                if (display) {
-                    text.append(change.getString("unit")).append(". Stunde ").append(change.getJSONObject("changed").getString("tutor")).append(" ").append(change.getJSONObject("changed").getString("info")).append(" ").append(change.getJSONObject("changed").getString("room")).append("\n");
+
+                @Override
+                public void onNoSp() {
+                    try {
+                        service.onNoSp(changes, weekday);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            title = weekday;
-            if (text.length() != 0) {
-                text = new StringBuilder(text.substring(0, text.length() - 1));
+                @Override
+                public void onNewLoaded() {
 
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("page", "vp");
-                intent.putExtra("day", weekday);
-                Random generator = new Random();
+                }
 
-                PendingIntent i = PendingIntent.getActivity(getApplicationContext(), generator.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                @Override
+                public void onConnectionFailed() {
 
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), String.valueOf(generator.nextInt()))
-                        .setSmallIcon(R.mipmap.logo_white)
-                        .setContentTitle(title)
-                        .setContentText(text.toString().split("\n")[0])
-                        .setColor(getResources().getColor(R.color.colorPrimary))
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText(text.toString()))
-                        .setVibrate(new long[]{500, 500})
-                        .setContentIntent(i);
-
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                Objects.requireNonNull(notificationManager).notify(generator.nextInt(), builder.build());
-            }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void onSp(JSONArray changes, String weekday) throws JSONException {
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < changes.length(); i++) {
+            JSONObject change = changes.getJSONObject(i);
+            Log.i("Change", change.toString());
+            int day = 0;
+            switch (weekday) {
+                case "Montag":
+                    day = SpHolder.MONDAY;
+                    break;
+                case "Dienstag":
+                    day = SpHolder.TUESDAY;
+                    break;
+                case "Mittwoch":
+                    day = SpHolder.WEDNESDAY;
+                    break;
+                case "Donnerstag":
+                    day = SpHolder.THURSDAY;
+                    break;
+                case "Freitag":
+                    day = SpHolder.FRIDAY;
+                    break;
+            }
+            try {
+                Lesson lesson = SpHolder.getLesson(day, Integer.parseInt(change.getString("unit")) - 1);
+                Subject subject = lesson.getSubject();
+                String normal = subject.name;
+                String changed = change.getString("lesson").split(" ")[0];
+                Log.i(normal, changed);
+                if (normal.equals(changed)) {
+                    text.append(change.getString("unit")).append(". Stunde ").append(change.getJSONObject("changed").getString("teacher")).append(" ").append(change.getJSONObject("changed").getString("info")).append(" ").append(change.getJSONObject("changed").getString("room")).append("\n");
+                }
+            } catch (IndexOutOfBoundsException ignored) {
+
+            }
+        }
+        this.notifyUser(weekday, text.toString());
     }
 }

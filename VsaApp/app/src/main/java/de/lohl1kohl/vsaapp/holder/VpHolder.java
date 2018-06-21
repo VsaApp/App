@@ -1,7 +1,7 @@
 package de.lohl1kohl.vsaapp.holder;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -26,16 +26,15 @@ import de.lohl1kohl.vsaapp.server.vp.Tomorrow;
 
 public class VpHolder {
     @SuppressLint("StaticFieldLeak")
-    public static Activity mActivity;
     public static Map<String, String> subjectsSymbols;
     public static String weekdayToday, dateToday, timeToday;
     public static String weekdayTomorrow, dateTomorrow, timeTomorrow;
     private static List<List<Subject>> vp;
     private static int countDownloadedVps = 0;
 
-    public static void load(vpLoadedCallback vpLoadedCallback) {
+    public static void load(Context context, vpLoadedCallback vpLoadedCallback) {
         // Get grade...
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String grade = sharedPref.getString("pref_grade", "-1");
 
         vp = new ArrayList<>();
@@ -45,7 +44,7 @@ public class VpHolder {
             boolean today = (i == 0);
 
             // Show saved sp first...
-            List<Subject> savedVP = getSavedVp(today);
+            List<Subject> savedVP = getSavedVp(context, today);
             if (savedVP != null) vp.add(today ? 0 : 1, savedVP);
             if (vpLoadedCallback != null && countDownloadedVps == 2) vpLoadedCallback.onFinished();
 
@@ -53,11 +52,11 @@ public class VpHolder {
             vpCallback callback = new vpCallback() {
                 @Override
                 public void onReceived(String output) {
-                    vp.add(today ? 0 : 1, convertJsonToArray(output, today));
+                    vp.add(today ? 0 : 1, convertJsonToArray(context, output, today));
                     Log.v("VsaApp/Server", "Success");
 
                     // Save the current sp...
-                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
+                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putString("pref_vp_" + grade + "_" + (today ? "today" : "tomorrow"), output);
                     editor.apply();
@@ -71,10 +70,10 @@ public class VpHolder {
                 @Override
                 public void onConnectionFailed() {
                     Log.e("VsaApp/Server", "Failed");
-                    Toast.makeText(mActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.no_connection, Toast.LENGTH_SHORT).show();
 
                     // Show saved sp...
-                    List<Subject> savedVP = getSavedVp(today);
+                    List<Subject> savedVP = getSavedVp(context, today);
                     if (savedVP != null) vp.add(today ? 0 : 1, savedVP);
 
                     if (vpLoadedCallback != null && countDownloadedVps == 2)
@@ -92,18 +91,17 @@ public class VpHolder {
     }
 
     @Nullable
-    private static List<Subject> getSavedVp(boolean today) {
-        if (mActivity == null) return null;
+    private static List<Subject> getSavedVp(Context context, boolean today) {
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String grade = sharedPref.getString("pref_grade", "-1");
         String savedVP = sharedPref.getString("pref_vp_" + grade + "_" + (today ? "today" : "tomorrow"), "-1");
 
         if (savedVP.equals("-1")) return null;
-        return convertJsonToArray(savedVP, today);
+        return convertJsonToArray(context, savedVP, today);
     }
 
-    private static List<Subject> convertJsonToArray(String array, boolean today) {
+    private static List<Subject> convertJsonToArray(Context context, String array, boolean today) {
         List<Subject> subjects = new ArrayList<>();
         try {
             JSONObject header = new JSONObject(array);
@@ -118,17 +116,17 @@ public class VpHolder {
                 JSONObject changed = new JSONObject(entry.getString("changed"));
 
                 String info = changed.getString("info");
-                String tutor = changed.getString("teacher");
+                String teacher = changed.getString("teacher");
                 String room = changed.getString("room");
 
                 if (subjectsSymbols.containsKey(info.split(" ")[0].toUpperCase())) {
                     info = info.replace(info.split(" ")[0], subjectsSymbols.get(info.split(" ")[0].toUpperCase()));
                 }
 
-                Subject subject = SpHolder.getSubject(weekday, unit, normalLesson);
+                Subject subject = SpHolder.getSubject(context, weekday, unit, normalLesson);
                 if (subject == null)
-                    subject = SpHolder.getLesson(Arrays.asList(mActivity.getResources().getStringArray(R.array.weekdays)).indexOf(weekday), unit).getSubject();
-                subject.changes = new Subject(weekday, unit, info, room, tutor);
+                    subject = SpHolder.getLesson(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday), unit).getSubject();
+                subject.changes = new Subject(weekday, unit, info, room, teacher);
 
                 subjects.add(subject);
             }

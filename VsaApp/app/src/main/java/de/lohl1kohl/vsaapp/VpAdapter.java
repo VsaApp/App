@@ -9,10 +9,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 import de.lohl1kohl.vsaapp.holder.VpHolder;
 
 public class VpAdapter extends BaseAdapter {
@@ -59,22 +58,21 @@ public class VpAdapter extends BaseAdapter {
         Subject nSubject = VpHolder.getSubject(today, position);
         Subject cSubject = nSubject.changes;
 
-        String tutorNow = cSubject.tutor;
+        String teacherNow = cSubject.teacher;
 
         String normal = String.format(convertView.getResources().getString(R.string.s_in_room_s), nSubject.getName(), nSubject.room);
-        List<String> shortNames = new ArrayList<>(Arrays.asList(convertView.getResources().getStringArray(R.array.short_names)));
-        List<String> longNames = new ArrayList<>(Arrays.asList(convertView.getResources().getStringArray(R.array.long_names)));
 
-        if (tutorNow.length() > 0) {
-            if (shortNames.contains(tutorNow)) {
-                tutorNow = longNames.get(shortNames.indexOf(tutorNow));
-                tutorNow = tutorNow.replace(convertView.getResources().getString(R.string.mister), convertView.getResources().getString(R.string.mister_gen));
+        if (teacherNow.length() > 0) {
+            List<Teacher> possibleTeachers = TeacherHolder.searchTeacher(teacherNow);
+            if (possibleTeachers.size() > 0) {
+                teacherNow = possibleTeachers.get(0).getGenderizedGenitiveName();
             }
         }
-        String changes = String.format("%s %s", tutorNow, cSubject.name);
+
+        String changes = String.format("%s %s", teacherNow, cSubject.name);
 
         if (cSubject.room.length() > 0)
-            changes = String.format("%s %s (%s)", tutorNow, cSubject.name, cSubject.room);
+            changes = String.format("%s %s (%s)", teacherNow, cSubject.name, cSubject.room);
 
         listViewHolder.lessonInListView.setText((nSubject.unit + 1) + ".");
         listViewHolder.normalInListView.setText(normal);

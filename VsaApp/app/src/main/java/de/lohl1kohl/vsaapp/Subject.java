@@ -7,15 +7,15 @@ public class Subject {
     public int unit;
     public String name;
     public String room;
-    public String tutor;
+    public String teacher;
     public Subject changes;
 
-    public Subject(String day, int unit, String name, String room, String tutor) {
+    public Subject(String day, int unit, String name, String room, String teacher) {
         this.day = day;
         this.unit = unit;
         this.name = name;
         this.room = room;
-        this.tutor = tutor;
+        this.teacher = teacher;
     }
 
     public String getName() {

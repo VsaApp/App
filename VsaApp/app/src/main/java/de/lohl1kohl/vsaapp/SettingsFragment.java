@@ -51,7 +51,10 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals("pref_grade")) {
-            SpHolder.load();
+            String gradename = sharedPreferences.getString("pref_grade", "-1");
+            FirebaseHandler.unsubscribeAll(mActivity.getApplicationContext());
+            FirebaseHandler.subscribe(mActivity.getApplicationContext(), gradename);
+            new Thread(() -> SpHolder.load(mActivity, true)).start();
         }
     }
 }

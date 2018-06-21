@@ -12,9 +12,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 
 public class SpDayListAdapter extends BaseAdapter {
 
@@ -55,7 +55,7 @@ public class SpDayListAdapter extends BaseAdapter {
         convertView = layoutinflater.inflate(R.layout.sp_cell, parent, false);
         listViewHolder.leftButton = convertView.findViewById(R.id.sp_left);
         listViewHolder.lessonInListView = convertView.findViewById(R.id.sp_lesson);
-        listViewHolder.tutorInListView = convertView.findViewById(R.id.sp_tutor);
+        listViewHolder.teacherInListView = convertView.findViewById(R.id.sp_teacher);
         listViewHolder.roomInListView = convertView.findViewById(R.id.sp_room);
         listViewHolder.rightButton = convertView.findViewById(R.id.sp_right);
         listViewHolder.relativeLayout = convertView.findViewById(R.id.sp_rl);
@@ -95,35 +95,33 @@ public class SpDayListAdapter extends BaseAdapter {
         if (lesson.numberOfSubjects() == 0) {
             listViewHolder.lessonInListView.setText("");
             if (position == 5)
-                listViewHolder.tutorInListView.setText(convertView.getResources().getString(R.string.lesson_pause));
+                listViewHolder.teacherInListView.setText(convertView.getResources().getString(R.string.lesson_pause));
             else
-                listViewHolder.tutorInListView.setText(convertView.getResources().getString(R.string.no_unit_in_this_lesson));
+                listViewHolder.teacherInListView.setText(convertView.getResources().getString(R.string.no_unit_in_this_lesson));
             listViewHolder.roomInListView.setText("");
         } else if (lesson.getSubject().name.equals(convertView.getResources().getString(R.string.lesson_free))) {
             listViewHolder.lessonInListView.setText("");
-            listViewHolder.tutorInListView.setText(lesson.getSubject().name);
+            listViewHolder.teacherInListView.setText(lesson.getSubject().name);
             listViewHolder.roomInListView.setText("");
         } else {
-            List<String> shortNames = new ArrayList<>(Arrays.asList(convertView.getResources().getStringArray(R.array.short_names)));
-            List<String> longNames = new ArrayList<>(Arrays.asList(convertView.getResources().getStringArray(R.array.long_names)));
 
             Subject subject = lesson.getSubject();
-            String tutor = subject.tutor;
-            if (tutor.length() > 0) {
-                if (shortNames.contains(tutor)) {
-                    tutor = longNames.get(shortNames.indexOf(tutor));
-                    tutor = tutor.replace(convertView.getResources().getString(R.string.mister), convertView.getResources().getString(R.string.mister_gen));
+            String teacher = subject.teacher;
+            if (teacher.length() > 0) {
+                List<Teacher> possibleTeachers = TeacherHolder.searchTeacher(teacher);
+                if (possibleTeachers.size() > 0) {
+                    teacher = possibleTeachers.get(0).getGenderizedGenitiveName();
                 }
             }
 
             listViewHolder.lessonInListView.setText(subject.getName());
-            listViewHolder.tutorInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), tutor));
+            listViewHolder.teacherInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), teacher));
             listViewHolder.roomInListView.setText(String.format(convertView.getResources().getString(R.string.in_room_s), subject.room));
         }
 
         if (lesson.isGray()) {
             listViewHolder.lessonInListView.setTextColor(convertView.getResources().getColor(R.color.spPassedLesson));
-            listViewHolder.tutorInListView.setTextColor(convertView.getResources().getColor(R.color.spPassedLesson));
+            listViewHolder.teacherInListView.setTextColor(convertView.getResources().getColor(R.color.spPassedLesson));
             listViewHolder.roomInListView.setTextColor(convertView.getResources().getColor(R.color.spPassedLesson));
         }
 
@@ -133,7 +131,7 @@ public class SpDayListAdapter extends BaseAdapter {
     static class ViewHolder {
         ImageView leftButton;
         TextView lessonInListView;
-        TextView tutorInListView;
+        TextView teacherInListView;
         TextView roomInListView;
         ImageView rightButton;
         RelativeLayout relativeLayout;

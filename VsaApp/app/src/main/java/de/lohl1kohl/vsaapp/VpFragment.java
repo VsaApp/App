@@ -15,14 +15,13 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import de.lohl1kohl.vsaapp.holder.Callbacks.vpLoadedCallback;
+import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 import de.lohl1kohl.vsaapp.holder.VpHolder;
 
 
@@ -42,24 +41,20 @@ public class VpFragment extends BaseFragment {
         loginDialog.setCancelable(true);
         loginDialog.setTitle(R.string.vpInfoDialogTitle);
 
-        String tutorNormal = subject.tutor;
-        String tutorNow = subject.changes.tutor;
+        String teacherNormal = subject.teacher;
+        String teacherNow = subject.changes.teacher;
 
-        // Get long teacher name for normal lesson...
-        List<String> shortNames = new ArrayList<>(Arrays.asList(context.getResources().getStringArray(R.array.short_names)));
-        List<String> longNames = new ArrayList<>(Arrays.asList(context.getResources().getStringArray(R.array.long_names)));
-
-        if (tutorNormal.length() > 0) {
-            if (shortNames.contains(subject.tutor)) {
-                tutorNormal = longNames.get(shortNames.indexOf(tutorNormal));
-                tutorNormal = tutorNormal.replace(context.getString(R.string.mister), context.getString(R.string.mister_gen));
+        if (teacherNormal.length() > 0) {
+            List<Teacher> possibleTeachers = TeacherHolder.searchTeacher(teacherNormal);
+            if (possibleTeachers.size() > 0) {
+                teacherNormal = possibleTeachers.get(0).getGenderizedGenitiveName();
             }
         }
 
-        if (tutorNow.length() > 0) {
-            if (shortNames.contains(subject.tutor)) {
-                tutorNow = longNames.get(shortNames.indexOf(tutorNow));
-                tutorNow = tutorNow.replace(context.getString(R.string.mister), context.getString(R.string.mister_gen));
+        if (teacherNow.length() > 0) {
+            List<Teacher> possibleTeachers = TeacherHolder.searchTeacher(teacherNow);
+            if (possibleTeachers.size() > 0) {
+                teacherNow = possibleTeachers.get(0).getGenderizedGenitiveName();
             }
         }
 
@@ -70,12 +65,12 @@ public class VpFragment extends BaseFragment {
 
 
         tV_units.setText(Integer.toString(subject.unit + 1) + context.getString(R.string.dot_unit));
-        tV_normal.setText(String.format(context.getString(R.string.with_s_s_in_room_s), tutorNormal, subject.getName(), subject.room));
+        tV_normal.setText(String.format(context.getString(R.string.with_s_s_in_room_s), teacherNormal, subject.getName(), subject.room));
         tV_normal.setPaintFlags(tV_normal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         String text;
-        if (subject.changes.tutor.length() > 0)
-            text = String.format(context.getString(R.string.now_with_s_s), tutorNow, subject.changes.name);
+        if (subject.changes.teacher.length() > 0)
+            text = String.format(context.getString(R.string.now_with_s_s), teacherNow, subject.changes.name);
         else text = String.format(context.getString(R.string.now_s), subject.changes.getName());
         if (subject.changes.room.length() > 0)
             text += String.format(context.getString(R.string.in_room_s), subject.changes.room);
@@ -103,8 +98,7 @@ public class VpFragment extends BaseFragment {
                 fillVp();
             }
         };
-
-        VpHolder.load(callback);
+        new Thread(() -> VpHolder.load(mActivity, callback)).start();
 
         // Create dictionary with all subject symbols...
         String[] subjects = getResources().getStringArray(R.array.nameOfSubjects);

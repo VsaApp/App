@@ -30,7 +30,7 @@
         tools:ignore="RelativeOverlap" />
 
     <TextView
-        android:id="@+id/sp_tutor"
+        android:id="@+id/sp_teacher"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_below="@id/sp_lesson"
@@ -43,7 +43,7 @@
         android:id="@+id/sp_room"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_below="@id/sp_tutor"
+        android:layout_below="@id/sp_teacher"
         android:layout_centerHorizontal="true"
         android:paddingBottom="10dp"
         android:textColor="@android:color/black"
