@@ -275,6 +275,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_settings:
                 navigationView.getMenu().getItem(3).setChecked(true);
+                currentFragment.onDestroy();
                 settingsFragment = new SettingsFragment();
                 break;
         }
