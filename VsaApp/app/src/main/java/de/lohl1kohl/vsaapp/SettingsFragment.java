@@ -1,18 +1,13 @@
 package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.widget.TextView;
-
-import java.util.Objects;
 
 import de.lohl1kohl.vsaapp.holder.SpHolder;
 
@@ -35,12 +30,9 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                     .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
                         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
                         sharedPref.edit().clear().commit();
-                        Intent mStartActivity = new Intent(mActivity, MainActivity.class);
-                        int mPendingIntentId = 123456;
-                        PendingIntent mPendingIntent = PendingIntent.getActivity(mActivity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                        AlarmManager mgr = (AlarmManager) mActivity.getSystemService(Context.ALARM_SERVICE);
-                        Objects.requireNonNull(mgr).set(AlarmManager.RTC, 0, mPendingIntent);
-                        System.exit(0);
+                        Intent intent = new Intent(mActivity, MainActivity.class);
+                        mActivity.finish();
+                        startActivity(intent);
                     })
                     .setNegativeButton(android.R.string.no, null).show();
             return true;
