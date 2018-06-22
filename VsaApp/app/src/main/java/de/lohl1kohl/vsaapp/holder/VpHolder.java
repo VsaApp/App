@@ -28,6 +28,10 @@ public class VpHolder {
     private static List<List<Subject>> vp;
     private static int countDownloadedVps = 0;
 
+    public static void load(Context context) {
+        load(context, null);
+    }
+
     public static void load(Context context, vpLoadedCallback vpLoadedCallback) {
         // Get grade...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);

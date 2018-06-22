@@ -9,6 +9,11 @@
             android:key="pref_showVpOnlyForYou"
             android:summary="@string/preferenceSummary_showVpOnlyForYou"
             android:title="@string/preferenceTitle_showVpOnlyForYou" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_showVpinSp"
+            android:summary="Nutzbar mit der obigen Einstellung"
+            android:title="Vertretungsplan im Stundenplan anzeigen" />
 
     </PreferenceCategory>
 

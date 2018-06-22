@@ -1,9 +1,11 @@
 package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
@@ -31,14 +33,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
+import de.lohl1kohl.vsaapp.holder.Callbacks.vpLoadedCallback;
+import de.lohl1kohl.vsaapp.holder.SpHolder;
 import de.lohl1kohl.vsaapp.holder.SubjectSymbolsHolder;
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
+import de.lohl1kohl.vsaapp.holder.VpHolder;
 import de.lohl1kohl.vsaapp.server.Callbacks;
 import de.lohl1kohl.vsaapp.server.Login;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static boolean loggingin = false;
     private final MainActivity mainActivity = this;
     private boolean showSettings = false;
     private int currentNavId = 0;
@@ -60,6 +65,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Init subjectSymbolsHolder...
         new Thread(() -> SubjectSymbolsHolder.load(this)).start();
+        vpLoadedCallback vpLoadedCallback = new vpLoadedCallback() {
+            @Override
+            public void onFinished() {
+                SpHolder.load(mainActivity, false);
+            }
+
+            @Override
+            public void onConnectionFailed() {
+
+            }
+        };
+
+        new Thread(() -> {
+            spLoadedCallback spLoadedCallback = new spLoadedCallback() {
+                @Override
+                public void onOldLoaded() {
+                    new Thread(() -> VpHolder.load(mainActivity, vpLoadedCallback)).start();
+                }
+
+                @Override
+                public void onNewLoaded() {
+                    new Thread(() -> VpHolder.load(mainActivity, vpLoadedCallback)).start();
+                }
+
+                @Override
+                public void onConnectionFailed() {
+
+                }
+
+                @Override
+                public void onNoSp() {
+
+                }
+            };
+            SpHolder.load(this, true, spLoadedCallback);
+        }).start();
 
         // Show the vpFragment as the start fragment...
         displayView(R.id.nav_sp);
@@ -79,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String username = sharedPref.getString("pref_username", "-1");
             String password = sharedPref.getString("pref_password", "-1");
             if (username.equals("-1") || password.equals("-1")) {
-                showLoginScreen();
+                runOnUiThread(this::showLoginScreen);
             } else {
                 Callbacks.credentialsCallback callback = new Callbacks.credentialsCallback() {
                     @Override
@@ -90,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onFailed() {
                         Log.e("VsaApp/Server", "Password failed");
-                        showLoginScreen();
+                        runOnUiThread(() -> showLoginScreen());
                     }
 
                     @Override
@@ -141,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (Looper.myLooper() == null) {
             Looper.prepare();
         }
-        final Dialog loginDialog = new Dialog(this);
+        final Dialog loginDialog = new Dialog(MainActivity.this);
         WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
         lWindowParams.copyFrom(Objects.requireNonNull(loginDialog.getWindow()).getAttributes());
         lWindowParams.width = WindowManager.LayoutParams.FILL_PARENT;
@@ -201,9 +242,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     ((TextView) findViewById(R.id.header_name)).setText(getString(R.string.app_name) + " - " + grades[w[0]]);
                     editor.apply();
                     loginDialog.cancel();
-                    loggingin = false;
                     ((SpFragment) currentFragment).syncSp();
                     Toast.makeText(mainActivity, R.string.login_success, Toast.LENGTH_SHORT).show();
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
                 }
 
                 @Override
@@ -218,10 +261,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             };
             new Login().login(username.getText().toString(), password.getText().toString(), callback);
         });
-        runOnUiThread(() -> {
-            loginDialog.show();
-            loginDialog.getWindow().setAttributes(lWindowParams);
-        });
+        loginDialog.show();
+        loginDialog.getWindow().setAttributes(lWindowParams);
     }
 
     @Override

@@ -6,18 +6,14 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
-import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
 import de.lohl1kohl.vsaapp.holder.SpHolder;
 
 
@@ -45,36 +41,7 @@ public class SpFragment extends BaseFragment {
         if (grade.equals("-1")) {
             return;
         }
-
-        // Create callback...
-        spLoadedCallback callback = new spLoadedCallback() {
-            @Override
-            public void onOldLoaded() {
-                fillSp();
-            }
-
-            @Override
-            public void onNewLoaded() {
-                fillSp();
-            }
-
-            @Override
-            public void onConnectionFailed() {
-                Log.e("VsaApp/Server", "Failed");
-                Toast.makeText(mActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
-                fillSp();
-            }
-
-            @Override
-            public void onNoSp() {
-                TabLayout tabLayout = spView.findViewById(R.id.sp_tabs);
-                tabLayout.setVisibility(View.GONE);
-                TextView text = spView.findViewById(R.id.noSp);
-                text.setVisibility(View.VISIBLE);
-                text.setText(R.string.noSp);
-            }
-        };
-        SpHolder.load(mActivity, true, callback);
+        fillSp();
     }
 
     public void fillSp() {

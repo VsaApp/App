@@ -2,6 +2,8 @@ package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -92,6 +94,16 @@ public class SpDayListAdapter extends BaseAdapter {
             });
         }
 
+        Subject subject = lesson.getSubject();
+        String normalTeacher = subject.teacher;
+        if (normalTeacher.length() > 0) {
+            try {
+                normalTeacher = Objects.requireNonNull(TeacherHolder.searchTeacher(normalTeacher)).getGenderizedGenitiveName();
+            } catch (Exception ignored) {
+
+            }
+        }
+
         // Set the TextViews...
         if (lesson.numberOfSubjects() == 0) {
             listViewHolder.lessonInListView.setText("");
@@ -105,19 +117,8 @@ public class SpDayListAdapter extends BaseAdapter {
             listViewHolder.teacherInListView.setText(lesson.getSubject().name);
             listViewHolder.roomInListView.setText("");
         } else {
-
-            Subject subject = lesson.getSubject();
-            String teacher = subject.teacher;
-            if (teacher.length() > 0) {
-                try {
-                    teacher = Objects.requireNonNull(TeacherHolder.searchTeacher(teacher)).getGenderizedGenitiveName();
-                } catch (Exception ignored) {
-
-                }
-            }
-
             listViewHolder.lessonInListView.setText(subject.getName());
-            listViewHolder.teacherInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), teacher));
+            listViewHolder.teacherInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), normalTeacher));
             listViewHolder.roomInListView.setText(String.format(convertView.getResources().getString(R.string.in_room_s), subject.room));
         }
 
@@ -125,6 +126,35 @@ public class SpDayListAdapter extends BaseAdapter {
             listViewHolder.lessonInListView.setTextColor(convertView.getResources().getColor(R.color.spPassedLesson));
             listViewHolder.teacherInListView.setTextColor(convertView.getResources().getColor(R.color.spPassedLesson));
             listViewHolder.roomInListView.setTextColor(convertView.getResources().getColor(R.color.spPassedLesson));
+        }
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        Boolean showVpinSp = sharedPref.getBoolean("pref_showVpinSp", true);
+
+        if (showVpinSp) {
+            Subject changes = lesson.getSubject().changes;
+            if (changes != null) {
+                String changedTeacher = changes.teacher;
+                if (changedTeacher.length() > 0) {
+                    try {
+                        changedTeacher = Objects.requireNonNull(TeacherHolder.searchTeacher(changedTeacher)).getGenderizedGenitiveName();
+                    } catch (Exception ignored) {
+
+                    }
+                }
+                if (!changedTeacher.equals(normalTeacher) && !changedTeacher.equals("")) {
+                    listViewHolder.teacherInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), changedTeacher));
+                    listViewHolder.teacherInListView.setTextColor(convertView.getResources().getColor(R.color.spChangeSubject));
+                }
+                if (!subject.getName().equals(changes.getName()) && !changes.getName().equals("")) {
+                    listViewHolder.lessonInListView.setText(listViewHolder.lessonInListView.getText() + "\n" + changes.getName());
+                    listViewHolder.lessonInListView.setTextColor(convertView.getResources().getColor(R.color.spChangeSubject));
+                }
+                if (!subject.room.equals(changes.room) && !changes.room.equals("")) {
+                    listViewHolder.roomInListView.setText(String.format(convertView.getResources().getString(R.string.in_room_s), changes.room));
+                    listViewHolder.roomInListView.setTextColor(convertView.getResources().getColor(R.color.spChangeSubject));
+                }
+            }
         }
 
         return convertView;
