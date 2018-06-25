@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/cafetoria_loginFeedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/cafetoriaDialog_status" />
+
+    <EditText
+        android:id="@+id/cafetoria_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:hint="@string/cafetoriaDialog_idHint"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/cafetoria_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:hint="@string/cafatoriaDialog_passwordHint"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/btn_cafetoriaOk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/OK" />
+
+</LinearLayout>

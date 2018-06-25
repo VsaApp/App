@@ -20,7 +20,7 @@ public class Callbacks {
         void onReceived(String output);
 
         void onConnectionFailed();
-        }
+    }
 
     public interface teachersCallback {
         void onReceived(String output);
@@ -32,6 +32,12 @@ public class Callbacks {
         void onSuccess();
 
         void onFailed();
+
+        void onConnectionFailed();
+    }
+
+    public interface cafetoriaCallback {
+        void onReceived(String output);
 
         void onConnectionFailed();
     }

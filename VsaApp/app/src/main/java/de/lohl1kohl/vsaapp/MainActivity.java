@@ -1,7 +1,6 @@
 package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -318,8 +317,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 currentFragment = new DatesFragment();
                 title = getString(R.string.menu_dates);
                 break;
-            case R.id.nav_settings:
+            case R.id.nav_cafetoria:
                 navigationView.getMenu().getItem(4).setChecked(true);
+                currentFragment = new CafetoriaFragment();
+                title = getString(R.string.cafetoria);
+                break;
+            case R.id.nav_settings:
+                navigationView.getMenu().getItem(5).setChecked(true);
                 currentFragment.onDestroy();
                 settingsFragment = new SettingsFragment();
                 break;
@@ -353,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (!showSettings) {
                 // remove current fragment...
                 getSupportFragmentManager().beginTransaction().
-                        remove(getSupportFragmentManager().findFragmentById(R.id.content_frame)).commit();
+                        remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.content_frame))).commit();
                 showSettings = true;
 
                 // Add settings fragment...

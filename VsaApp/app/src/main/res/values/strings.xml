@@ -48,6 +48,14 @@
     <string name="really_logout">Willst du dich wirklich abmelden?</string>
     <string name="no_username_set">Kein Nutzername gesetzt</string>
     <string name="no_password_set">Kein Passwort gesetzt</string>
+    <string name="cafetoria">Cafetoria</string>
+    <string name="cafatoriaDialog_passwordHint">PIN</string>
+    <string name="cafetoriaDialog_idHint">ID</string>
+    <string name="cafetoriaDialog_status">Zugangsdaten eingeben:</string>
+    <string name="cafetoriaDialog">Cafetoria Dialog</string>
+    <string name="cafetoriaDialog_statusFailed">ID oder PIN ist falsch</string>
+    <string name="no_id_set">Keine ID gesetzt</string>
+    <string name="no_pin_set">Keine PIN gesetzt</string>
     <string name="menu_dates">Kalender</string>
     <string name="dates_calendar">Kalender</string>
     <string name="dates_list">Liste</string>

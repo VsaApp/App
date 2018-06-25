@@ -6,21 +6,21 @@ public class Event {
     public Date start;
     public Date end;
 
-    public Event(String name, String info, Date start, Date end){
+    public Event(String name, String info, Date start, Date end) {
         this.name = name;
         this.info = info;
         this.start = start;
         this.end = end;
     }
 
-    public Event(String name, Date start, Date end){
+    public Event(String name, Date start, Date end) {
         this.name = name;
         this.info = "";
         this.start = start;
         this.end = end;
     }
 
-    public boolean isFullTime(){
+    public boolean isFullTime() {
         return start == end;
     }
 }

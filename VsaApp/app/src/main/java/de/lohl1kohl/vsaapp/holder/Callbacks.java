@@ -30,4 +30,12 @@ public class Callbacks {
 
         void onConnectionFailed();
     }
+
+    public interface cafetoriaLoadedCallback {
+        void onOldLoaded();
+
+        void onNewLoaded();
+
+        void onConnectionFailed();
+    }
 }
