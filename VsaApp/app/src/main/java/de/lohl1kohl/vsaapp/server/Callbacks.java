@@ -16,6 +16,12 @@ public class Callbacks {
         void onNoSp();
     }
 
+    public interface datesCallback {
+        void onReceived(String output);
+
+        void onConnectionFailed();
+        }
+
     public interface teachersCallback {
         void onReceived(String output);
 

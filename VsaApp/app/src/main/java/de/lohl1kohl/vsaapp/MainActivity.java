@@ -35,6 +35,7 @@ import java.util.Objects;
 
 import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
 import de.lohl1kohl.vsaapp.holder.Callbacks.vpLoadedCallback;
+import de.lohl1kohl.vsaapp.holder.DatesHolder;
 import de.lohl1kohl.vsaapp.holder.SpHolder;
 import de.lohl1kohl.vsaapp.holder.SubjectSymbolsHolder;
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
@@ -63,8 +64,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Init teacherHolder...
         new Thread(() -> TeacherHolder.load(this, true)).start();
 
+        // Init dates holder...
+        new Thread(() -> DatesHolder.load(this)).start();
+
         // Init subjectSymbolsHolder...
         new Thread(() -> SubjectSymbolsHolder.load(this)).start();
+
         vpLoadedCallback vpLoadedCallback = new vpLoadedCallback() {
             @Override
             public void onFinished() {
@@ -293,23 +298,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Get new fragment...
         switch (viewId) {
-            case R.id.nav_vp:
-                navigationView.getMenu().getItem(1).setChecked(true);
-                currentFragment = new VpFragment();
-                title = getString(R.string.vp);
-                break;
             case R.id.nav_sp:
                 navigationView.getMenu().getItem(0).setChecked(true);
                 currentFragment = new SpFragment();
                 title = getString(R.string.sp);
+                break;
+            case R.id.nav_vp:
+                navigationView.getMenu().getItem(1).setChecked(true);
+                currentFragment = new VpFragment();
+                title = getString(R.string.vp);
                 break;
             case R.id.nav_teacher:
                 navigationView.getMenu().getItem(2).setChecked(true);
                 currentFragment = new TeacherFragment();
                 title = getString(R.string.teacher);
                 break;
-            case R.id.nav_settings:
+            case R.id.nav_dates:
                 navigationView.getMenu().getItem(3).setChecked(true);
+                currentFragment = new DatesFragment();
+                title = getString(R.string.menu_dates);
+                break;
+            case R.id.nav_settings:
+                navigationView.getMenu().getItem(4).setChecked(true);
                 currentFragment.onDestroy();
                 settingsFragment = new SettingsFragment();
                 break;

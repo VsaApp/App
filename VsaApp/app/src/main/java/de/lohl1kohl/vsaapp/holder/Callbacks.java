@@ -11,6 +11,12 @@ public class Callbacks {
         void onNoSp();
     }
 
+    public interface datesLoadedCallback {
+        void onFinished();
+
+        void onConnectionFailed();
+    }
+
     public interface vpLoadedCallback {
         void onFinished();
 
