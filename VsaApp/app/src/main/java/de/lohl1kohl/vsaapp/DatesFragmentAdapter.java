@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import de.lohl1kohl.vsaapp.holder.VpHolder;
-
 public class DatesFragmentAdapter extends FragmentStatePagerAdapter {
 
     private DatesListFragment datesListFragment = new DatesListFragment();

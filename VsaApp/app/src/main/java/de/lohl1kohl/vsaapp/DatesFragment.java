@@ -8,10 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Objects;
-
-import de.lohl1kohl.vsaapp.holder.VpHolder;
-
 public class DatesFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -22,7 +18,7 @@ public class DatesFragment extends BaseFragment {
 
     private void createPages(View view) {
         ViewPager pager = view.findViewById(R.id.dates_viewpager);
-        DatesFragmentAdapter adapter = new DatesFragmentAdapter(mActivity ,getFragmentManager());
+        DatesFragmentAdapter adapter = new DatesFragmentAdapter(mActivity, getFragmentManager());
         pager.setAdapter(adapter);
 
         // Add the tabs...

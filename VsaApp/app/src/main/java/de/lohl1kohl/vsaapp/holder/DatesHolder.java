@@ -3,7 +3,6 @@ package de.lohl1kohl.vsaapp.holder;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -12,15 +11,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.lohl1kohl.vsaapp.Date;
-import de.lohl1kohl.vsaapp.DatesListFragment;
 import de.lohl1kohl.vsaapp.Event;
-import de.lohl1kohl.vsaapp.Holiday;
-import de.lohl1kohl.vsaapp.Lesson;
 import de.lohl1kohl.vsaapp.server.Dates;
 
 public class DatesHolder {
@@ -35,7 +29,7 @@ public class DatesHolder {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
         // If the dates are already loaded stop process...
-        if (events != null){
+        if (events != null) {
             if (datesLoadedCallback != null) datesLoadedCallback.onFinished();
             return;
         }
@@ -93,22 +87,22 @@ public class DatesHolder {
             events.add(new Event(openDoorDayO.getString("description"), date, date));
 
             // Convert holidays...
-            for (int i = 0; i < holidaysO.length(); i++){
+            for (int i = 0; i < holidaysO.length(); i++) {
                 JSONObject holdiayObject = holidaysO.getJSONObject(i);
                 Date start = new Date(holdiayObject.getJSONObject("start").getString("weekday"), holdiayObject.getJSONObject("start").getInt("day"), holdiayObject.getJSONObject("start").getString("month"), holdiayObject.getJSONObject("start").getInt("year"));
                 Date end = new Date(holdiayObject.getJSONObject("end").getString("weekday"), holdiayObject.getJSONObject("end").getInt("day"), holdiayObject.getJSONObject("end").getString("month"), holdiayObject.getJSONObject("end").getInt("year"));
-                events.add(new Event(holdiayObject.getString("name"), "holidays",start, end));
+                events.add(new Event(holdiayObject.getString("name"), "holidays", start, end));
             }
 
             // Convert free days...
-            for (int i = 0; i< freeDaysO.length(); i++){
+            for (int i = 0; i < freeDaysO.length(); i++) {
                 JSONObject freeDateObject = freeDaysO.getJSONObject(i);
                 date = new Date(freeDateObject.getString("weekday"), freeDateObject.getInt("day"), freeDateObject.getString("month"), freeDateObject.getInt("year"));
                 events.add(new Event(freeDateObject.getString("description"), "freeDate", date, date));
             }
 
             // Convert consultation days...
-            for (int i = 0; i < consultationDaysO.length(); i++){
+            for (int i = 0; i < consultationDaysO.length(); i++) {
                 JSONObject consultationDayObject = consultationDaysO.getJSONObject(i);
                 Date start = new Date(consultationDayObject.getString("weekday"), consultationDayObject.getInt("day"), consultationDayObject.getString("month"), consultationDayObject.getInt("year"));
                 Date end = new Date(consultationDayObject.getString("weekday"), consultationDayObject.getInt("day"), consultationDayObject.getString("month"), consultationDayObject.getInt("year"));
@@ -118,12 +112,12 @@ public class DatesHolder {
                     int endTime = Integer.parseInt(time.split(" - ")[1]);
                     start.setTime(0, startTime);
                     end.setTime(0, endTime);
-                }else end = start;
+                } else end = start;
                 events.add(new Event(consultationDayObject.getString("description"), "consultationDay", start, end));
             }
 
             // Convert conferences...
-            for (int i = 0; i< conferencesO.length(); i++){
+            for (int i = 0; i < conferencesO.length(); i++) {
                 JSONObject conferenceObject = conferencesO.getJSONObject(i);
                 JSONObject day = conferenceObject.getJSONObject("day");
                 Date start = new Date(day.getString("weekday"), day.getInt("day"), day.getString("month"), day.getInt("year"));
@@ -135,7 +129,7 @@ public class DatesHolder {
             }
 
             // Convert grades releases...
-            for (int i = 0; i< gradesReleasesO.length(); i++){
+            for (int i = 0; i < gradesReleasesO.length(); i++) {
                 JSONObject gradesReleaseObject = gradesReleasesO.getJSONObject(i);
                 JSONObject day = gradesReleaseObject.getJSONObject("day");
                 Date start = new Date(day.getString("weekday"), day.getInt("day"), day.getString("month"), day.getInt("year"));
@@ -154,13 +148,13 @@ public class DatesHolder {
         }
     }
 
-    private static void sortEvents(Context c){
+    private static void sortEvents(Context c) {
         List<Event> sortedList = new ArrayList<Event>();
         sortedList.add(events.get(0));
-        for (int i = 1; i < events.size(); i++){
+        for (int i = 1; i < events.size(); i++) {
             Date date = events.get(i).start;
             int j = 0;
-            for (j = 0; j < sortedList.size(); j++){
+            for (j = 0; j < sortedList.size(); j++) {
                 if (date.getTimestamp(c) <= sortedList.get(j).start.getTimestamp(c)) break;
             }
             sortedList.add(j, events.get(i));
@@ -168,7 +162,7 @@ public class DatesHolder {
         events = sortedList;
     }
 
-    public static void createCalendar(Context c){
+    public static void createCalendar(Context c) {
         calendar = new ArrayList<>();
 
         java.util.Date date = new java.util.Date();
@@ -176,7 +170,7 @@ public class DatesHolder {
         cal.setTime(date);
         Date today = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
 
-        for (int i = 1; i < events.size(); i++){
+        for (int i = 1; i < events.size(); i++) {
             Event event = events.get(i);
             if (event.end.getTimestamp(c) < today.getTimestamp(c)) continue;
             if (calendar.size() > 0) {
@@ -195,11 +189,11 @@ public class DatesHolder {
         }
     }
 
-    public static List<Event> getEvents(){
+    public static List<Event> getEvents() {
         return events;
     }
 
-    public static List<List<Event>> getCalendar(){
+    public static List<List<Event>> getCalendar() {
         return calendar;
     }
 }

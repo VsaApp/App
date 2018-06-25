@@ -2,27 +2,14 @@ package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.text.Html;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Objects;
-
-import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 
 public class DatesListAdapter extends BaseAdapter {
 
@@ -76,8 +63,10 @@ public class DatesListAdapter extends BaseAdapter {
             nameView.setText(event.name);
 
             if (event.start != event.end)
-                if (event.start.getHour() != 0) timeView.setText(String.format(context.getResources().getString(R.string.clock), event.start.getHour(), event.end.getHour()));
-                else timeView.setText(String.format(context.getResources().getString(R.string.to_day), event.end.getDay(), event.end.getMonth(context), event.end.getYear()));
+                if (event.start.getHour() != 0)
+                    timeView.setText(String.format(context.getResources().getString(R.string.clock), event.start.getHour(), event.end.getHour()));
+                else
+                    timeView.setText(String.format(context.getResources().getString(R.string.to_day), event.end.getDay(), event.end.getMonth(context), event.end.getYear()));
             else
                 timeView.setText(context.getResources().getString(R.string.whole_day));
 

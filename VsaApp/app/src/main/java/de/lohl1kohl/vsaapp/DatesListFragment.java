@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import de.lohl1kohl.vsaapp.holder.DatesHolder;
-import de.lohl1kohl.vsaapp.holder.VpHolder;
 
 public class DatesListFragment extends BaseFragment {
 

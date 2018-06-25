@@ -20,54 +20,54 @@ public class Date {
     private String monthName;
     private List<String> grades = new ArrayList<String>();
 
-    public Date(int day, int month, int year){
+    public Date(int day, int month, int year) {
         this.day = day;
         this.month = month;
         this.year = year;
     }
 
-    public Date(String weekday, int day, int month, int year){
+    public Date(String weekday, int day, int month, int year) {
         this.day = day;
         this.month = month;
         this.year = year;
         this.weekday = weekday;
     }
 
-    public Date(int day, String monthName, int year){
+    public Date(int day, String monthName, int year) {
         this.day = day;
         this.monthName = monthName;
         this.year = year;
     }
 
-    public Date(String weekday, int day, String monthName, int year){
+    public Date(String weekday, int day, String monthName, int year) {
         this.day = day;
         this.monthName = monthName;
         this.year = year;
         this.weekday = weekday;
     }
 
-    public int getTimestamp(Context c){
-        return  (year * 100000000) + (getMonth(c) * 1000000) + (day * 10000) + (hour * 100) + min;
+    public int getTimestamp(Context c) {
+        return (year * 100000000) + (getMonth(c) * 1000000) + (day * 10000) + (hour * 100) + min;
     }
 
-    public int getHour(){
+    public int getHour() {
         return hour;
     }
 
-    public int getMin(){
+    public int getMin() {
         return min;
     }
 
-    public int getDay(){
+    public int getDay() {
         return day;
     }
 
-    public int getMonth(Context c){
+    public int getMonth(Context c) {
         if (month == -1) return getMonth(c, monthName);
         else return month;
     }
 
-    public int getYear(){
+    public int getYear() {
         return year;
     }
 
@@ -86,21 +86,21 @@ public class Date {
         return new ArrayList<String>(Arrays.asList(context.getResources().getStringArray(R.array.nameOfGrades)));
     }
 
-    public void setTime(int min, int hour){
+    public void setTime(int min, int hour) {
         this.min = min;
         this.hour = hour;
     }
 
-    public void addGrade(String grade){
+    public void addGrade(String grade) {
         this.grades.add(grade);
     }
 
 
-    private int getMonth(Context context, String monthName){
+    private int getMonth(Context context, String monthName) {
         return Arrays.asList(context.getResources().getStringArray(R.array.monthNames)).indexOf(monthName) + 1;
     }
 
-    private String getWeekday(Context context, int day, int month, int year){
+    private String getWeekday(Context context, int day, int month, int year) {
         java.util.Date now = new java.util.Date(day, month, year);
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE", Locale.GERMANY);
         String asWeek = dateFormat.format(now);
@@ -108,7 +108,7 @@ public class Date {
         return asWeek;
     }
 
-    private String getMonthName(Context context, int month){
+    private String getMonthName(Context context, int month) {
         return Arrays.asList(context.getResources().getStringArray(R.array.monthNames)).get(month - 1);
     }
 }
