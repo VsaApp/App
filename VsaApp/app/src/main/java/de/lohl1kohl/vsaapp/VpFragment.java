@@ -21,7 +21,7 @@ import de.lohl1kohl.vsaapp.holder.VpHolder;
 
 
 public class VpFragment extends BaseFragment {
-    View vpView;
+    static View vpView;
 
     @SuppressLint("SetTextI18n")
     static void showVpInfoDialog(Context context, Subject subject) {
@@ -80,6 +80,20 @@ public class VpFragment extends BaseFragment {
         loginDialog.getWindow().setAttributes(lWindowParams);
     }
 
+    public static void selectDay(String day) {
+        while (vpView == null) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        TabLayout tabLayout = vpView.findViewById(R.id.vp_tabs);
+        if (day.equals(VpHolder.weekdayTomorrow)) {
+            Objects.requireNonNull(tabLayout.getTabAt(1)).select();
+        }
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -97,11 +111,5 @@ public class VpFragment extends BaseFragment {
         // Add the tabs...
         TabLayout tabLayout = vpView.findViewById(R.id.vp_tabs);
         tabLayout.setupWithViewPager(pager);
-
-        if (mActivity.getIntent().getStringExtra("day") != null) {
-            if (mActivity.getIntent().getStringExtra("day").equals(VpHolder.weekdayTomorrow)) {
-                Objects.requireNonNull(tabLayout.getTabAt(1)).select();
-            }
-        }
     }
 }

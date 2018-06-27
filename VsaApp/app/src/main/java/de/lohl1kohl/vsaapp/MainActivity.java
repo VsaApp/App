@@ -73,11 +73,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onFinished() {
                 SpHolder.load(mainActivity, false);
+                if (MainActivity.this.getIntent().getStringExtra("day") != null) {
+                    VpFragment.selectDay(MainActivity.this.getIntent().getStringExtra("day"));
+                }
             }
 
             @Override
             public void onConnectionFailed() {
-
+                if (MainActivity.this.getIntent().getStringExtra("day") != null) {
+                    VpFragment.selectDay(MainActivity.this.getIntent().getStringExtra("day"));
+                }
             }
         };
 
