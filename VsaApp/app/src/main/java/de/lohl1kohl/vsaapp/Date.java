@@ -6,6 +6,7 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -77,8 +78,18 @@ public class Date {
     }
 
     public String getWeekday(Context c) {
-        if (weekday == null) return getWeekday(c, day, month, year);
+        if (weekday == null) return getWeekdayString(c);
         else return weekday;
+    }
+
+    public int getDayOfWeek(Context c){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.MONTH, getMonth(c) - 1);
+        calendar.set(Calendar.YEAR, year);
+        int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
+        if (weekday == -1) weekday = 6;
+        return weekday;
     }
 
     public List<String> getGrades(Context context) {
@@ -100,12 +111,8 @@ public class Date {
         return Arrays.asList(context.getResources().getStringArray(R.array.monthNames)).indexOf(monthName) + 1;
     }
 
-    private String getWeekday(Context context, int day, int month, int year) {
-        java.util.Date now = new java.util.Date(day, month, year);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE", Locale.GERMANY);
-        String asWeek = dateFormat.format(now);
-        Log.i("VsaApp/Date", String.format("%d.%d.%d: %s", day, month, year, asWeek));
-        return asWeek;
+    private String getWeekdayString(Context context) {
+        return Arrays.asList(context.getResources().getStringArray(R.array.monthNames)).get(getDayOfWeek(context));
     }
 
     private String getMonthName(Context context, int month) {

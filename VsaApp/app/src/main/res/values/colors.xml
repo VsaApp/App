@@ -6,5 +6,12 @@
     <color name="textColor">#ffffff</color>
     <color name="spBackgroundColor">#ededed</color>
     <color name="spPassedLesson">#919191</color>
+    <color name="spLesson">#000000</color>
     <color name="spChangeSubject">#f01a30</color>
+    <color name="spChangePassedSubject">#e2a4aa</color>
+    <color name="calendarBorder">#919191</color>
+    <color name="calendarItem">#ffffff</color>
+    <color name="calendarItemOtherMonth">#ededed</color>
+    <color name="calendarWeekend">#dd0000</color>
+    <color name="calendarHeader">#d3d3d3</color>
 </resources>

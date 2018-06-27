@@ -16,7 +16,7 @@ public class DatesListFragment extends BaseFragment {
         View root = inflater.inflate(R.layout.dates_list, container, false);
 
         ListView listView = root.findViewById(R.id.datesList);
-        DatesListAdapter datesListAdapter = new DatesListAdapter(mActivity, DatesHolder.getCalendar());
+        DatesListAdapter datesListAdapter = new DatesListAdapter(mActivity, DatesHolder.getFiltertCalendar(mActivity));
         listView.setAdapter(datesListAdapter);
 
         return root;

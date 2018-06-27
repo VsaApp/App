@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/calendarHeader"
+    android:paddingBottom="2dp">
 
-    <android.support.v4.view.ViewPager
+    <TextView
+        android:id="@+id/weekday_short"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/calendar_viewpager">
-
-    </android.support.v4.view.ViewPager>
+        android:gravity="center"/>
 
 </LinearLayout>

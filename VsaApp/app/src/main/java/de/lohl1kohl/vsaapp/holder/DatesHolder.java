@@ -14,12 +14,13 @@ import java.util.Calendar;
 import java.util.List;
 
 import de.lohl1kohl.vsaapp.Date;
+import de.lohl1kohl.vsaapp.Day;
 import de.lohl1kohl.vsaapp.Event;
 import de.lohl1kohl.vsaapp.server.Dates;
 
 public class DatesHolder {
     private static List<Event> events;
-    private static List<List<Event>> calendar;
+    private static List<Day> calendar;
 
     public static void load(Context context) {
         load(context, null);
@@ -162,29 +163,24 @@ public class DatesHolder {
         events = sortedList;
     }
 
-    public static void createCalendar(Context c) {
+    private static void createCalendar(Context c) {
         calendar = new ArrayList<>();
 
-        java.util.Date date = new java.util.Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        Date today = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
 
         for (int i = 1; i < events.size(); i++) {
             Event event = events.get(i);
-            if (event.end.getTimestamp(c) < today.getTimestamp(c)) continue;
             if (calendar.size() > 0) {
-                if (event.start.getYear() == calendar.get(calendar.size() - 1).get(0).start.getYear()) {
-                    if (event.start.getMonth(c) == calendar.get(calendar.size() - 1).get(0).start.getMonth(c)) {
-                        if (event.start.getDay() == calendar.get(calendar.size() - 1).get(0).start.getDay()) {
-                            calendar.get(calendar.size() - 1).add(event);
+                if (event.start.getYear() == calendar.get(calendar.size() - 1).year) {
+                    if (event.start.getMonth(c) == calendar.get(calendar.size() - 1).month) {
+                        if (event.start.getDay() == calendar.get(calendar.size() - 1).day) {
+                            calendar.get(calendar.size() - 1).addEvent(event);
                             continue;
                         }
                     }
                 }
             }
-            List<Event> day = new ArrayList<Event>();
-            day.add(event);
+            Day day = new Day(event.start.getDay(), event.start.getMonth(c), event.start.getYear());
+            day.addEvent(event);
             calendar.add(day);
         }
     }
@@ -193,7 +189,39 @@ public class DatesHolder {
         return events;
     }
 
-    public static List<List<Event>> getCalendar() {
+    public static List<Day> getFiltertCalendar(Context c){
+        List<Day> filtertCalendar = new ArrayList<>(calendar);
+        java.util.Date date = new java.util.Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        Date today = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+
+        for (int i = filtertCalendar.size() - 1; i >= 0; i--) {
+            if (filtertCalendar.get(i).getEvent(0).end.getTimestamp(c) < today.getTimestamp(c)) filtertCalendar.remove(i);
+        }
+
+        return filtertCalendar;
+    }
+
+    public static List<Day> getCalendar() {
         return calendar;
+    }
+
+    public static List<Day> getMonth(int month, int year){
+        List<Day> monthList = new ArrayList<Day>();
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        int numDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        for (int i = 0; i < numDays; i++) monthList.add(new Day(i + 1, month, year));
+
+        for (int i = 0; i < calendar.size(); i++){
+            if (calendar.get(i).month == month + 1 && calendar.get(i).year == year)
+                for (int j = 0; j < calendar.get(i).getEvents().size(); j++) monthList.get(calendar.get(i).day - 1).addEvent(calendar.get(i).getEvents().get(j));
+        }
+
+        return monthList;
     }
 }

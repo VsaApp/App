@@ -13,11 +13,11 @@ import java.util.List;
 
 public class DatesListAdapter extends BaseAdapter {
 
-    private List<List<Event>> listStorage;
+    private List<Day> listStorage;
     private LayoutInflater layoutinflater;
     private Context context;
 
-    DatesListAdapter(Context context, List<List<Event>> eventList) {
+    DatesListAdapter(Context context, List<Day> eventList) {
         layoutinflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         listStorage = eventList;
         this.context = context;
@@ -51,14 +51,14 @@ public class DatesListAdapter extends BaseAdapter {
         convertView.setTag(listViewHolder);
 
         // Get the current lesson...
-        List<Event> events = listStorage.get(position);
+        Day day = listStorage.get(position);
+        List<Event> events = day.getEvents();
+        listViewHolder.dateInListView.setText(String.format("%s.%s.%s", day.day, day.month, day.year));
 
         for (Event event : events) {
-            listViewHolder.dateInListView.setText(String.format("%s.%s.%s", event.start.getDay(), event.start.getMonth(context), event.start.getYear()));
-
             @SuppressLint("InflateParams") View v = LayoutInflater.from(context).inflate(R.layout.dates_list_item_event, null);
-            TextView nameView = (TextView) v.findViewById(R.id.event_name);
-            TextView timeView = (TextView) v.findViewById(R.id.event_time);
+            TextView nameView = (TextView) v.findViewById(R.id.list_event_name);
+            TextView timeView = (TextView) v.findViewById(R.id.list_event_time);
 
             nameView.setText(event.name);
 

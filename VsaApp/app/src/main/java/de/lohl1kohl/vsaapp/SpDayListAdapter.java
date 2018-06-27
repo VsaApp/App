@@ -3,6 +3,7 @@ package de.lohl1kohl.vsaapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -123,9 +124,9 @@ public class SpDayListAdapter extends BaseAdapter {
         }
 
         if (lesson.isGray()) {
-            listViewHolder.lessonInListView.setTextColor(convertView.getResources().getColor(R.color.spPassedLesson));
-            listViewHolder.teacherInListView.setTextColor(convertView.getResources().getColor(R.color.spPassedLesson));
-            listViewHolder.roomInListView.setTextColor(convertView.getResources().getColor(R.color.spPassedLesson));
+            listViewHolder.lessonInListView.setTextColor(getColor(convertView, false, true));
+            listViewHolder.teacherInListView.setTextColor(getColor(convertView, false, true));
+            listViewHolder.roomInListView.setTextColor(getColor(convertView, false, true));
         }
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -144,20 +145,31 @@ public class SpDayListAdapter extends BaseAdapter {
                 }
                 if (!changedTeacher.equals(normalTeacher) && !changedTeacher.equals("")) {
                     listViewHolder.teacherInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), changedTeacher));
-                    listViewHolder.teacherInListView.setTextColor(convertView.getResources().getColor(R.color.spChangeSubject));
+                    listViewHolder.teacherInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
                 }
                 if (!subject.getName().equals(changes.getName()) && !changes.getName().equals("")) {
                     listViewHolder.lessonInListView.setText(listViewHolder.lessonInListView.getText() + "\n" + changes.getName());
-                    listViewHolder.lessonInListView.setTextColor(convertView.getResources().getColor(R.color.spChangeSubject));
+                    listViewHolder.lessonInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
                 }
                 if (!subject.room.equals(changes.room) && !changes.room.equals("")) {
                     listViewHolder.roomInListView.setText(String.format(convertView.getResources().getString(R.string.in_room_s), changes.room));
-                    listViewHolder.roomInListView.setTextColor(convertView.getResources().getColor(R.color.spChangeSubject));
+                    listViewHolder.roomInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
                 }
             }
         }
 
         return convertView;
+    }
+
+    private int getColor(View view, boolean changed, boolean isGray) {
+        if (changed) {
+            if (isGray) return view.getResources().getColor(R.color.spChangePassedSubject);
+            else return view.getResources().getColor(R.color.spChangeSubject);
+
+        } else {
+            if (isGray) return view.getResources().getColor(R.color.spPassedLesson);
+            else return view.getResources().getColor(R.color.spLesson);
+        }
     }
 
     static class ViewHolder {

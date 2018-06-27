@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 public class DatesFragmentAdapter extends FragmentStatePagerAdapter {
 
     private DatesListFragment datesListFragment = new DatesListFragment();
-    private DatesCalenderFragment datesCalenderFragment = new DatesCalenderFragment();
+    private DatesCalendarFragment datesCalendarFragment = new DatesCalendarFragment();
     private Context context;
 
     DatesFragmentAdapter(Context context, FragmentManager fm) {
@@ -19,7 +19,7 @@ public class DatesFragmentAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) return datesListFragment;
-        else return datesCalenderFragment;
+        else return datesCalendarFragment;
     }
 
     @Override
