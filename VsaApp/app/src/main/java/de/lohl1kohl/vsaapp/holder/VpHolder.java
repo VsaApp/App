@@ -127,13 +127,16 @@ public class VpHolder {
                 if (SubjectSymbolsHolder.has(info.split(" ")[0].toUpperCase())) {
                     info = info.replace(info.split(" ")[0], SubjectSymbolsHolder.get(info.split(" ")[0].toUpperCase()));
                 }
+                try {
+                    Subject subject = SpHolder.getSubject(context, weekday, unit, normalLesson.split(" ")[0]);
+                    if (subject == null)
+                        subject = new Subject(weekday, unit, normalLesson, "?", "");
+                    if (!isShowOnlySelectedSubjects(context) || subject == SpHolder.getLesson(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday), unit).getSubject()) {
+                        subject.changes = new Subject(weekday, unit, info, room, teacher);
+                        subjects.add(subject);
+                    }
+                } catch (IndexOutOfBoundsException ignored) {
 
-                Subject subject = SpHolder.getSubject(context, weekday, unit, normalLesson.split(" ")[0]);
-                if (subject == null)
-                    subject = new Subject(weekday, unit, normalLesson, "?", "");
-                if (!isShowOnlySelectedSubjects(context) || subject == SpHolder.getLesson(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday), unit).getSubject()) {
-                    subject.changes = new Subject(weekday, unit, info, room, teacher);
-                    subjects.add(subject);
                 }
 
             }
