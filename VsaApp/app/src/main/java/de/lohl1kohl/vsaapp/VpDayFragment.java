@@ -2,6 +2,7 @@ package de.lohl1kohl.vsaapp;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ public class VpDayFragment extends BaseFragment {
     public boolean today;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View root = inflater.inflate(R.layout.vp_day, container, false);
         ListView listView = root.findViewById(R.id.vpList);
         VpAdapter vpAdapter = new VpAdapter(mActivity, today);

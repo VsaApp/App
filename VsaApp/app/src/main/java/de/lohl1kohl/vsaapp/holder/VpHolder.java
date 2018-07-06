@@ -76,17 +76,21 @@ public class VpHolder {
                     List<Subject> savedVP = getSavedVp(context, today);
                     if (savedVP != null) vp.add(today ? 0 : 1, savedVP);
 
+                    countDownloadedVps++;
+
                     if (vpLoadedCallback != null && countDownloadedVps == 2)
                         vpLoadedCallback.onConnectionFailed();
                 }
             };
 
-            // Send request to server...
-            if (today) {
-                new Today().updateVp(grade, callback);
-            } else {
-                new Tomorrow().updateVp(grade, callback);
-            }
+            new Thread(() -> {
+                // Send request to server...
+                if (today) {
+                    new Today().updateVp(grade, callback);
+                } else {
+                    new Tomorrow().updateVp(grade, callback);
+                }
+            }).start();
         }
     }
 
@@ -167,7 +171,6 @@ public class VpHolder {
     }
 
     public static Subject getSubject(boolean today, int i) {
-        Log.i("VsaApp/VpHolder", "Today: " + (today ? "true" : "false") + ", i:" + i + ", " + vp);
         return vp.get(today ? 0 : 1).get(i);
     }
 }
