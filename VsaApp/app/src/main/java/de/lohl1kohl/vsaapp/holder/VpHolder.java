@@ -52,7 +52,7 @@ public class VpHolder {
             vpCallback callback = new vpCallback() {
                 @Override
                 public void onReceived(String output) {
-                    vp.add(today ? 0 : 1, convertJsonToArray(context, output, today));
+                    vp.add(today ? 0 : (vp.size() == 0 ? 0 : 1), convertJsonToArray(context, output, today));
                     Log.v("VsaApp/Server", "Success");
 
                     // Save the current sp...
