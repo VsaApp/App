@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/calendarBorder">
+    android:background="@color/calendarBorder"
+    android:orientation="vertical">
 
     <GridView
-        android:gravity="center"
-        android:horizontalSpacing="1px"
-        android:verticalSpacing="1px"
         android:id="@+id/dates_calender_grid_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:numColumns="7"
-        android:paddingBottom="1px"/>
-
-    <GridView
         android:gravity="center"
         android:horizontalSpacing="1px"
-        android:verticalSpacing="1px"
+        android:numColumns="7"
+        android:paddingBottom="1px"
+        android:verticalSpacing="1px" />
+
+    <GridView
         android:id="@+id/dates_calender_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:numColumns="7"/>
+        android:gravity="center"
+        android:horizontalSpacing="1px"
+        android:numColumns="7"
+        android:verticalSpacing="1px" />
 
 </LinearLayout>

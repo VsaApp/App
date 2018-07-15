@@ -8,18 +8,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Objects;
 
 import de.lohl1kohl.vsaapp.holder.Callbacks;
-import de.lohl1kohl.vsaapp.holder.SpHolder;
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 import de.lohl1kohl.vsaapp.holder.VpHolder;
 
@@ -107,7 +104,7 @@ public class VpFragment extends BaseFragment {
         return vpView;
     }
 
-    private void loadVp(){
+    private void loadVp() {
         Callbacks.vpLoadedCallback vpLoadedCallback = new Callbacks.vpLoadedCallback() {
             @Override
             public void onFinished() {

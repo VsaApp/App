@@ -6,7 +6,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,8 @@ public class SpFragment extends BaseFragment {
             int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
             try {
                 if (weekday == -1 | weekday == 5) weekday = 0;
-                else if (LessonUtils.isLessonPassed(SpHolder.getNumberOfLessons(weekday) - 1)) weekday++;
+                else if (LessonUtils.isLessonPassed(SpHolder.getNumberOfLessons(weekday) - 1))
+                    weekday++;
                 TabLayout.Tab tab = tabLayout.getTabAt(weekday);
                 try {
                     Objects.requireNonNull(tab).select();

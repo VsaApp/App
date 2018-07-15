@@ -189,7 +189,7 @@ public class DatesHolder {
         return events;
     }
 
-    public static List<Day> getFiltertCalendar(Context c){
+    public static List<Day> getFiltertCalendar(Context c) {
         List<Day> filtertCalendar = new ArrayList<>(calendar);
         java.util.Date date = new java.util.Date();
         Calendar cal = Calendar.getInstance();
@@ -197,7 +197,8 @@ public class DatesHolder {
         Date today = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
 
         for (int i = filtertCalendar.size() - 1; i >= 0; i--) {
-            if (filtertCalendar.get(i).getEvent(0).end.getTimestamp(c) < today.getTimestamp(c)) filtertCalendar.remove(i);
+            if (filtertCalendar.get(i).getEvent(0).end.getTimestamp(c) < today.getTimestamp(c))
+                filtertCalendar.remove(i);
         }
 
         return filtertCalendar;
@@ -207,7 +208,7 @@ public class DatesHolder {
         return calendar;
     }
 
-    public static List<Day> getMonth(int month, int year){
+    public static List<Day> getMonth(int month, int year) {
         List<Day> monthList = new ArrayList<Day>();
 
         Calendar c = Calendar.getInstance();
@@ -217,9 +218,10 @@ public class DatesHolder {
 
         for (int i = 0; i < numDays; i++) monthList.add(new Day(i + 1, month, year));
 
-        for (int i = 0; i < calendar.size(); i++){
+        for (int i = 0; i < calendar.size(); i++) {
             if (calendar.get(i).month == month + 1 && calendar.get(i).year == year)
-                for (int j = 0; j < calendar.get(i).getEvents().size(); j++) monthList.get(calendar.get(i).day - 1).addEvent(calendar.get(i).getEvents().get(j));
+                for (int j = 0; j < calendar.get(i).getEvents().size(); j++)
+                    monthList.get(calendar.get(i).day - 1).addEvent(calendar.get(i).getEvents().get(j));
         }
 
         return monthList;

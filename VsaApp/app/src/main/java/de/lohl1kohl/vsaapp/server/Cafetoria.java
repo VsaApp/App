@@ -7,19 +7,19 @@ import de.lohl1kohl.vsaapp.HttpGetRequest;
 
 public class Cafetoria implements AsyncResponse {
 
-    private Callbacks.cafetoriaCallback spCallback;
+    private Callbacks.cafetoriaCallback cafetoriaCallback;
 
     @Override
     public void processFinish(String output) {
         if (output == null) {
-            spCallback.onConnectionFailed();
+            cafetoriaCallback.onConnectionFailed();
         } else {
-            spCallback.onReceived(output);
+            cafetoriaCallback.onReceived(output);
         }
     }
 
     public void updateMenues(String id, String password, Callbacks.cafetoriaCallback c) {
-        spCallback = c;
+        cafetoriaCallback = c;
 
         String url = String.format("https://vsa.lohl1kohl.de/cafetoria?id=%s&password=%s", id, password);
         Log.i("VsaApp/Server/Sp", "Open: " + url);

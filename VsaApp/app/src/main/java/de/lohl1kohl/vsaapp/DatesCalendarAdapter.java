@@ -1,26 +1,13 @@
 package de.lohl1kohl.vsaapp;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.holder.DatesHolder;
 
 public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
 
@@ -43,8 +30,8 @@ public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
         setFragments();
     }
 
-    public int setCurrentItem(int item){
-        if (currentItem != item){
+    public int setCurrentItem(int item) {
+        if (currentItem != item) {
             currentItem = item;
             if (item == 0) {
                 DatesCalendarMonthFragment fragment = new DatesCalendarMonthFragment();
@@ -57,7 +44,7 @@ public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
                 monthsFragments.add(0, fragment);
                 notifyDataSetChanged();
                 return -1;
-            } else if (item == monthsFragments.size() - 1){
+            } else if (item == monthsFragments.size() - 1) {
                 DatesCalendarMonthFragment fragment = new DatesCalendarMonthFragment();
                 fragment.month = monthsFragments.get(monthsFragments.size() - 1).month + 1;
                 fragment.year = monthsFragments.get(monthsFragments.size() - 1).year;
@@ -73,7 +60,7 @@ public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
         return 0;
     }
 
-    private void setFragments(){
+    private void setFragments() {
         DatesCalendarMonthFragment fragment = new DatesCalendarMonthFragment();
         fragment.month = currentMonth - 1;
         fragment.year = currentYear;

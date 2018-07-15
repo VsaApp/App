@@ -9,9 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -40,7 +37,8 @@ public class DatesCalendarMonthAdapter extends BaseAdapter {
                 lastYear = year - 1;
             }
             List<Day> lastMonth = DatesHolder.getMonth(lastMonthNumber, lastYear);
-            for (int i = 1; i < firstWeekday + 1; i++) monthList.add(0, lastMonth.get(lastMonth.size() - i));
+            for (int i = 1; i < firstWeekday + 1; i++)
+                monthList.add(0, lastMonth.get(lastMonth.size() - i));
         }
         if (monthList.size() < 42) {
             int nextYear = year;
@@ -97,7 +95,8 @@ public class DatesCalendarMonthAdapter extends BaseAdapter {
         calendar.set(Calendar.MONTH, day.month);
         calendar.set(Calendar.YEAR, day.year);
         int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
-        if (weekday == -1 || weekday == 5) listViewHolder.numberOfDateInListView.setTextColor(convertView.getResources().getColor(R.color.calendarWeekend));
+        if (weekday == -1 || weekday == 5)
+            listViewHolder.numberOfDateInListView.setTextColor(convertView.getResources().getColor(R.color.calendarWeekend));
 
         // Get the current lesson...
         List<Event> events = day.getEvents();
@@ -105,7 +104,7 @@ public class DatesCalendarMonthAdapter extends BaseAdapter {
         for (Event event : events) {
 
             @SuppressLint("InflateParams") View v = LayoutInflater.from(context).inflate(R.layout.dates_calendar_event, null);
-            TextView nameView = (TextView) v.findViewById(R.id.event_name);
+            TextView nameView = v.findViewById(R.id.event_name);
 
             nameView.setText(event.name);
             listViewHolder.listInListView.addView(v);

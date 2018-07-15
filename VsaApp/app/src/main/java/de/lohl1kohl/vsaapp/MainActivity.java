@@ -28,6 +28,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -41,6 +43,8 @@ import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 import de.lohl1kohl.vsaapp.holder.VpHolder;
 import de.lohl1kohl.vsaapp.server.Callbacks;
 import de.lohl1kohl.vsaapp.server.Login;
+
+import static de.lohl1kohl.vsaapp.WebFragment.pushChoices;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -75,6 +79,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 SpHolder.load(mainActivity, false);
                 if (MainActivity.this.getIntent().getStringExtra("day") != null) {
                     VpFragment.selectDay(MainActivity.this.getIntent().getStringExtra("day"));
+                }
+                try {
+                    pushChoices(mainActivity);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -327,8 +336,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 currentFragment = new CafetoriaFragment();
                 title = getString(R.string.cafetoria);
                 break;
-            case R.id.nav_settings:
+            case R.id.nav_web:
                 navigationView.getMenu().getItem(5).setChecked(true);
+                currentFragment = new WebFragment();
+                title = getString(R.string.web);
+                break;
+            case R.id.nav_settings:
+                navigationView.getMenu().getItem(6).setChecked(true);
                 currentFragment.onDestroy();
                 settingsFragment = new SettingsFragment();
                 break;

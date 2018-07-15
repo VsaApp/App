@@ -6,16 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-
-import de.lohl1kohl.vsaapp.holder.DatesHolder;
 
 public class DatesCalendarMonthHeaderAdapter extends BaseAdapter {
 
@@ -25,7 +19,7 @@ public class DatesCalendarMonthHeaderAdapter extends BaseAdapter {
     DatesCalendarMonthHeaderAdapter(Context context) {
         layoutinflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
-        }
+    }
 
     @Override
     public int getCount() {

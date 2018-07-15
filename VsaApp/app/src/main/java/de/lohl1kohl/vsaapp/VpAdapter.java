@@ -64,7 +64,7 @@ public class VpAdapter extends BaseAdapter {
 
         if (teacherNow.length() > 0) {
             try {
-                teacherNow = Objects.requireNonNull(TeacherHolder.searchTeacher(teacherNow)).getGenderizedGenitiveName();
+                teacherNow = Objects.requireNonNull(TeacherHolder.searchTeacher(teacherNow)).getGenderizedName();
             } catch (Exception ignored) {
 
             }

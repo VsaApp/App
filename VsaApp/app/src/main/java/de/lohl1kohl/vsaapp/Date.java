@@ -1,14 +1,11 @@
 package de.lohl1kohl.vsaapp;
 
 import android.content.Context;
-import android.util.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class Date {
 
@@ -82,7 +79,7 @@ public class Date {
         else return weekday;
     }
 
-    public int getDayOfWeek(Context c){
+    public int getDayOfWeek(Context c) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, day);
         calendar.set(Calendar.MONTH, getMonth(c) - 1);

@@ -140,7 +140,7 @@ public class SpHolder {
                     spDay.add(ls);
                 }
                 // Delete last free lessons...
-                for (int j = spDay.size() - 1; j >= 0; j--){
+                for (int j = spDay.size() - 1; j >= 0; j--) {
                     if (spDay.get(j).numberOfSubjects() == 0) spDay.remove(j);
                     else break;
                 }
@@ -163,7 +163,7 @@ public class SpHolder {
         return sp.get(day);
     }
 
-    public static int getNumberOfLessons(int weekday){
+    public static int getNumberOfLessons(int weekday) {
         return sp.get(weekday).size();
     }
 

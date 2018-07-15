@@ -3,7 +3,6 @@ package de.lohl1kohl.vsaapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,10 +14,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 import java.util.Objects;
 
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
+import de.lohl1kohl.vsaapp.server.Callbacks;
+import de.lohl1kohl.vsaapp.server.web.Push;
 
 public class SpDayListAdapter extends BaseAdapter {
 
@@ -89,20 +94,45 @@ public class SpDayListAdapter extends BaseAdapter {
                         clickedLesson.setSubject(update);
                         clickedLesson.saveSubject(context);
                         adapter.notifyDataSetChanged();
+                        Subject subject = clickedLesson.getSubject();
+
+                        try {
+                            JSONArray jsonArray = new JSONArray();
+                            jsonArray.put(new JSONObject().put("weekday", subject.day).put("unit", subject.unit).put("subject", subject.name).put("teacher", StringUtils.poop(subject.teacher)));
+                            Callbacks.pushCallback pushCallback = new Callbacks.pushCallback() {
+                                @Override
+                                public void onReceived(String output) {
+
+                                }
+
+                                @Override
+                                public void onConnectionFailed() {
+
+                                }
+                            };
+                            new Push().push(context, jsonArray, pushCallback);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 return true;
             });
         }
+        String normalTeacher = "";
+        Subject subject = null;
+        try {
+            subject = lesson.getSubject();
+            normalTeacher = subject.teacher;
+            if (normalTeacher.length() > 0) {
+                try {
+                    normalTeacher = Objects.requireNonNull(TeacherHolder.searchTeacher(normalTeacher)).getGenderizedGenitiveName();
+                } catch (Exception ignored) {
 
-        Subject subject = lesson.getSubject();
-        String normalTeacher = subject.teacher;
-        if (normalTeacher.length() > 0) {
-            try {
-                normalTeacher = Objects.requireNonNull(TeacherHolder.searchTeacher(normalTeacher)).getGenderizedGenitiveName();
-            } catch (Exception ignored) {
-
+                }
             }
+        } catch (IndexOutOfBoundsException ignored) {
+
         }
 
         // Set the TextViews...
@@ -118,7 +148,7 @@ public class SpDayListAdapter extends BaseAdapter {
             listViewHolder.teacherInListView.setText(lesson.getSubject().name);
             listViewHolder.roomInListView.setText("");
         } else {
-            listViewHolder.lessonInListView.setText(subject.getName());
+            listViewHolder.lessonInListView.setText(Objects.requireNonNull(subject).getName());
             listViewHolder.teacherInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), normalTeacher));
             listViewHolder.roomInListView.setText(String.format(convertView.getResources().getString(R.string.in_room_s), subject.room));
         }
@@ -132,28 +162,30 @@ public class SpDayListAdapter extends BaseAdapter {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         Boolean showVpinSp = sharedPref.getBoolean("pref_showVpinSp", true);
 
-        if (showVpinSp) {
-            Subject changes = lesson.getSubject().changes;
-            if (changes != null) {
-                String changedTeacher = changes.teacher;
-                if (changedTeacher.length() > 0) {
-                    try {
-                        changedTeacher = Objects.requireNonNull(TeacherHolder.searchTeacher(changedTeacher)).getGenderizedGenitiveName();
-                    } catch (Exception ignored) {
+        if (lesson.numberOfSubjects() > 0) {
+            if (showVpinSp) {
+                Subject changes = lesson.getSubject().changes;
+                if (changes != null) {
+                    String changedTeacher = changes.teacher;
+                    if (changedTeacher.length() > 0) {
+                        try {
+                            changedTeacher = Objects.requireNonNull(TeacherHolder.searchTeacher(changedTeacher)).getGenderizedGenitiveName();
+                        } catch (Exception ignored) {
 
+                        }
                     }
-                }
-                if (!changedTeacher.equals(normalTeacher) && !changedTeacher.equals("")) {
-                    listViewHolder.teacherInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), changedTeacher));
-                    listViewHolder.teacherInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
-                }
-                if (!subject.getName().equals(changes.getName()) && !changes.getName().equals("")) {
-                    listViewHolder.lessonInListView.setText(listViewHolder.lessonInListView.getText() + "\n" + changes.getName());
-                    listViewHolder.lessonInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
-                }
-                if (!subject.room.equals(changes.room) && !changes.room.equals("")) {
-                    listViewHolder.roomInListView.setText(String.format(convertView.getResources().getString(R.string.in_room_s), changes.room));
-                    listViewHolder.roomInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
+                    if (!changedTeacher.equals(normalTeacher) && !changedTeacher.equals("")) {
+                        listViewHolder.teacherInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), changedTeacher));
+                        listViewHolder.teacherInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
+                    }
+                    if (!Objects.requireNonNull(subject).getName().equals(changes.getName()) && !changes.getName().equals("")) {
+                        listViewHolder.lessonInListView.setText(listViewHolder.lessonInListView.getText() + "\n" + changes.getName());
+                        listViewHolder.lessonInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
+                    }
+                    if (!subject.room.equals(changes.room) && !changes.room.equals("")) {
+                        listViewHolder.roomInListView.setText(String.format(convertView.getResources().getString(R.string.in_room_s), changes.room));
+                        listViewHolder.roomInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
+                    }
                 }
             }
         }

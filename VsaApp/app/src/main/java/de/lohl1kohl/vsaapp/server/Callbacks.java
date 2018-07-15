@@ -41,4 +41,28 @@ public class Callbacks {
 
         void onConnectionFailed();
     }
+
+    public interface connectCallback {
+        void onReceived(String output);
+
+        void onConnectionFailed();
+    }
+
+    public interface connectionsCallback {
+        void onReceived(String output);
+
+        void onConnectionFailed();
+    }
+
+    public interface pushCallback {
+        void onReceived(String output);
+
+        void onConnectionFailed();
+    }
+
+    public interface deleteCallback {
+        void onReceived(String output);
+
+        void onConnectionFailed();
+    }
 }
