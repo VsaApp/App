@@ -22,6 +22,7 @@ import de.lohl1kohl.vsaapp.holder.VpHolder;
 
 
 public class VpFragment extends BaseFragment {
+    @SuppressLint("StaticFieldLeak")
     static View vpView;
 
     @SuppressLint("SetTextI18n")
@@ -127,5 +128,10 @@ public class VpFragment extends BaseFragment {
         // Add the tabs...
         TabLayout tabLayout = vpView.findViewById(R.id.vp_tabs);
         tabLayout.setupWithViewPager(pager);
+        if (VpHolder.weekdayToday.equals(VpHolder.weekdayTomorrow)) {
+            tabLayout.removeTabAt(1);
+            adapter.fragments.remove(1);
+            adapter.notifyDataSetChanged();
+        }
     }
 }

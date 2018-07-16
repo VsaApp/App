@@ -189,7 +189,7 @@ public class DatesHolder {
         return events;
     }
 
-    public static List<Day> getFiltertCalendar(Context c) {
+    public static List<Day> getFilteredCalendar(Context c) {
         List<Day> filtertCalendar = new ArrayList<>(calendar);
         java.util.Date date = new java.util.Date();
         Calendar cal = Calendar.getInstance();

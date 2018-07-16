@@ -12,9 +12,15 @@
         android:text="@string/vpStand"
         android:textColor="@android:color/black" />
 
-    <ListView
-        android:id="@+id/vpList"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp" />
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/vpList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp" />
+    </ScrollView>
 </LinearLayout>

@@ -83,7 +83,12 @@ public class CafetoriaHolder {
                 for (int j = 0; j < jsonObject.getJSONArray("menues").length(); j++) {
                     JSONObject menu = jsonObject.getJSONArray("menues").getJSONObject(j);
                     String startTime = menu.getJSONObject("time").getString("start");
-                    String endTime = menu.getJSONObject("time").getString("end");
+                    String endTime = "";
+                    try {
+                        endTime = menu.getJSONObject("time").getString("end");
+                    } catch (JSONException ignored) {
+
+                    }
                     String food = menu.getString("food");
                     double price = menu.getDouble("price");
                     menues.add(new Menu(food, price, startTime, endTime));
