@@ -83,14 +83,13 @@ public class WebFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) {
-            scan();
             return;
         }
         if (requestCode == REQUEST_CODE_QR_SCAN) {
             if (data == null)
                 return;
             //Getting the passed result
-            String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
+            String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_result");
             Callbacks.connectCallback connectCallback = new Callbacks.connectCallback() {
                 @Override
                 public void onReceived(String output) {
@@ -183,12 +182,13 @@ public class WebFragment extends BaseFragment {
 
     public void scan() {
         Intent i = new Intent(mActivity, QrCodeActivity.class);
-        i.putExtra(QrCodeActivity.VIBRATE, true);
-        i.putExtra(QrCodeActivity.SHOW_CORNERS, false);
-        i.putExtra(QrCodeActivity.SHOW_LASER, false);
-        i.putExtra(QrCodeActivity.SHOW_TEXT, false);
-        i.putExtra(QrCodeActivity.SHOW_HEADER, false);
-        i.putExtra(QrCodeActivity.SHOW_FLASH_LIGHT, false);
+        i.putExtra("vibrate", true);
+        i.putExtra("showcorners", false);
+        i.putExtra("showlaser", false);
+        i.putExtra("showtext", false);
+        i.putExtra("showheader", false);
+        i.putExtra("showflashlight", false);
+        i.putExtra("allowbackpress", true);
         startActivityForResult(i, REQUEST_CODE_QR_SCAN);
     }
 
