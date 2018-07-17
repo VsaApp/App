@@ -5,24 +5,24 @@ import android.util.Log;
 import de.lohl1kohl.vsaapp.AsyncResponse;
 import de.lohl1kohl.vsaapp.HttpGetRequest;
 
-public class Cafetoria implements AsyncResponse {
+public class AGs implements AsyncResponse {
 
-    private Callbacks.cafetoriaCallback cafetoriaCallback;
+    private Callbacks.agsCallback agsCallback;
 
     @Override
     public void processFinish(String output) {
         if (output == null) {
-            cafetoriaCallback.onConnectionFailed();
+            agsCallback.onConnectionFailed();
         } else {
-            cafetoriaCallback.onReceived(output);
+            agsCallback.onReceived(output);
         }
     }
 
-    public void updateMenues(String id, String password, Callbacks.cafetoriaCallback c) {
-        cafetoriaCallback = c;
+    public void getAGs(Callbacks.agsCallback c) {
+        agsCallback = c;
 
-        String url = String.format("https://vsa.lohl1kohl.de/cafetoria?id=%s&password=%s", id, password);
-        Log.i("VsaApp/Server/Cafetoria", "Open: " + url);
+        String url = "https://vsa.lohl1kohl.de/ags/list.json";
+        Log.i("VsaApp/Server/AGs", "Open: " + url);
 
         HttpGetRequest asyncTask = new HttpGetRequest();
 

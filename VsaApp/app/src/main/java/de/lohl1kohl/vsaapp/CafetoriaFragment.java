@@ -64,7 +64,7 @@ public class CafetoriaFragment extends BaseFragment {
                 Toast.makeText(mActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
             }
         };
-        CafetoriaHolder.load(mActivity, true, settings.getString("pref_cafetoria_id", "-1"), settings.getString("pref_cafetoria_pin", "-1"), cafetoriaLoadedCallback);
+        CafetoriaHolder.load(mActivity, settings.getString("pref_cafetoria_id", "-1"), settings.getString("pref_cafetoria_pin", "-1"), cafetoriaLoadedCallback);
     }
 
     void displayMenues() {

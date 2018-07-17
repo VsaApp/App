@@ -38,4 +38,12 @@ public class Callbacks {
 
         void onConnectionFailed();
     }
+
+    public interface agsLoadedCallback {
+        void onOldLoaded();
+
+        void onNewLoaded();
+
+        void onConnectionFailed();
+    }
 }

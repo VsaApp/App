@@ -20,43 +20,36 @@ public class CafetoriaHolder {
 
     public static List<Day> days = new ArrayList<>();
 
-    public static void load(Context context, boolean update, String id, String password) {
-        load(context, update, id, password, null);
-    }
-
-    public static void load(Context context, boolean update, String id, String password, Callbacks.cafetoriaLoadedCallback cafetoriaLoadedCallback) {
+    public static void load(Context context, String id, String password, Callbacks.cafetoriaLoadedCallback cafetoriaLoadedCallback) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
         // Show the old days first (for a faster reaction time)...
         days = getSavedDays(context);
         if (cafetoriaLoadedCallback != null) cafetoriaLoadedCallback.onOldLoaded();
 
-        if (update) {
+        cafetoriaCallback cafetoriaCallback = new cafetoriaCallback() {
 
-            cafetoriaCallback cafetoriaCallback = new cafetoriaCallback() {
+            public void onReceived(String output) {
+                days = convertJsonToArray(output);
 
-                public void onReceived(String output) {
-                    days = convertJsonToArray(context, output);
+                // Save the current sp in the settings...
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("pref_cafetoria", output);
+                editor.apply();
 
-                    // Save the current sp in the settings...
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("pref_cafetoria", output);
-                    editor.apply();
+                if (cafetoriaLoadedCallback != null) cafetoriaLoadedCallback.onNewLoaded();
+            }
 
-                    if (cafetoriaLoadedCallback != null) cafetoriaLoadedCallback.onNewLoaded();
-                }
+            public void onConnectionFailed() {
+                Log.e("VsaApp/CafetoriaHolder", "No connection!");
+                days = getSavedDays(context);
+                if (cafetoriaLoadedCallback != null)
+                    cafetoriaLoadedCallback.onConnectionFailed();
+            }
+        };
 
-                public void onConnectionFailed() {
-                    Log.e("VsaApp/SpHolder", "No connection!");
-                    days = getSavedDays(context);
-                    if (cafetoriaLoadedCallback != null)
-                        cafetoriaLoadedCallback.onConnectionFailed();
-                }
-            };
-
-            // Send request to server...
-            new Cafetoria().updateMenues(id, password, cafetoriaCallback);
-        }
+        // Send request to server...
+        new Cafetoria().updateMenues(id, password, cafetoriaCallback);
     }
 
     @Nullable
@@ -67,11 +60,11 @@ public class CafetoriaHolder {
         if (savedDays.equals("-1")) {
             return new ArrayList<>();
         }
-        return convertJsonToArray(context, savedDays);
+        return convertJsonToArray(savedDays);
     }
 
     @Nullable
-    private static List<Day> convertJsonToArray(Context context, String array) {
+    private static List<Day> convertJsonToArray(String array) {
         List<Day> days = new ArrayList<>();
         try {
             JSONArray jsonArray = new JSONObject(array).getJSONArray("menues");

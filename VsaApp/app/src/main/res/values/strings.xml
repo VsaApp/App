@@ -27,7 +27,6 @@
     <string name="choose_grade">Klasse auswählen</string>
     <string name="search_teacher">Lehrer mit Namen oder Kürzel suchen</string>
     <string name="send_email">Email senden</string>
-    <string name="no_vp">Es gibt keine Vertretungsplan für dich</string>
     <string name="for_s_the_s_from_s">Für %s den %s (Von: %s)</string>
     <string name="mister">Herr</string>
     <string name="mister_gen">Herrn</string>
@@ -42,7 +41,6 @@
     <string name="no_unit_in_this_lesson">-</string>
     <string name="lesson_pause">Mittagspause</string>
     <string name="lesson_free">Freistunde</string>
-    <string name="noSp">Es gibt keinen Stundenplan für dich</string>
     <string name="logout">Abmelden</string>
     <string name="logout_summary">Von der VsaApp abmelden</string>
     <string name="really_logout">Willst du dich wirklich abmelden?</string>
@@ -59,14 +57,13 @@
     <string name="menu_dates">Kalender</string>
     <string name="dates_calendar">Kalender</string>
     <string name="dates_list">Liste</string>
-    <string name="dates_list_day_icon">-</string>
     <string name="clock">%d - %d Uhr</string>
     <string name="whole_day">Ganztägig</string>
     <string name="to_day">bis %d.%d.%d</string>
     <string name="web">Web</string>
     <string name="scan">Scannen</string>
     <string name="scan_instruction">Öffne https://vsa.lohl1kohl.de in einem Browser und scanne den QR-Code</string>
-    <string name="pause">Pause</string>
+    <string name="ags">AGs</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>

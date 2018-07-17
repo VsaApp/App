@@ -19,6 +19,10 @@
             android:icon="@android:drawable/ic_menu_my_calendar"
             android:title="@string/menu_dates" />
         <item
+            android:id="@+id/nav_ags"
+            android:icon="@drawable/sports"
+            android:title="@string/ags" />
+        <item
             android:id="@+id/nav_cafetoria"
             android:icon="@drawable/food"
             android:title="@string/cafetoria" />

@@ -331,18 +331,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 currentFragment = new DatesFragment();
                 title = getString(R.string.menu_dates);
                 break;
-            case R.id.nav_cafetoria:
+            case R.id.nav_ags:
                 navigationView.getMenu().getItem(4).setChecked(true);
+                currentFragment = new AGsFragment();
+                title = getString(R.string.ags);
+                break;
+            case R.id.nav_cafetoria:
+                navigationView.getMenu().getItem(5).setChecked(true);
                 currentFragment = new CafetoriaFragment();
                 title = getString(R.string.cafetoria);
                 break;
             case R.id.nav_web:
-                navigationView.getMenu().getItem(5).setChecked(true);
+                navigationView.getMenu().getItem(6).setChecked(true);
                 currentFragment = new WebFragment();
                 title = getString(R.string.web);
                 break;
             case R.id.nav_settings:
-                navigationView.getMenu().getItem(6).setChecked(true);
+                navigationView.getMenu().getItem(7).setChecked(true);
                 currentFragment.onDestroy();
                 settingsFragment = new SettingsFragment();
                 break;

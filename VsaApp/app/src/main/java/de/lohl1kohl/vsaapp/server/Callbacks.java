@@ -65,4 +65,10 @@ public class Callbacks {
 
         void onConnectionFailed();
     }
+
+    public interface agsCallback {
+        void onReceived(String output);
+
+        void onConnectionFailed();
+    }
 }
