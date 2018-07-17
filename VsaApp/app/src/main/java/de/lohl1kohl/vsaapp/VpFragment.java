@@ -13,9 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
-
-import java.util.Objects;
-
 import de.lohl1kohl.vsaapp.holder.Callbacks;
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 import de.lohl1kohl.vsaapp.holder.VpHolder;
@@ -29,8 +26,8 @@ public class VpFragment extends BaseFragment {
     static void showVpInfoDialog(Context context, Subject subject) {
         final Dialog loginDialog = new Dialog(context);
         WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
-        lWindowParams.copyFrom(Objects.requireNonNull(loginDialog.getWindow()).getAttributes());
-        lWindowParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lWindowParams.copyFrom(loginDialog.getWindow().getAttributes());
+        lWindowParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         lWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
         loginDialog.setContentView(R.layout.dialog_vp_info);
@@ -42,7 +39,7 @@ public class VpFragment extends BaseFragment {
 
         if (teacherNormal.length() > 0) {
             try {
-                teacherNormal = Objects.requireNonNull(TeacherHolder.searchTeacher(teacherNormal)).getGenderizedGenitiveName();
+                teacherNormal = TeacherHolder.searchTeacher(teacherNormal).getGenderizedGenitiveName();
             } catch (Exception ignored) {
 
             }
@@ -50,7 +47,7 @@ public class VpFragment extends BaseFragment {
 
         if (teacherNow.length() > 0) {
             try {
-                teacherNow = Objects.requireNonNull(TeacherHolder.searchTeacher(teacherNow)).getGenderizedGenitiveName();
+                teacherNow = TeacherHolder.searchTeacher(teacherNow).getGenderizedGenitiveName();
             } catch (Exception ignored) {
 
             }
@@ -92,7 +89,7 @@ public class VpFragment extends BaseFragment {
         }
         TabLayout tabLayout = vpView.findViewById(R.id.vp_tabs);
         if (day.equals(VpHolder.weekdayTomorrow)) {
-            Objects.requireNonNull(tabLayout.getTabAt(1)).select();
+            tabLayout.getTabAt(1).select();
         }
     }
 

@@ -10,9 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.Objects;
-
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 import de.lohl1kohl.vsaapp.holder.VpHolder;
 
@@ -31,7 +28,7 @@ public class VpDayFragment extends BaseFragment {
             for (int position = 0; position < VpHolder.getVp(today).size(); position++) {
                 ViewHolder listViewHolder;
                 listViewHolder = new ViewHolder();
-                View convertView = Objects.requireNonNull(layoutinflater).inflate(R.layout.vp_line, null);
+                View convertView = layoutinflater.inflate(R.layout.vp_line, null);
                 listViewHolder.lessonInListView = convertView.findViewById(R.id.vp_lesson);
                 listViewHolder.normalInListView = convertView.findViewById(R.id.vp_normal);
                 listViewHolder.changesInListView = convertView.findViewById(R.id.vp_changes);
@@ -45,7 +42,7 @@ public class VpDayFragment extends BaseFragment {
 
                 if (teacherNow.length() > 0) {
                     try {
-                        teacherNow = Objects.requireNonNull(TeacherHolder.searchTeacher(teacherNow)).getGenderizedName();
+                        teacherNow = TeacherHolder.searchTeacher(teacherNow).getGenderizedName();
                     } catch (Exception ignored) {
 
                     }

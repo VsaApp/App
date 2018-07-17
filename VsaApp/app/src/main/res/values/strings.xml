@@ -19,13 +19,15 @@
     <string name="vpInfoDialogTitle">Vertretung</string>
     <string name="vpStand">Aktualisiere…</string>
     <string name="preferenceCategory_appPref">Appeinstellungen</string>
-    <string name="preferenceTitle_showVpOnlyForYou">Im Vertretungsplan nur deine Kurse  anzeigen</string>
-    <string name="preferenceSummary_showVpOnlyForYou">Im Vertretungsplan werden nur die von dir ausgewählten Kurse angezeigt</string>
+    <string name="preferenceTitle_showVpOnlyForYou">Im Vertretungsplan nur deine Kurse anzeigen</string>
+    <string name="preferenceSummary_showVpOnlyForYou">Im Vertretungsplan werden nur die von dir ausgewählten Kurse
+        angezeigt
+    </string>
     <string name="login_success">Erfolgreich angemeldet</string>
     <string name="no_connection">Verbindung zum Server fehlgeschagen</string>
     <string name="no_class">Keine Klasse gesetzt</string>
     <string name="choose_grade">Klasse auswählen</string>
-    <string name="search_teacher">Lehrer mit Namen oder Kürzel suchen</string>
+    <string name="search_teacher">Lehrer mit Namen, Kürzel oder Fach suchen</string>
     <string name="send_email">Email senden</string>
     <string name="for_s_the_s_from_s">Für %s den %s (Von: %s)</string>
     <string name="mister">Herr</string>
@@ -64,6 +66,10 @@
     <string name="scan">Scannen</string>
     <string name="scan_instruction">Öffne https://vsa.lohl1kohl.de in einem Browser und scanne den QR-Code</string>
     <string name="ags">AGs</string>
+    <string name="write_email">Eine Email schreiben</string>
+    <string name="shortName">Kürzel:</string>
+    <string name="subjects">Fächer:</string>
+    <string name="no_teacher_found">Es konnte kein Lehrer gefunden werden</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>
@@ -108,6 +114,7 @@
         <item>UC:U. Chor</item>
         <item>EK:Erdkunde</item>
         <item>KU:Kunst</item>
+        <item>KW:Kunst</item>
         <item>SW:SoWi</item>
         <item>PL:Philosophie</item>
         <item>GE:Geschichte</item>

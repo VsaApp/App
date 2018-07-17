@@ -9,12 +9,10 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import de.lohl1kohl.vsaapp.holder.SpHolder;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
-
-import de.lohl1kohl.vsaapp.holder.SpHolder;
 
 
 public class SpFragment extends BaseFragment {
@@ -60,8 +58,9 @@ public class SpFragment extends BaseFragment {
                     weekday++;
                 TabLayout.Tab tab = tabLayout.getTabAt(weekday);
                 try {
-                    Objects.requireNonNull(tab).select();
+                    tab.select();
                 } catch (Exception ignored) {
+
                 }
             } catch (IndexOutOfBoundsException ignored) {
 

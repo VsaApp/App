@@ -6,18 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
 import com.google.firebase.messaging.RemoteMessage;
-
+import de.lohl1kohl.vsaapp.holder.Callbacks;
+import de.lohl1kohl.vsaapp.holder.SpHolder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Objects;
 import java.util.Random;
-
-import de.lohl1kohl.vsaapp.holder.Callbacks;
-import de.lohl1kohl.vsaapp.holder.SpHolder;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
@@ -56,7 +52,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                     .setContentIntent(i);
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            Objects.requireNonNull(notificationManager).notify(generator.nextInt(), builder.build());
+            notificationManager.notify(generator.nextInt(), builder.build());
         }
 
     }

@@ -27,22 +27,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
+import de.lohl1kohl.vsaapp.holder.Callbacks.vpLoadedCallback;
+import de.lohl1kohl.vsaapp.holder.*;
+import de.lohl1kohl.vsaapp.server.Callbacks;
+import de.lohl1kohl.vsaapp.server.Login;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
-
-import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
-import de.lohl1kohl.vsaapp.holder.Callbacks.vpLoadedCallback;
-import de.lohl1kohl.vsaapp.holder.DatesHolder;
-import de.lohl1kohl.vsaapp.holder.SpHolder;
-import de.lohl1kohl.vsaapp.holder.SubjectSymbolsHolder;
-import de.lohl1kohl.vsaapp.holder.TeacherHolder;
-import de.lohl1kohl.vsaapp.holder.VpHolder;
-import de.lohl1kohl.vsaapp.server.Callbacks;
-import de.lohl1kohl.vsaapp.server.Login;
 
 import static de.lohl1kohl.vsaapp.WebFragment.pushChoices;
 
@@ -202,8 +195,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         final Dialog loginDialog = new Dialog(MainActivity.this);
         WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
-        lWindowParams.copyFrom(Objects.requireNonNull(loginDialog.getWindow()).getAttributes());
-        lWindowParams.width = WindowManager.LayoutParams.FILL_PARENT;
+        lWindowParams.copyFrom(loginDialog.getWindow().getAttributes());
+        lWindowParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         lWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
         loginDialog.setContentView(R.layout.dialog_login);
@@ -381,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (!showSettings) {
                 // remove current fragment...
                 getSupportFragmentManager().beginTransaction().
-                        remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.content_frame))).commit();
+                        remove(getSupportFragmentManager().findFragmentById(R.id.content_frame)).commit();
                 showSettings = true;
 
                 // Add settings fragment...
@@ -398,6 +391,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Objects.requireNonNull(notificationManager).cancelAll();
+        notificationManager.cancelAll();
     }
 }

@@ -10,21 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Objects;
-
+import android.widget.*;
 import de.lohl1kohl.vsaapp.holder.CafetoriaHolder;
 import de.lohl1kohl.vsaapp.holder.Callbacks.cafetoriaLoadedCallback;
 import de.lohl1kohl.vsaapp.server.Cafetoria;
 import de.lohl1kohl.vsaapp.server.Callbacks;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class CafetoriaFragment extends BaseFragment {
@@ -74,8 +66,8 @@ public class CafetoriaFragment extends BaseFragment {
     public void showCafetoriaLoginDialog() {
         final Dialog loginDialog = new Dialog(mActivity);
         WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
-        lWindowParams.copyFrom(Objects.requireNonNull(loginDialog.getWindow()).getAttributes());
-        lWindowParams.width = WindowManager.LayoutParams.FILL_PARENT;
+        lWindowParams.copyFrom(loginDialog.getWindow().getAttributes());
+        lWindowParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         lWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
         loginDialog.setContentView(R.layout.dialog_cafetoria);

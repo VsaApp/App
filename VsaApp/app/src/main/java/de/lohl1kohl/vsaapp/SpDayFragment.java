@@ -10,24 +10,17 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
+import android.widget.*;
+import de.lohl1kohl.vsaapp.holder.SpHolder;
+import de.lohl1kohl.vsaapp.holder.TeacherHolder;
+import de.lohl1kohl.vsaapp.server.Callbacks;
+import de.lohl1kohl.vsaapp.server.web.Push;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-
-import de.lohl1kohl.vsaapp.holder.SpHolder;
-import de.lohl1kohl.vsaapp.holder.TeacherHolder;
-import de.lohl1kohl.vsaapp.server.Callbacks;
-import de.lohl1kohl.vsaapp.server.web.Push;
 
 public class SpDayFragment extends BaseFragment {
 
@@ -71,7 +64,7 @@ public class SpDayFragment extends BaseFragment {
 
                     // Create the view...
                     ViewHolder listViewHolder = new ViewHolder();
-                    View convertView = Objects.requireNonNull(layoutinflater).inflate(R.layout.sp_cell, null);
+                    View convertView = layoutinflater.inflate(R.layout.sp_cell, null);
                     listViewHolder.leftButton = convertView.findViewById(R.id.sp_left);
                     listViewHolder.lessonInListView = convertView.findViewById(R.id.sp_lesson);
                     listViewHolder.teacherInListView = convertView.findViewById(R.id.sp_teacher);
@@ -136,7 +129,7 @@ public class SpDayFragment extends BaseFragment {
                         normalTeacher = subject.teacher;
                         if (normalTeacher.length() > 0) {
                             try {
-                                normalTeacher = Objects.requireNonNull(TeacherHolder.searchTeacher(normalTeacher)).getGenderizedGenitiveName();
+                                normalTeacher = TeacherHolder.searchTeacher(normalTeacher).getGenderizedGenitiveName();
                             } catch (Exception ignored) {
 
                             }
@@ -158,7 +151,7 @@ public class SpDayFragment extends BaseFragment {
                         listViewHolder.teacherInListView.setText(lesson.getSubject().name);
                         listViewHolder.roomInListView.setText("");
                     } else {
-                        listViewHolder.lessonInListView.setText(Objects.requireNonNull(subject).getName());
+                        listViewHolder.lessonInListView.setText(subject.getName());
                         listViewHolder.teacherInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), normalTeacher));
                         listViewHolder.roomInListView.setText(String.format(convertView.getResources().getString(R.string.in_room_s), subject.room));
                     }
@@ -178,7 +171,7 @@ public class SpDayFragment extends BaseFragment {
                                 String changedTeacher = changes.teacher;
                                 if (changedTeacher.length() > 0) {
                                     try {
-                                        changedTeacher = Objects.requireNonNull(TeacherHolder.searchTeacher(changedTeacher)).getGenderizedGenitiveName();
+                                        changedTeacher = TeacherHolder.searchTeacher(changedTeacher).getGenderizedGenitiveName();
                                     } catch (Exception ignored) {
 
                                     }
@@ -187,7 +180,7 @@ public class SpDayFragment extends BaseFragment {
                                     listViewHolder.teacherInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), changedTeacher));
                                     listViewHolder.teacherInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
                                 }
-                                if (!Objects.requireNonNull(subject).getName().equals(changes.getName()) && !changes.getName().equals("")) {
+                                if (!subject.getName().equals(changes.getName()) && !changes.getName().equals("")) {
                                     listViewHolder.lessonInListView.setText(listViewHolder.lessonInListView.getText() + "\n" + changes.getName());
                                     listViewHolder.lessonInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
                                 }

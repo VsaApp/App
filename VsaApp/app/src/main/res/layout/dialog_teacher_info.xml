@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+    <TextView
+            android:id="@+id/teacher_dialog_longname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:textSize="20sp"/>
+
+    <TextView
+            android:id="@+id/teacher_dialog_shortname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/teacher_dialog_longname"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:textSize="20sp"/>
+
+    <TextView
+            android:id="@+id/teacher_dialog_subjects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/teacher_dialog_shortname"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:textSize="18sp"/>
+
+    <Button
+            android:id="@+id/teacher_dialog_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/teacher_dialog_subjects"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:text="@string/write_email"/>
+
+
+</RelativeLayout>

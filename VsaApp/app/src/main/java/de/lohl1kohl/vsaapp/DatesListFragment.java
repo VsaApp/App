@@ -9,11 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import de.lohl1kohl.vsaapp.holder.DatesHolder;
 
 import java.util.List;
-import java.util.Objects;
-
-import de.lohl1kohl.vsaapp.holder.DatesHolder;
 
 public class DatesListFragment extends BaseFragment {
 
@@ -31,7 +29,7 @@ public class DatesListFragment extends BaseFragment {
             for (int position = 0; position < calendar.size(); position++) {
                 // Create the view...
                 ViewHolder listViewHolder = new ViewHolder();
-                View convertView = Objects.requireNonNull(layoutinflater).inflate(R.layout.dates_list_item, null);
+                View convertView = layoutinflater.inflate(R.layout.dates_list_item, null);
                 listViewHolder.dateInListView = convertView.findViewById(R.id.event_date);
                 listViewHolder.listInListView = convertView.findViewById(R.id.event_events);
                 convertView.setTag(listViewHolder);

@@ -1,13 +1,13 @@
 package de.lohl1kohl.vsaapp;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import de.lohl1kohl.vsaapp.holder.VpHolder;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.holder.VpHolder;
 
 public class VpDayAdapter extends FragmentStatePagerAdapter {
 
@@ -36,7 +36,7 @@ public class VpDayAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public int getItemPosition(Object object) {
+    public int getItemPosition(@NonNull Object object) {
         int index = fragments.indexOf(object);
         if (index == -1) {
             return POSITION_NONE;
