@@ -6,16 +6,18 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
-import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.Teacher;
-import de.lohl1kohl.vsaapp.server.Callbacks.teachersCallback;
-import de.lohl1kohl.vsaapp.server.Teachers;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.lohl1kohl.vsaapp.R;
+import de.lohl1kohl.vsaapp.Teacher;
+import de.lohl1kohl.vsaapp.server.Callbacks.teachersCallback;
+import de.lohl1kohl.vsaapp.server.Teachers;
 
 public class TeacherHolder {
     @SuppressLint("StaticFieldLeak")

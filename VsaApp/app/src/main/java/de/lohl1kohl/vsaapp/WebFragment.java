@@ -11,19 +11,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.blikoon.qrcodescanner.QrCodeActivity;
-import de.lohl1kohl.vsaapp.holder.SpHolder;
-import de.lohl1kohl.vsaapp.server.Callbacks;
-import de.lohl1kohl.vsaapp.server.web.Push;
-import de.lohl1kohl.vsaapp.server.web.connections.Connect;
-import de.lohl1kohl.vsaapp.server.web.connections.Delete;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.lohl1kohl.vsaapp.holder.SpHolder;
+import de.lohl1kohl.vsaapp.server.Callbacks;
+import de.lohl1kohl.vsaapp.server.web.Push;
+import de.lohl1kohl.vsaapp.server.web.connections.Connect;
+import de.lohl1kohl.vsaapp.server.web.connections.Delete;
 
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
 

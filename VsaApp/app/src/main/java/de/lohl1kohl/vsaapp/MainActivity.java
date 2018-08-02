@@ -27,15 +27,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
-import de.lohl1kohl.vsaapp.holder.Callbacks.vpLoadedCallback;
-import de.lohl1kohl.vsaapp.holder.*;
-import de.lohl1kohl.vsaapp.server.Callbacks;
-import de.lohl1kohl.vsaapp.server.Login;
+
 import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
+import de.lohl1kohl.vsaapp.holder.Callbacks.vpLoadedCallback;
+import de.lohl1kohl.vsaapp.holder.DatesHolder;
+import de.lohl1kohl.vsaapp.holder.SpHolder;
+import de.lohl1kohl.vsaapp.holder.SubjectSymbolsHolder;
+import de.lohl1kohl.vsaapp.holder.TeacherHolder;
+import de.lohl1kohl.vsaapp.holder.VpHolder;
+import de.lohl1kohl.vsaapp.server.Callbacks;
+import de.lohl1kohl.vsaapp.server.Login;
 
 import static de.lohl1kohl.vsaapp.WebFragment.pushChoices;
 

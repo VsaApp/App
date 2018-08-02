@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 import de.lohl1kohl.vsaapp.holder.VpHolder;
 

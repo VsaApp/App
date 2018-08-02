@@ -16,11 +16,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import de.lohl1kohl.vsaapp.holder.SubjectSymbolsHolder;
-import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.lohl1kohl.vsaapp.holder.SubjectSymbolsHolder;
+import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 
 
 public class TeacherFragment extends BaseFragment {

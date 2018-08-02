@@ -9,9 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import de.lohl1kohl.vsaapp.holder.DatesHolder;
 
 import java.util.List;
+
+import de.lohl1kohl.vsaapp.holder.DatesHolder;
 
 public class DatesListFragment extends BaseFragment {
 

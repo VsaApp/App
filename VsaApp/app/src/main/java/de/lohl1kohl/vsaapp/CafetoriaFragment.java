@@ -10,13 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import de.lohl1kohl.vsaapp.holder.CafetoriaHolder;
 import de.lohl1kohl.vsaapp.holder.Callbacks.cafetoriaLoadedCallback;
 import de.lohl1kohl.vsaapp.server.Cafetoria;
 import de.lohl1kohl.vsaapp.server.Callbacks;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 public class CafetoriaFragment extends BaseFragment {

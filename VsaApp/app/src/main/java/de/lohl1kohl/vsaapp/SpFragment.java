@@ -9,10 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import de.lohl1kohl.vsaapp.holder.SpHolder;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import de.lohl1kohl.vsaapp.holder.SpHolder;
 
 
 public class SpFragment extends BaseFragment {

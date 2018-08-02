@@ -1,10 +1,11 @@
 package de.lohl1kohl.vsaapp.holder;
 
 import android.content.Context;
-import de.lohl1kohl.vsaapp.R;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import de.lohl1kohl.vsaapp.R;
 
 public class SubjectSymbolsHolder {
 

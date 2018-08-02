@@ -10,17 +10,23 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import de.lohl1kohl.vsaapp.holder.SpHolder;
-import de.lohl1kohl.vsaapp.holder.TeacherHolder;
-import de.lohl1kohl.vsaapp.server.Callbacks;
-import de.lohl1kohl.vsaapp.server.web.Push;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
+
+import de.lohl1kohl.vsaapp.holder.SpHolder;
+import de.lohl1kohl.vsaapp.holder.TeacherHolder;
+import de.lohl1kohl.vsaapp.server.Callbacks;
+import de.lohl1kohl.vsaapp.server.web.Push;
 
 public class SpDayFragment extends BaseFragment {
 
