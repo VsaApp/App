@@ -22,7 +22,7 @@ public class Delete implements AsyncResponse {
     public void delete(String id, Callbacks.deleteCallback c) {
         deleteCallback = c;
 
-        String url = String.format("https://vsa.lohl1kohl.de/web/delete?web=%s", id);
+        String url = String.format("https://vsa.lohl1kohl.de/delete?web=%s", id);
         Log.i("VsaApp/Server/Web", "Open: " + url);
 
         HttpGetRequest asyncTask = new HttpGetRequest();

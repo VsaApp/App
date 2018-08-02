@@ -21,7 +21,7 @@ public class Cafetoria implements AsyncResponse {
     public void updateMenues(String id, String password, Callbacks.cafetoriaCallback c) {
         cafetoriaCallback = c;
 
-        String url = String.format("https://vsa.lohl1kohl.de/cafetoria?id=%s&password=%s", id, password);
+        String url = String.format("https://api.vsa.lohl1kohl.de/cafetoria?id=%s&password=%s", id, password);
         Log.i("VsaApp/Server/Cafetoria", "Open: " + url);
 
         HttpGetRequest asyncTask = new HttpGetRequest();

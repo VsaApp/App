@@ -49,7 +49,7 @@ public class Login implements AsyncResponse {
             e1.printStackTrace();
         }
 
-        url = String.format("https://vsa.lohl1kohl.de/validate?username=%s&password=%s", hashUsername, hashPassword);
+        url = String.format("https://api.vsa.lohl1kohl.de/validate?username=%s&password=%s", hashUsername, hashPassword);
 
         HttpGetRequest asyncTask = new HttpGetRequest();
 

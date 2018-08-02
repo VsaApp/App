@@ -20,7 +20,7 @@ public class Tomorrow implements AsyncResponse {
 
     public void updateVp(String gradename, Callbacks.vpCallback c) {
         vpCallback = c;
-        String url = String.format("https://vsa.lohl1kohl.de/vp/tomorrow/%s.json", gradename);
+        String url = String.format("https://api.vsa.lohl1kohl.de/vp/tomorrow/%s.json", gradename);
         Log.i("VsaApp/Server/Vp", "Open: " + url);
 
         HttpGetRequest asyncTask = new HttpGetRequest();

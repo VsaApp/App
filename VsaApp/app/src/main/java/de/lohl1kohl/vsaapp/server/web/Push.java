@@ -32,7 +32,7 @@ public class Push implements AsyncResponse {
     public void push(Context context, JSONArray choice, Callbacks.pushCallback c) {
         pushCallback = c;
 
-        String url = String.format("https://vsa.lohl1kohl.de/web/push?id=%s&choice=%s", getMyID(context), choice.toString());
+        String url = String.format("https://vsa.lohl1kohl.de/push?id=%s&choice=%s", getMyID(context), choice.toString());
         Log.i("VsaApp/Server/Web", "Open: " + url);
 
         HttpGetRequest asyncTask = new HttpGetRequest();

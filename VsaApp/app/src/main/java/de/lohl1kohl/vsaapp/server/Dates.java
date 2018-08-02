@@ -20,7 +20,7 @@ public class Dates implements AsyncResponse {
     public void updateDates(Callbacks.datesCallback c) {
         datesCallback = c;
 
-        String url = "https://vsa.lohl1kohl.de/dates/list.json";
+        String url = "https://api.vsa.lohl1kohl.de/dates/list.json";
         Log.i("VsaApp/Server/Dates", "Open: " + url);
 
         HttpGetRequest asyncTask = new HttpGetRequest();

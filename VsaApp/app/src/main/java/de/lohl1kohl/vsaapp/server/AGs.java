@@ -21,7 +21,7 @@ public class AGs implements AsyncResponse {
     public void getAGs(Callbacks.agsCallback c) {
         agsCallback = c;
 
-        String url = "https://vsa.lohl1kohl.de/ags/list.json";
+        String url = "https://api.vsa.lohl1kohl.de/ags/list.json";
         Log.i("VsaApp/Server/AGs", "Open: " + url);
 
         HttpGetRequest asyncTask = new HttpGetRequest();

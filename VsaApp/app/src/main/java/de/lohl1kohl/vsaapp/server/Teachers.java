@@ -21,7 +21,7 @@ public class Teachers implements AsyncResponse {
     public void updateSp(Callbacks.teachersCallback c) {
         teachersCallback = c;
 
-        String url = "https://vsa.lohl1kohl.de/teachers/list.json";
+        String url = "https://api.vsa.lohl1kohl.de/teachers/list.json";
         Log.i("VsaApp/Server/Teachers", "Open: " + url);
 
         HttpGetRequest asyncTask = new HttpGetRequest();

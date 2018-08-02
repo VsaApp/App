@@ -65,7 +65,7 @@ public class Connect implements AsyncResponse {
             e1.printStackTrace();
         }
 
-        String url = String.format("https://vsa.lohl1kohl.de/web/connect?client=%s&web=%s&grade=%s&username=%s&password=%s", getMyID(context), id, grade, hashUsername, hashPassword);
+        String url = String.format("https://vsa.lohl1kohl.de/connect?client=%s&web=%s&grade=%s&username=%s&password=%s", getMyID(context), id, grade, hashUsername, hashPassword);
         Log.i("VsaApp/Server/Web", "Open: " + url);
 
         HttpGetRequest asyncTask = new HttpGetRequest();

@@ -30,7 +30,7 @@ public class List implements AsyncResponse {
     public void list(Context context, Callbacks.connectionsCallback c) {
         connectionsCallback = c;
 
-        String url = String.format("https://vsa.lohl1kohl.de/web/connections?id=%s", getMyID(context));
+        String url = String.format("https://vsa.lohl1kohl.de/connections?id=%s", getMyID(context));
         Log.i("VsaApp/Server/Web", "Open: " + url);
 
         HttpGetRequest asyncTask = new HttpGetRequest();

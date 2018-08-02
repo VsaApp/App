@@ -23,7 +23,7 @@ public class Sp implements AsyncResponse {
     public void updateSp(String gradename, Callbacks.spCallback c) {
         spCallback = c;
 
-        String url = String.format("https://vsa.lohl1kohl.de/sp/%s.json", gradename);
+        String url = String.format("https://api.vsa.lohl1kohl.de/sp/%s.json", gradename);
         Log.i("VsaApp/Server/Sp", "Open: " + url);
 
         HttpGetRequest asyncTask = new HttpGetRequest();
