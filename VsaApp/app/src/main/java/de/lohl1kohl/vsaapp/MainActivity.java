@@ -36,6 +36,7 @@ import java.util.Arrays;
 import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
 import de.lohl1kohl.vsaapp.holder.Callbacks.vpLoadedCallback;
 import de.lohl1kohl.vsaapp.holder.DatesHolder;
+import de.lohl1kohl.vsaapp.holder.DocumentsHolder;
 import de.lohl1kohl.vsaapp.holder.SpHolder;
 import de.lohl1kohl.vsaapp.holder.SubjectSymbolsHolder;
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
@@ -71,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Init subjectSymbolsHolder...
         new Thread(() -> SubjectSymbolsHolder.load(this)).start();
+
+        // Init documentsHolder...
+        new Thread(() -> DocumentsHolder.load(this)).start();
 
         vpLoadedCallback vpLoadedCallback = new vpLoadedCallback() {
             @Override
@@ -340,13 +344,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 currentFragment = new CafetoriaFragment();
                 title = getString(R.string.cafetoria);
                 break;
-            case R.id.nav_web:
+            case R.id.nav_documents:
                 navigationView.getMenu().getItem(6).setChecked(true);
+                currentFragment = new DocumentsFragment();
+                title = getString(R.string.documents);
+                break;
+            case R.id.nav_web:
+                navigationView.getMenu().getItem(7).setChecked(true);
                 currentFragment = new WebFragment();
                 title = getString(R.string.web);
                 break;
             case R.id.nav_settings:
-                navigationView.getMenu().getItem(7).setChecked(true);
+                navigationView.getMenu().getItem(8).setChecked(true);
                 currentFragment.onDestroy();
                 settingsFragment = new SettingsFragment();
                 break;

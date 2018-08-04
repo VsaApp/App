@@ -46,4 +46,12 @@ public class Callbacks {
 
         void onConnectionFailed();
     }
+
+    public interface documentsLoadedCallback {
+        void onOldLoaded();
+
+        void onNewLoaded();
+
+        void onConnectionFailed();
+    }
 }

@@ -26,6 +26,11 @@
             android:id="@+id/nav_cafetoria"
             android:icon="@drawable/food"
             android:title="@string/cafetoria" />
+
+        <item
+            android:id="@+id/nav_documents"
+            android:icon="@drawable/documents"
+            android:title="@string/documents" />
         <item
             android:id="@+id/nav_web"
             android:icon="@drawable/web"

@@ -71,4 +71,10 @@ public class Callbacks {
 
         void onConnectionFailed();
     }
+
+    public interface documentsCallback {
+        void onReceived(String output);
+
+        void onConnectionFailed();
+    }
 }
