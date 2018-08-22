@@ -21,6 +21,12 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+    aaptOptions {
+        cruncherEnabled = false
+    }
+    dexOptions {
+        preDexLibraries true
+    }
 }
 
 dependencies {
@@ -30,7 +36,7 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.google.firebase:firebase-messaging:17.1.0'
+    implementation 'com.google.firebase:firebase-messaging:17.3.0'
     implementation 'com.github.VsaApp:QRCodeScanner:0.1.4'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2' exclude group: 'com.android.support', module: 'support-annotations'
