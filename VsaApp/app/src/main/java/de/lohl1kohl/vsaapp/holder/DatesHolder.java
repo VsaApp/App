@@ -81,7 +81,7 @@ public class DatesHolder {
             JSONArray conferencesO = jsonObject.getJSONArray("conferences");
             JSONArray gradesReleasesO = jsonObject.getJSONArray("gradesReleases");
 
-            events = new ArrayList<Event>();
+            events = new ArrayList<>();
 
             // Convert open door day...
             Date date = new Date(openDoorDayO.getInt("day"), openDoorDayO.getString("month"), openDoorDayO.getInt("year"));
@@ -150,15 +150,15 @@ public class DatesHolder {
     }
 
     private static void sortEvents(Context c) {
-        List<Event> sortedList = new ArrayList<Event>();
-        sortedList.add(events.get(0));
-        for (int i = 1; i < events.size(); i++) {
-            Date date = events.get(i).start;
-            int j = 0;
+        List<Event> sortedList = new ArrayList<>();
+        sortedList.add(getEvents().get(0));
+        for (int i = 1; i < getEvents().size(); i++) {
+            Date date = getEvents().get(i).start;
+            int j;
             for (j = 0; j < sortedList.size(); j++) {
                 if (date.getTimestamp(c) <= sortedList.get(j).start.getTimestamp(c)) break;
             }
-            sortedList.add(j, events.get(i));
+            sortedList.add(j, getEvents().get(i));
         }
         events = sortedList;
     }
@@ -167,8 +167,8 @@ public class DatesHolder {
         calendar = new ArrayList<>();
 
 
-        for (int i = 1; i < events.size(); i++) {
-            Event event = events.get(i);
+        for (int i = 1; i < getEvents().size(); i++) {
+            Event event = getEvents().get(i);
             if (calendar.size() > 0) {
                 if (event.start.getYear() == calendar.get(calendar.size() - 1).year) {
                     if (event.start.getMonth(c) == calendar.get(calendar.size() - 1).month) {
@@ -190,18 +190,18 @@ public class DatesHolder {
     }
 
     public static List<Day> getFilteredCalendar(Context c) {
-        List<Day> filtertCalendar = new ArrayList<>(calendar);
+        List<Day> filteredCalendar = getCalendar();
         java.util.Date date = new java.util.Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         Date today = new Date(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
 
-        for (int i = filtertCalendar.size() - 1; i >= 0; i--) {
-            if (filtertCalendar.get(i).getEvent(0).end.getTimestamp(c) < today.getTimestamp(c))
-                filtertCalendar.remove(i);
+        for (int i = filteredCalendar.size() - 1; i >= 0; i--) {
+            if (filteredCalendar.get(i).getEvent(0).end.getTimestamp(c) < today.getTimestamp(c))
+                filteredCalendar.remove(i);
         }
 
-        return filtertCalendar;
+        return filteredCalendar;
     }
 
     public static List<Day> getCalendar() {
