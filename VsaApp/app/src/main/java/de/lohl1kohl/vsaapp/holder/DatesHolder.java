@@ -91,8 +91,12 @@ public class DatesHolder {
             for (int i = 0; i < holidaysO.length(); i++) {
                 JSONObject holdiayObject = holidaysO.getJSONObject(i);
                 Date start = new Date(holdiayObject.getJSONObject("start").getString("weekday"), holdiayObject.getJSONObject("start").getInt("day"), holdiayObject.getJSONObject("start").getString("month"), holdiayObject.getJSONObject("start").getInt("year"));
-                Date end = new Date(holdiayObject.getJSONObject("end").getString("weekday"), holdiayObject.getJSONObject("end").getInt("day"), holdiayObject.getJSONObject("end").getString("month"), holdiayObject.getJSONObject("end").getInt("year"));
-                events.add(new Event(holdiayObject.getString("name"), "holidays", start, end));
+                if (holdiayObject.getJSONObject("end").has("weekday")) {
+                    Date end = new Date(holdiayObject.getJSONObject("end").getString("weekday"), holdiayObject.getJSONObject("end").getInt("day"), holdiayObject.getJSONObject("end").getString("month"), holdiayObject.getJSONObject("end").getInt("year"));
+                    events.add(new Event(holdiayObject.getString("name"), "holidays", start, end));
+                } else {
+                    events.add(new Event(holdiayObject.getString("name"), "holidays", start, start));
+                }
             }
 
             // Convert free days...
