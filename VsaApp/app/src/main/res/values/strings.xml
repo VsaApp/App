@@ -76,6 +76,8 @@
     <string name="no_document_found">Es konnte kein Dokument gefunden werden</string>
     <string name="search_document">Dokument mit Name oder Gruppe suchen</string>
     <string name="documents">Dokumente</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Abbrechen</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>

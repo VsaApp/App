@@ -301,7 +301,6 @@ public class LoadingActivity extends AppCompatActivity {
                     editor.putString("pref_password", password.getText().toString());
                     editor.putString("pref_grade", grades[w[0]]);
                     FirebaseHandler.subscribe(LoadingActivity.this, grades[w[0]]);
-                    ((TextView) findViewById(R.id.header_name)).setText(getString(R.string.app_name) + " - " + grades[w[0]]);
                     editor.apply();
                     loginDialog.cancel();
                     Toast.makeText(LoadingActivity.this, R.string.login_success, Toast.LENGTH_SHORT).show();

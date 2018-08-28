@@ -1,7 +1,10 @@
 package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -28,14 +31,17 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                     .setTitle(R.string.logout)
                     .setMessage(R.string.really_logout)
                     .setIcon(R.mipmap.logo_transparent)
-                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                    .setPositiveButton(R.string.ok, (dialog, whichButton) -> {
                         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
                         sharedPref.edit().clear().commit();
-                        Intent intent = new Intent(mActivity, MainActivity.class);
-                        mActivity.finish();
-                        startActivity(intent);
+                        Intent mStartActivity = new Intent(mActivity, LoadingActivity.class);
+                        int mPendingIntentId = 123456;
+                        PendingIntent mPendingIntent = PendingIntent.getActivity(mActivity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                        AlarmManager mgr = (AlarmManager) mActivity.getSystemService(Context.ALARM_SERVICE);
+                        mgr.set(AlarmManager.RTC, 0, mPendingIntent);
+                        System.exit(0);
                     })
-                    .setNegativeButton(android.R.string.no, null).show();
+                    .setNegativeButton(R.string.cancel, null).show();
             return true;
         });
 
