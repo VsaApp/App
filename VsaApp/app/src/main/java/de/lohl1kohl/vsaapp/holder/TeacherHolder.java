@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,7 +12,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.Teacher;
 import de.lohl1kohl.vsaapp.server.Callbacks.teachersCallback;
 import de.lohl1kohl.vsaapp.server.Teachers;
@@ -41,14 +38,11 @@ public class TeacherHolder {
                 @Override
                 public void onReceived(String output) {
                     TeacherHolder.teachers = convertJsonToArray(context, output);
-                    Log.v("VsaApp/Server", "Success");
                     if (teachersLoadedCallback != null) teachersLoadedCallback.onNewLoaded();
                 }
 
                 @Override
                 public void onConnectionFailed() {
-                    Log.e("VsaApp/Server", "Failed");
-                    Toast.makeText(context, R.string.no_connection, Toast.LENGTH_SHORT).show();
                     if (teachersLoadedCallback != null) teachersLoadedCallback.onConnectionFailed();
                 }
             };
@@ -114,8 +108,6 @@ public class TeacherHolder {
     private static List<Teacher> getSavedTeachers(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String savedTeachers = sharedPref.getString("pref_teachers", "-1");
-
-        Log.i("Teachers", savedTeachers);
 
         if (savedTeachers.equals("-1")) return null;
         return convertJsonToArray(context, savedTeachers);

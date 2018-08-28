@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import de.lohl1kohl.vsaapp.holder.Callbacks;
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 import de.lohl1kohl.vsaapp.holder.VpHolder;
 
@@ -22,6 +21,7 @@ import de.lohl1kohl.vsaapp.holder.VpHolder;
 public class VpFragment extends BaseFragment {
     @SuppressLint("StaticFieldLeak")
     static View vpView;
+    static String day;
 
     @SuppressLint("SetTextI18n")
     static void showVpInfoDialog(Context context, Subject subject) {
@@ -81,17 +81,7 @@ public class VpFragment extends BaseFragment {
     }
 
     public static void selectDay(String day) {
-        while (vpView == null) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        TabLayout tabLayout = vpView.findViewById(R.id.vp_tabs);
-        if (day.equals(VpHolder.weekdayTomorrow)) {
-            tabLayout.getTabAt(1).select();
-        }
+        VpFragment.day = day;
     }
 
     @Override
@@ -99,23 +89,14 @@ public class VpFragment extends BaseFragment {
         // Inflate the layout for this fragment
         vpView = inflater.inflate(R.layout.fragment_vp, container, false);
         // Load vp...
-        loadVp();
+        fillVp();
+        if (day != null) {
+            TabLayout tabLayout = vpView.findViewById(R.id.vp_tabs);
+            if (day.equals(VpHolder.weekdayTomorrow)) {
+                tabLayout.getTabAt(1).select();
+            }
+        }
         return vpView;
-    }
-
-    private void loadVp() {
-        Callbacks.vpLoadedCallback vpLoadedCallback = new Callbacks.vpLoadedCallback() {
-            @Override
-            public void onFinished() {
-                fillVp();
-            }
-
-            @Override
-            public void onConnectionFailed() {
-                fillVp();
-            }
-        };
-        VpHolder.load(mActivity, vpLoadedCallback);
     }
 
     private void fillVp() {

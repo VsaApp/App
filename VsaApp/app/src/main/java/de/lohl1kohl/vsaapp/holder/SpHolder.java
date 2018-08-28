@@ -66,14 +66,11 @@ public class SpHolder {
                 }
 
                 public void onConnectionFailed() {
-                    Log.e("VsaApp/SpHolder", "No connection!");
                     sp = getSavedSp(context);
                     if (spLoadedCallback != null) spLoadedCallback.onConnectionFailed();
                 }
 
                 public void onNoSp() {
-                    Log.i("VsaApp/SpHolder", "No sp!");
-
                     // Create a empty sp...
                     sp = new ArrayList<>();
                     for (int i = 0; i < 5; i++) {
@@ -129,7 +126,6 @@ public class SpHolder {
                     try {
                         boolean isPassed = LessonUtils.isLessonPassed(ls.getSubject().unit);
                         boolean isFuture = LessonUtils.isDayInFuture(ls.getSubject().day);
-                        //Log.i("VsaApp", "Day: " + ls.getSubject().day + ", Unit: " + ls.getSubject().unit + ", isPassed: " + (isPassed ? "true" : "false") + ", isFuture: " + (isFuture ? "true" : "false"));
                         if (LessonUtils.isDayPassed(ls.getSubject().day)) ls.setGray(true);
                         else if (isPassed && !isFuture) {
                             ls.setGray(true);

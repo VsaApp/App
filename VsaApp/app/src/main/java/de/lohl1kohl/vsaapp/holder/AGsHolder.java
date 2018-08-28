@@ -44,7 +44,6 @@ public class AGsHolder {
             }
 
             public void onConnectionFailed() {
-                Log.e("VsaApp/AGsHolder", "No connection!");
                 ags = getSavedAGs(context);
                 if (agsLoadedCallback != null)
                     agsLoadedCallback.onConnectionFailed();

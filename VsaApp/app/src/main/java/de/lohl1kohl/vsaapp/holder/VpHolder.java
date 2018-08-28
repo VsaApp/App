@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,14 +45,13 @@ public class VpHolder {
             // Show saved sp first...
             List<Subject> savedVP = getSavedVp(context, today);
             if (savedVP != null) vp.add(today ? 0 : 1, savedVP);
-            if (vpLoadedCallback != null && countDownloadedVps == 2) vpLoadedCallback.onFinished();
+            if (vpLoadedCallback != null && countDownloadedVps == 2) vpLoadedCallback.onOldLoaded();
 
             // Create callback...
             vpCallback callback = new vpCallback() {
                 @Override
                 public void onReceived(String output) {
                     vp.add(today ? 0 : (vp.size() == 0 ? 0 : 1), convertJsonToArray(context, output, today));
-                    Log.v("VsaApp/Server", "Success");
 
                     // Save the current sp...
                     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -64,14 +62,11 @@ public class VpHolder {
                     countDownloadedVps++;
 
                     if (vpLoadedCallback != null && countDownloadedVps == 2)
-                        vpLoadedCallback.onFinished();
+                        vpLoadedCallback.onNewLoaded();
                 }
 
                 @Override
                 public void onConnectionFailed() {
-                    Log.e("VsaApp/Server", "Failed");
-                    Toast.makeText(context, R.string.no_connection, Toast.LENGTH_SHORT).show();
-
                     // Show saved sp...
                     List<Subject> savedVP = getSavedVp(context, today);
                     if (savedVP != null) vp.add(today ? 0 : 1, savedVP);

@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lohl1kohl.vsaapp.Document;
-import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.server.Callbacks.documentsCallback;
 import de.lohl1kohl.vsaapp.server.Documents;
 
@@ -38,14 +35,11 @@ public class DocumentsHolder {
             @Override
             public void onReceived(String output) {
                 DocumentsHolder.documents = convertJsonToArray(output);
-                Log.v("VsaApp/Server", "Success");
                 if (documentsLoadedCallback != null) documentsLoadedCallback.onNewLoaded();
             }
 
             @Override
             public void onConnectionFailed() {
-                Log.e("VsaApp/Server", "Failed");
-                Toast.makeText(context, R.string.no_connection, Toast.LENGTH_SHORT).show();
                 if (documentsLoadedCallback != null)
                     documentsLoadedCallback.onConnectionFailed();
             }
@@ -85,8 +79,6 @@ public class DocumentsHolder {
     private static List<Document> getSavedDocuments(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String savedDocuments = sharedPref.getString("pref_documents", "-1");
-
-        Log.i("Documents", savedDocuments);
 
         if (savedDocuments.equals("-1")) return null;
         return convertJsonToArray(savedDocuments);

@@ -31,13 +31,13 @@ public class DatesHolder {
 
         // If the dates are already loaded stop process...
         if (events != null) {
-            if (datesLoadedCallback != null) datesLoadedCallback.onFinished();
+            if (datesLoadedCallback != null) datesLoadedCallback.onOldLoaded();
             return;
         }
 
         // Show the old dates first (for a faster reaction time)...
         readSavedDates(context);
-        if (datesLoadedCallback != null) datesLoadedCallback.onFinished();
+        if (datesLoadedCallback != null) datesLoadedCallback.onOldLoaded();
 
         de.lohl1kohl.vsaapp.server.Callbacks.datesCallback datesCallback = new de.lohl1kohl.vsaapp.server.Callbacks.datesCallback() {
 
@@ -49,11 +49,10 @@ public class DatesHolder {
                 editor.putString("pref_dates", output);
                 editor.apply();
 
-                if (datesLoadedCallback != null) datesLoadedCallback.onFinished();
+                if (datesLoadedCallback != null) datesLoadedCallback.onNewLoaded();
             }
 
             public void onConnectionFailed() {
-                Log.e("VsaApp/SpHolder", "No connection!");
                 readSavedDates(context);
                 if (datesLoadedCallback != null) datesLoadedCallback.onConnectionFailed();
             }

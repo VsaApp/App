@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.lohl1kohl.vsaapp.holder.CafetoriaHolder;
-import de.lohl1kohl.vsaapp.holder.Callbacks.cafetoriaLoadedCallback;
 import de.lohl1kohl.vsaapp.server.Cafetoria;
 import de.lohl1kohl.vsaapp.server.Callbacks;
 
@@ -37,32 +34,9 @@ public class CafetoriaFragment extends BaseFragment {
         if (id.equals("-1")) {
             showCafetoriaLoginDialog();
         } else {
-            setup();
+            displayMenues();
         }
         return root;
-    }
-
-    void setup() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        cafetoriaLoadedCallback cafetoriaLoadedCallback = new cafetoriaLoadedCallback() {
-            @Override
-            public void onOldLoaded() {
-                Log.i("Cafetoria", "Old loaded");
-                displayMenues();
-            }
-
-            @Override
-            public void onNewLoaded() {
-                Log.i("Cafetoria", "New loaded");
-                displayMenues();
-            }
-
-            @Override
-            public void onConnectionFailed() {
-                Toast.makeText(mActivity, R.string.no_connection, Toast.LENGTH_SHORT).show();
-            }
-        };
-        CafetoriaHolder.load(mActivity, settings.getString("pref_cafetoria_id", "-1"), settings.getString("pref_cafetoria_pin", "-1"), cafetoriaLoadedCallback);
     }
 
     void displayMenues() {
@@ -108,7 +82,7 @@ public class CafetoriaFragment extends BaseFragment {
                             loginDialog.cancel();
 
                             Toast.makeText(mActivity, R.string.login_success, Toast.LENGTH_SHORT).show();
-                            setup();
+                            displayMenues();
                         } else {
                             feedback.setText(R.string.cafetoriaDialog_statusFailed);
                         }

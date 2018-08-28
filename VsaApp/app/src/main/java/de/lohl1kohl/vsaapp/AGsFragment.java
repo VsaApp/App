@@ -8,10 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import de.lohl1kohl.vsaapp.holder.AGsHolder;
-import de.lohl1kohl.vsaapp.holder.Callbacks;
 
 
 public class AGsFragment extends BaseFragment {
@@ -24,23 +22,7 @@ public class AGsFragment extends BaseFragment {
         this.inflater = inflater;
         View root = inflater.inflate(R.layout.fragment_ags, container, false);
         list = root.findViewById(R.id.agsList);
-        Callbacks.agsLoadedCallback agsLoadedCallback = new Callbacks.agsLoadedCallback() {
-            @Override
-            public void onOldLoaded() {
-                listAGs();
-            }
-
-            @Override
-            public void onNewLoaded() {
-                listAGs();
-            }
-
-            @Override
-            public void onConnectionFailed() {
-                mActivity.runOnUiThread(() -> Toast.makeText(mActivity, R.string.no_connection, Toast.LENGTH_LONG).show());
-            }
-        };
-        AGsHolder.load(mActivity, agsLoadedCallback);
+        listAGs();
         return root;
     }
 

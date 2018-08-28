@@ -1,13 +1,10 @@
 package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,35 +13,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
-import de.lohl1kohl.vsaapp.holder.Callbacks.vpLoadedCallback;
-import de.lohl1kohl.vsaapp.holder.DatesHolder;
-import de.lohl1kohl.vsaapp.holder.DocumentsHolder;
-import de.lohl1kohl.vsaapp.holder.SpHolder;
-import de.lohl1kohl.vsaapp.holder.SubjectSymbolsHolder;
-import de.lohl1kohl.vsaapp.holder.TeacherHolder;
-import de.lohl1kohl.vsaapp.holder.VpHolder;
-import de.lohl1kohl.vsaapp.server.Callbacks;
-import de.lohl1kohl.vsaapp.server.Login;
-
-import static de.lohl1kohl.vsaapp.WebFragment.pushChoices;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -62,67 +35,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        LessonUtils.setWeekdays(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weekdays))));
-
-        // Init teacherHolder...
-        new Thread(() -> TeacherHolder.load(this, true)).start();
-
-        // Init dates holder...
-        new Thread(() -> DatesHolder.load(this)).start();
-
-        // Init subjectSymbolsHolder...
-        new Thread(() -> SubjectSymbolsHolder.load(this)).start();
-
-        // Init documentsHolder...
-        new Thread(() -> DocumentsHolder.load(this)).start();
-
-        vpLoadedCallback vpLoadedCallback = new vpLoadedCallback() {
-            @Override
-            public void onFinished() {
-                SpHolder.load(mainActivity, false);
-                if (MainActivity.this.getIntent().getStringExtra("day") != null) {
-                    VpFragment.selectDay(MainActivity.this.getIntent().getStringExtra("day"));
-                }
-                try {
-                    pushChoices(mainActivity);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onConnectionFailed() {
-                if (MainActivity.this.getIntent().getStringExtra("day") != null) {
-                    VpFragment.selectDay(MainActivity.this.getIntent().getStringExtra("day"));
-                }
-            }
-        };
-
-        new Thread(() -> {
-            spLoadedCallback spLoadedCallback = new spLoadedCallback() {
-                @Override
-                public void onOldLoaded() {
-                    new Thread(() -> VpHolder.load(mainActivity, vpLoadedCallback)).start();
-                }
-
-                @Override
-                public void onNewLoaded() {
-                    new Thread(() -> VpHolder.load(mainActivity, vpLoadedCallback)).start();
-                }
-
-                @Override
-                public void onConnectionFailed() {
-
-                }
-
-                @Override
-                public void onNoSp() {
-
-                }
-            };
-            SpHolder.load(this, true, spLoadedCallback);
-        }).start();
-
         // Show the vpFragment as the start fragment...
         displayView(R.id.nav_sp);
 
@@ -135,35 +47,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        new Thread(() -> {
-            // Check the login data...
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-            String username = sharedPref.getString("pref_username", "-1");
-            String password = sharedPref.getString("pref_password", "-1");
-            if (username.equals("-1") || password.equals("-1")) {
-                runOnUiThread(this::showLoginScreen);
-            } else {
-                Callbacks.credentialsCallback callback = new Callbacks.credentialsCallback() {
-                    @Override
-                    public void onSuccess() {
-                        Log.i("VsaApp/Server", "Password success");
-                    }
-
-                    @Override
-                    public void onFailed() {
-                        Log.e("VsaApp/Server", "Password failed");
-                        runOnUiThread(() -> showLoginScreen());
-                    }
-
-                    @Override
-                    public void onConnectionFailed() {
-                        Log.e("VsaApp/Server", "No connection");
-                        runOnUiThread(() -> Toast.makeText(mainActivity, R.string.no_connection, Toast.LENGTH_LONG).show());
-                    }
-                };
-                new Login().login(username, password, callback);
-            }
-        }).start();
         if (getIntent().getStringExtra("page") != null) {
             displayView(R.id.nav_vp);
             navigationView.getMenu().getItem(1).setChecked(true);
@@ -177,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if (currentNavId != R.id.nav_sp) displayView(R.id.nav_sp);
-            else super.onBackPressed();
+            else finish();
         }
     }
 
@@ -196,94 +79,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return item.getItemId() == R.id.action_home || super.onOptionsItemSelected(item);
-    }
-
-    @SuppressLint("SetTextI18n")
-    private void showLoginScreen() {
-        if (Looper.myLooper() == null) {
-            Looper.prepare();
-        }
-        final Dialog loginDialog = new Dialog(MainActivity.this);
-        WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
-        lWindowParams.copyFrom(loginDialog.getWindow().getAttributes());
-        lWindowParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-        loginDialog.setContentView(R.layout.dialog_login);
-        loginDialog.setCancelable(false);
-        loginDialog.setTitle(R.string.loginDialog);
-
-        final Button btn_login = loginDialog.findViewById(R.id.btn_loginOk);
-        final Button btn_grade = loginDialog.findViewById(R.id.btn_loginGrade);
-        final EditText username = loginDialog.findViewById(R.id.login_username);
-        final EditText password = loginDialog.findViewById(R.id.login_password);
-        final TextView feedback = loginDialog.findViewById(R.id.lbl_loginFeedback);
-
-        String[] grades = getResources().getStringArray(R.array.nameOfGrades);
-        final int[] w = {-1};
-
-        btn_grade.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.choose_grade));
-            builder.setSingleChoiceItems(grades, 1, (dialog, which) -> {
-                w[0] = which;
-                dialog.cancel();
-                btn_grade.setText(getString(R.string.choose_grade) + " - " + grades[w[0]]);
-            });
-
-            builder.setPositiveButton(getString(R.string.OK), (dialog, which) -> dialog.cancel());
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-        });
-
-        btn_login.setOnClickListener(view -> {
-            if (username.getText().toString().equals("")) {
-                feedback.setText(R.string.no_username_set);
-                return;
-            }
-            if (password.getText().toString().equals("")) {
-                feedback.setText(R.string.no_password_set);
-                return;
-            }
-            if (w[0] == -1) {
-                feedback.setText(R.string.no_class);
-                return;
-            }
-            Callbacks.credentialsCallback callback = new Callbacks.credentialsCallback() {
-                @Override
-                public void onSuccess() {
-                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString("pref_username", username.getText().toString());
-                    editor.putString("pref_password", password.getText().toString());
-                    editor.putString("pref_grade", grades[w[0]]);
-                    FirebaseHandler.subscribe(MainActivity.this, grades[w[0]]);
-                    ((TextView) findViewById(R.id.header_name)).setText(getString(R.string.app_name) + " - " + grades[w[0]]);
-                    editor.apply();
-                    loginDialog.cancel();
-                    ((SpFragment) currentFragment).syncSp();
-                    Toast.makeText(mainActivity, R.string.login_success, Toast.LENGTH_SHORT).show();
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
-                }
-
-                @Override
-                public void onFailed() {
-                    feedback.setText(R.string.loginDialog_statusFailed);
-                }
-
-                @Override
-                public void onConnectionFailed() {
-                    feedback.setText(R.string.no_connection);
-                }
-            };
-            new Login().login(username.getText().toString(), password.getText().toString(), callback);
-        });
-        loginDialog.show();
-        loginDialog.getWindow().setAttributes(lWindowParams);
     }
 
     @Override

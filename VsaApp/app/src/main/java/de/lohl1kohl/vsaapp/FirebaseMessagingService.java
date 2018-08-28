@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -38,7 +37,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 tText = tText.split("\n").length + " Änderungen";
             }
 
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, LoadingActivity.class);
             intent.putExtra("page", "vp");
             intent.putExtra("day", title);
             Random generator = new Random();
@@ -65,7 +64,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         super.onMessageReceived(remoteMessage);
         try {
             JSONObject jsonObject = new JSONObject(remoteMessage.getData().get("data"));
-            Log.i("JSON", jsonObject.toString());
             String weekday = jsonObject.getString("weekday");
             JSONArray changes = jsonObject.getJSONArray("changes");
             FirebaseMessagingService service = this;
@@ -107,7 +105,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         StringBuilder text = new StringBuilder();
         for (int i = 0; i < changes.length(); i++) {
             JSONObject change = changes.getJSONObject(i);
-            Log.i("Change", change.toString());
             int day = 0;
             switch (weekday) {
                 case "Montag":
@@ -131,7 +128,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 Subject subject = lesson.getSubject();
                 String normal = subject.name;
                 String changed = change.getString("lesson").split(" ")[0];
-                Log.i(normal, changed);
                 if (normal.equals(changed)) {
                     text.append(change.getString("unit")).append(". Stunde ").append(change.getJSONObject("changed").getString("teacher")).append(" ").append(change.getJSONObject("changed").getString("info")).append(" ").append(change.getJSONObject("changed").getString("room")).append("\n");
                 }

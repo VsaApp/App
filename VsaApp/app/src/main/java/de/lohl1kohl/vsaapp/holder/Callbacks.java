@@ -12,13 +12,17 @@ public class Callbacks {
     }
 
     public interface datesLoadedCallback {
-        void onFinished();
+        void onOldLoaded();
+
+        void onNewLoaded();
 
         void onConnectionFailed();
     }
 
     public interface vpLoadedCallback {
-        void onFinished();
+        void onOldLoaded();
+
+        void onNewLoaded();
 
         void onConnectionFailed();
     }

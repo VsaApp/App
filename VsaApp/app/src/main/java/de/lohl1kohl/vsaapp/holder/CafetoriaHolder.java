@@ -41,7 +41,6 @@ public class CafetoriaHolder {
             }
 
             public void onConnectionFailed() {
-                Log.e("VsaApp/CafetoriaHolder", "No connection!");
                 days = getSavedDays(context);
                 if (cafetoriaLoadedCallback != null)
                     cafetoriaLoadedCallback.onConnectionFailed();
