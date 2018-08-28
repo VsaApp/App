@@ -28,9 +28,10 @@ public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
         currentMonth = cal.get(Calendar.MONTH);
 
         setFragments();
+        setCurrentItem(-1);
     }
 
-    public int setCurrentItem(int item) {
+    public void setCurrentItem(int item) {
         if (currentItem != item) {
             currentItem = item;
             if (item == 0) {
@@ -43,7 +44,6 @@ public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
                 }
                 monthsFragments.add(0, fragment);
                 notifyDataSetChanged();
-                return -1;
             } else if (item == monthsFragments.size() - 1) {
                 DatesCalendarMonthFragment fragment = new DatesCalendarMonthFragment();
                 fragment.month = monthsFragments.get(monthsFragments.size() - 1).month + 1;
@@ -54,23 +54,12 @@ public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
                 }
                 monthsFragments.add(fragment);
                 notifyDataSetChanged();
-                return 1;
             }
         }
-        return 0;
     }
 
     private void setFragments() {
         DatesCalendarMonthFragment fragment = new DatesCalendarMonthFragment();
-        fragment.month = currentMonth - 1;
-        fragment.year = currentYear;
-        if (currentMonth - 1 < 0) {
-            fragment.month = 11;
-            fragment.year = currentYear - 1;
-        }
-        monthsFragments.add(fragment);
-
-        fragment = new DatesCalendarMonthFragment();
         fragment.month = currentMonth;
         fragment.year = currentYear;
         monthsFragments.add(fragment);

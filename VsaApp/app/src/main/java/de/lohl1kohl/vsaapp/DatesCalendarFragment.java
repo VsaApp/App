@@ -16,12 +16,13 @@ public class DatesCalendarFragment extends BaseFragment {
         ViewPager pager = root.findViewById(R.id.calendar_viewpager);
         DatesCalendarAdapter adapter = new DatesCalendarAdapter(mActivity, getFragmentManager());
         pager.setAdapter(adapter);
-        pager.setCurrentItem(1);
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                int moved = adapter.setCurrentItem(pager.getCurrentItem());
+                if (position > 0) {
+                    adapter.setCurrentItem(pager.getCurrentItem());
+                }
             }
 
             @Override

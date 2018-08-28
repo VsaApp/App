@@ -87,7 +87,7 @@ public class DatesCalendarMonthAdapter extends BaseAdapter {
 
         LinearLayout ll = convertView.findViewById(R.id.dates_calendar_item_layout);
         AbsListView.LayoutParams params = (AbsListView.LayoutParams) ll.getLayoutParams();
-        params.height = parent.getHeight() / 6;
+        params.height = parent.getHeight() / 6 - 1;
         ll.setLayoutParams(params);
 
         Day day = days.get(position);
