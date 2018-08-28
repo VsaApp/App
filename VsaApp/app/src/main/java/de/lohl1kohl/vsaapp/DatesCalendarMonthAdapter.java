@@ -2,9 +2,11 @@ package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -83,6 +85,11 @@ public class DatesCalendarMonthAdapter extends BaseAdapter {
         listViewHolder.listInListView = convertView.findViewById(R.id.events_of_date);
         convertView.setTag(listViewHolder);
 
+        LinearLayout ll = convertView.findViewById(R.id.dates_calendar_item_layout);
+        AbsListView.LayoutParams params = (AbsListView.LayoutParams) ll.getLayoutParams();
+        params.height = parent.getHeight() / 6;
+        ll.setLayoutParams(params);
+
         Day day = days.get(position);
 
         if (month != day.month)
@@ -111,6 +118,10 @@ public class DatesCalendarMonthAdapter extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    public int pxToDp(int px) {
+        return Math.round(px / (context.getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     static class ViewHolder {
