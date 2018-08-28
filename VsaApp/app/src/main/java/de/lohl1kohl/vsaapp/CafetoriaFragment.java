@@ -51,7 +51,7 @@ public class CafetoriaFragment extends BaseFragment {
         lWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
         loginDialog.setContentView(R.layout.dialog_cafetoria);
-        loginDialog.setCancelable(false);
+        loginDialog.setCancelable(true);
         loginDialog.setTitle(R.string.cafetoriaDialog);
 
         final Button btn_login = loginDialog.findViewById(R.id.btn_cafetoriaOk);
