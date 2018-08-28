@@ -43,6 +43,9 @@
     <string name="no_unit_in_this_lesson">-</string>
     <string name="lesson_pause">Mittagspause</string>
     <string name="lesson_free">Freistunde</string>
+    <string name="lesson_tandem">Tandem</string>
+    <string name="lesson_french">Französisch</string>
+    <string name="lesson_latin">Latein</string>
     <string name="logout">Abmelden</string>
     <string name="logout_summary">Von der VsaApp abmelden</string>
     <string name="really_logout">Willst du dich wirklich abmelden?</string>

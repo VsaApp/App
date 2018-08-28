@@ -60,7 +60,21 @@ public class SpDayFragment extends BaseFragment {
                     for (int unit = 0; unit < spDay.size(); unit++) {
                         Lesson lesson = spDay.get(unit);
                         if (unit == 5) continue;
-                        lesson.addSubject(new Subject(weekday, unit, getResources().getString(R.string.lesson_free), "", ""));
+                        lesson.addSubject(new Subject(weekday, unit, getString(R.string.lesson_free), "", ""));
+                    }
+                }
+
+                else {
+                    for (int unit = 0; unit < spDay.size(); unit++) {
+                        Lesson lesson = spDay.get(unit);
+                        if (unit == 5) continue;
+                        if (lesson.numberOfSubjects() >= 2){
+                            if (lesson.getSubject(0).getName().equals(getString(R.string.lesson_french)) || lesson.getSubject(0).getName().equals(getString(R.string.lesson_latin))){
+                                // Add the tandem lesson...
+                                lesson.addSubject(new Subject(weekday, unit, getString(R.string.lesson_tandem), getString(R.string.lesson_french), getString(R.string.lesson_latin)));
+                                lesson.readSavedSubject(mActivity);
+                            }
+                        }
                     }
                 }
 
@@ -172,6 +186,10 @@ public class SpDayFragment extends BaseFragment {
             listViewHolder.lessonInListView.setText("");
             listViewHolder.teacherInListView.setText(lesson.getSubject().name);
             listViewHolder.roomInListView.setText("");
+        } else if (lesson.getSubject().name.equals(convertView.getResources().getString(R.string.lesson_tandem))) {
+            listViewHolder.lessonInListView.setText(lesson.getSubject().name);
+            listViewHolder.teacherInListView.setText(lesson.getSubject().room);
+            listViewHolder.roomInListView.setText(lesson.getSubject().teacher);
         } else {
             listViewHolder.lessonInListView.setText(subject.getName());
             listViewHolder.teacherInListView.setText(String.format(convertView.getResources().getString(R.string.with_s), normalTeacher));
@@ -209,6 +227,19 @@ public class SpDayFragment extends BaseFragment {
                     if (!subject.room.equals(changes.room) && !changes.room.equals("")) {
                         listViewHolder.roomInListView.setText(String.format(convertView.getResources().getString(R.string.in_room_s), changes.room));
                         listViewHolder.roomInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
+                    }
+                }
+                //TODO: Not tested yet...
+                else if (lesson.getSubject().name.equals(convertView.getResources().getString(R.string.lesson_tandem))){
+                    for (int i = 0; i < lesson.numberOfSubjects(); i++){
+                        if (lesson.getSubject(i).changes != null){
+                            if (lesson.getSubject(i).getName().equals(convertView.getResources().getString(R.string.lesson_french))){
+                                listViewHolder.teacherInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
+                            }
+                            else{
+                                listViewHolder.roomInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
+                            }
+                        }
                     }
                 }
             }
