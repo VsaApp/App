@@ -1,6 +1,7 @@
 package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -45,6 +46,7 @@ public class TeacherFragment extends BaseFragment {
 
                 teacherDialog.setContentView(R.layout.dialog_teacher_info);
                 teacherDialog.setCancelable(true);
+                teacherDialog.setCanceledOnTouchOutside(true);
 
                 TextView longname = teacherDialog.findViewById(R.id.teacher_dialog_longname);
                 TextView shortname = teacherDialog.findViewById(R.id.teacher_dialog_shortname);
