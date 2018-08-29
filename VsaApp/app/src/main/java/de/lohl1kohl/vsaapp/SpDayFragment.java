@@ -62,14 +62,12 @@ public class SpDayFragment extends BaseFragment {
                         if (unit == 5) continue;
                         lesson.addSubject(new Subject(weekday, unit, getString(R.string.lesson_free), "", ""));
                     }
-                }
-
-                else {
+                } else {
                     for (int unit = 0; unit < spDay.size(); unit++) {
                         Lesson lesson = spDay.get(unit);
                         if (unit == 5) continue;
-                        if (lesson.numberOfSubjects() >= 2){
-                            if (lesson.getSubject(0).getName().equals(getString(R.string.lesson_french)) || lesson.getSubject(0).getName().equals(getString(R.string.lesson_latin))){
+                        if (lesson.numberOfSubjects() >= 2) {
+                            if (lesson.getSubject(0).getName().equals(getString(R.string.lesson_french)) || lesson.getSubject(0).getName().equals(getString(R.string.lesson_latin))) {
                                 // Add the tandem lesson...
                                 lesson.addSubject(new Subject(weekday, unit, getString(R.string.lesson_tandem), getString(R.string.lesson_french), getString(R.string.lesson_latin)));
                                 lesson.readSavedSubject(mActivity);
@@ -230,13 +228,12 @@ public class SpDayFragment extends BaseFragment {
                     }
                 }
                 //TODO: Not tested yet...
-                else if (lesson.getSubject().name.equals(convertView.getResources().getString(R.string.lesson_tandem))){
-                    for (int i = 0; i < lesson.numberOfSubjects(); i++){
-                        if (lesson.getSubject(i).changes != null){
-                            if (lesson.getSubject(i).getName().equals(convertView.getResources().getString(R.string.lesson_french))){
+                else if (lesson.getSubject().name.equals(convertView.getResources().getString(R.string.lesson_tandem))) {
+                    for (int i = 0; i < lesson.numberOfSubjects(); i++) {
+                        if (lesson.getSubject(i).changes != null) {
+                            if (lesson.getSubject(i).getName().equals(convertView.getResources().getString(R.string.lesson_french))) {
                                 listViewHolder.teacherInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
-                            }
-                            else{
+                            } else {
                                 listViewHolder.roomInListView.setTextColor(getColor(convertView, true, lesson.isGray()));
                             }
                         }
@@ -244,6 +241,18 @@ public class SpDayFragment extends BaseFragment {
                 }
             }
         }
+        new Thread(() -> {
+            try {
+                Thread.sleep(60000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            View newView = createView(layoutInflater, spDay, position, sharedPref);
+            ViewGroup parent = (ViewGroup) convertView.getParent();
+            int i = parent.indexOfChild(convertView);
+            parent.removeView(convertView);
+            mActivity.runOnUiThread(() -> parent.addView(newView, i));
+        }).start();
         return convertView;
     }
 
