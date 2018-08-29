@@ -3,6 +3,7 @@ package de.lohl1kohl.vsaapp;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ public class DatesCalendarMonthFragment extends BaseFragment {
         View root = inflater.inflate(R.layout.dates_calendar_month, container, false);
 
         TextView monthYear = root.findViewById(R.id.dates_calendar_month_year);
-        monthYear.setText(Arrays.asList(mActivity.getResources().getStringArray(R.array.monthNames)).get(month - 1) + " " + year);
+        monthYear.setText(Arrays.asList(mActivity.getResources().getStringArray(R.array.monthNames)).get(month) + " " + year);
 
         GridView header = root.findViewById(R.id.dates_calendar_grid_header);
         DatesCalendarMonthHeaderAdapter headerAdapter = new DatesCalendarMonthHeaderAdapter(mActivity);
