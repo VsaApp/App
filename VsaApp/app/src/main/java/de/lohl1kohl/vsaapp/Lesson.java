@@ -33,6 +33,13 @@ public class Lesson {
         subjects.add(subject);
     }
 
+    public boolean containsSubject(String name){
+        for (int i = 0; i < subjects.size(); i++){
+            if (subjects.get(i).getName().equals(name)) return true;
+        }
+        return  false;
+    }
+
     public int numberOfSubjects() {
         return subjects.size();
     }

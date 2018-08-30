@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -57,17 +58,22 @@ public class SpDayFragment extends BaseFragment {
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
                 String grade = sharedPref.getString("pref_grade", "-1").toUpperCase();
 
-                if (grade.equals("EF") | grade.equals("Q1") | grade.equals("Q2")) {
-                    for (int unit = 0; unit < spDay.size(); unit++) {
-                        Lesson lesson = spDay.get(unit);
-                        if (unit == 5) continue;
-                        lesson.addSubject(new Subject(weekday, unit, getString(R.string.lesson_free), "-", "-"));
-                        lesson.readSavedSubject(mActivity);
+                if (!spDay.get(0).containsSubject(getString(R.string.lesson_free))) {
+                    if (grade.equals("EF") | grade.equals("Q1") | grade.equals("Q2")) {
+                        for (int unit = 0; unit < spDay.size(); unit++) {
+                            Lesson lesson = spDay.get(unit);
+                            if (unit == 5) continue;
+                            Log.i("VsaApp/SpDayFragment", String.format("Add free lesson: %s %d", weekday, unit));
+                            lesson.addSubject(new Subject(weekday, unit, getString(R.string.lesson_free), "-", "-"));
+                            lesson.readSavedSubject(mActivity);
+                        }
                     }
-                } else {
+                }
+                if (!grade.equals("EF") && !grade.equals("Q1") && !grade.equals("Q2")) {
                     for (int unit = 0; unit < spDay.size(); unit++) {
                         Lesson lesson = spDay.get(unit);
                         if (unit == 5) continue;
+                        if (lesson.containsSubject(getString(R.string.lesson_tandem))) continue;
                         if (lesson.numberOfSubjects() >= 2) {
                             if (lesson.getSubject(0).getName().equals(getString(R.string.lesson_french)) || lesson.getSubject(0).getName().equals(getString(R.string.lesson_latin))) {
                                 // Add the tandem lesson...
