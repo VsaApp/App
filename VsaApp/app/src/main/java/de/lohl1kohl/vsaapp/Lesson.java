@@ -9,18 +9,24 @@ import java.util.List;
 public class Lesson {
     private List<Subject> subjects;
     private int currentIndex = 0;
-    private boolean gray;
 
     public Lesson(List<Subject> subjects) {
         this.subjects = subjects;
     }
 
     public boolean isGray() {
-        return gray;
-    }
+        try {
+            boolean isPassed = LessonUtils.isLessonPassed(getSubject().unit);
+            boolean isFuture = LessonUtils.isDayInFuture(getSubject().day);
+            if (LessonUtils.isDayPassed(getSubject().day)) return true;
+            else if (isPassed && !isFuture) {
+                return true;
+            }
+        } catch (Exception ignored) {
 
-    public void setGray(boolean gray) {
-        this.gray = gray;
+        }
+
+        return false;
     }
 
     public void addSubject(Subject subject) {

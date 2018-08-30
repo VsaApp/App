@@ -250,8 +250,10 @@ public class SpDayFragment extends BaseFragment {
             View newView = createView(layoutInflater, spDay, position, sharedPref);
             ViewGroup parent = (ViewGroup) convertView.getParent();
             int i = parent.indexOfChild(convertView);
-            parent.removeView(convertView);
-            mActivity.runOnUiThread(() -> parent.addView(newView, i));
+            mActivity.runOnUiThread(() -> {
+                parent.removeView(convertView);
+                parent.addView(newView, i);
+            });
         }).start();
         return convertView;
     }
