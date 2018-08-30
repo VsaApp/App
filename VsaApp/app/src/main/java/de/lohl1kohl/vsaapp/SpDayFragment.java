@@ -25,6 +25,7 @@ import java.util.List;
 
 import de.lohl1kohl.vsaapp.holder.SpHolder;
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
+import de.lohl1kohl.vsaapp.holder.VpHolder;
 import de.lohl1kohl.vsaapp.server.Callbacks;
 import de.lohl1kohl.vsaapp.server.web.Push;
 
@@ -128,6 +129,9 @@ public class SpDayFragment extends BaseFragment {
                         clickedLesson.setSubject(update);
                         clickedLesson.saveSubject(mActivity);
                         Subject subject = clickedLesson.getSubject();
+
+                        // Update vp...
+                        VpHolder.updateVpList(mActivity);
 
                         try {
                             JSONArray jsonArray = new JSONArray();
