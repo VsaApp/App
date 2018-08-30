@@ -59,5 +59,8 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
             TextView headerName = mActivity.findViewById(R.id.header_name);
             headerName.setText(String.format("%s - %s", mActivity.getResources().getString(R.string.app_name), gradename));
         }
+        else if (key.equals("pref_showVpOnlyForYou")){
+            new Thread(() -> VpHolder.load(mActivity)).start();
+        }
     }
 }
