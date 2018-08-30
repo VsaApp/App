@@ -4,8 +4,11 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -16,10 +19,12 @@ public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
     private Context context;
     private List<DatesCalendarMonthFragment> monthsFragments = new ArrayList<>();
     private int currentItem = 0;
+    private TextView monthName;
 
-    DatesCalendarAdapter(Context context, FragmentManager fm) {
+    DatesCalendarAdapter(Context context, FragmentManager fm, TextView monthName) {
         super(fm);
         this.context = context;
+        this.monthName = monthName;
 
         java.util.Date date = new java.util.Date();
         Calendar cal = Calendar.getInstance();
@@ -34,17 +39,8 @@ public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
     public void setCurrentItem(int item) {
         if (currentItem != item) {
             currentItem = item;
-            if (item == 0) {
-                DatesCalendarMonthFragment fragment = new DatesCalendarMonthFragment();
-                fragment.month = monthsFragments.get(0).month - 1;
-                fragment.year = monthsFragments.get(0).year;
-                if (fragment.month - 1 < 0) {
-                    fragment.month = 11;
-                    fragment.year--;
-                }
-                monthsFragments.add(0, fragment);
-                notifyDataSetChanged();
-            } else if (item == monthsFragments.size() - 1) {
+
+            if (item == monthsFragments.size() - 1) {
                 DatesCalendarMonthFragment fragment = new DatesCalendarMonthFragment();
                 fragment.month = monthsFragments.get(monthsFragments.size() - 1).month + 1;
                 fragment.year = monthsFragments.get(monthsFragments.size() - 1).year;
@@ -55,6 +51,8 @@ public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
                 monthsFragments.add(fragment);
                 notifyDataSetChanged();
             }
+            DatesCalendarMonthFragment currentFragment = monthsFragments.get((currentItem == -1) ? 0 : currentItem);
+            monthName.setText(String.format("%d, %s", currentFragment.year, Arrays.asList(context.getResources().getStringArray(R.array.monthNames)).get(currentFragment.month)));
         }
     }
 

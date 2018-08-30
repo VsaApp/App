@@ -5,32 +5,17 @@
     android:background="@color/calendarBorder"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/dates_calendar_month_year"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:padding="5dp"
-        android:textColor="@android:color/black"
-        android:textSize="16sp" />
-
-    <GridView
+    <LinearLayout
         android:id="@+id/dates_calendar_grid_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:horizontalSpacing="1px"
-        android:numColumns="7"
         android:paddingBottom="1px"
-        android:verticalSpacing="1px" />
+        android:orientation="horizontal"/>
 
-    <GridView
+    <LinearLayout
         android:id="@+id/dates_calendar_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:horizontalSpacing="1px"
-        android:numColumns="7"
-        android:verticalSpacing="1px" />
+        android:orientation="vertical"/>
 
 </LinearLayout>

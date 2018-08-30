@@ -3,13 +3,17 @@
     android:id="@+id/dates_calendar_item_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/calendarItem"
-    android:orientation="vertical">
+    android:background="@color/calendarBorder"
+    android:orientation="vertical"
+    android:paddingRight="1px"
+    android:paddingEnd="1px"
+    android:paddingBottom="1px">
 
     <TextView
         android:id="@+id/number_of_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/calendarItem"
         android:gravity="end"
         android:paddingEnd="2dp"
         android:paddingRight="2dp"
@@ -18,7 +22,8 @@
     <LinearLayout
         android:id="@+id/events_of_date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:background="@color/calendarItem"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="2dp" />
 
