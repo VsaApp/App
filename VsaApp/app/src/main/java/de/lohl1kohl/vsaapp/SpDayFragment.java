@@ -60,7 +60,8 @@ public class SpDayFragment extends BaseFragment {
                     for (int unit = 0; unit < spDay.size(); unit++) {
                         Lesson lesson = spDay.get(unit);
                         if (unit == 5) continue;
-                        lesson.addSubject(new Subject(weekday, unit, getString(R.string.lesson_free), "", ""));
+                        lesson.addSubject(new Subject(weekday, unit, getString(R.string.lesson_free), "-", "-"));
+                        lesson.readSavedSubject(mActivity);
                     }
                 } else {
                     for (int unit = 0; unit < spDay.size(); unit++) {
@@ -247,13 +248,17 @@ public class SpDayFragment extends BaseFragment {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            View newView = createView(layoutInflater, spDay, position, sharedPref);
-            ViewGroup parent = (ViewGroup) convertView.getParent();
-            int i = parent.indexOfChild(convertView);
-            mActivity.runOnUiThread(() -> {
-                parent.removeView(convertView);
-                parent.addView(newView, i);
-            });
+            try {
+                View newView = createView(layoutInflater, spDay, position, sharedPref);
+                ViewGroup parent = (ViewGroup) convertView.getParent();
+                int i = parent.indexOfChild(convertView);
+                mActivity.runOnUiThread(() -> {
+                    parent.removeView(convertView);
+                    parent.addView(newView, i);
+                });
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }).start();
         return convertView;
     }

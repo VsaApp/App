@@ -93,6 +93,7 @@ public class DatesCalendarMonthFragment extends BaseFragment {
                 mActivity.runOnUiThread(() -> header.addView(headerItem));
             }
 
+            // After creading the header cread the grid...
             createGrid(inflater, root, container);
         }).start();
     }
