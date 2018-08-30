@@ -117,8 +117,8 @@ public class DatesCalendarMonthFragment extends BaseFragment {
 
     private View createGridItem(int position, LayoutInflater layoutinflater, ViewGroup parent, int height){
         // Create the view...
-        DatesCalendarMonthAdapter.ViewHolder listViewHolder;
-        listViewHolder = new DatesCalendarMonthAdapter.ViewHolder();
+        ViewHolder listViewHolder;
+        listViewHolder = new ViewHolder();
         View convertView = layoutinflater.inflate(R.layout.dates_calendar_item, parent, false);
         listViewHolder.numberOfDateInListView = convertView.findViewById(R.id.number_of_date);
         listViewHolder.listInListView = convertView.findViewById(R.id.events_of_date);
