@@ -2,8 +2,10 @@ package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -17,10 +19,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobRequest;
+
 import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import de.lohl1kohl.vsaapp.holder.AGsHolder;
 import de.lohl1kohl.vsaapp.holder.CafetoriaHolder;
@@ -31,6 +39,8 @@ import de.lohl1kohl.vsaapp.holder.SpHolder;
 import de.lohl1kohl.vsaapp.holder.SubjectSymbolsHolder;
 import de.lohl1kohl.vsaapp.holder.TeacherHolder;
 import de.lohl1kohl.vsaapp.holder.VpHolder;
+import de.lohl1kohl.vsaapp.jobs.JobCreator;
+import de.lohl1kohl.vsaapp.jobs.StartJob;
 import de.lohl1kohl.vsaapp.server.Login;
 
 import static de.lohl1kohl.vsaapp.WebFragment.pushChoices;
@@ -40,10 +50,79 @@ public class LoadingActivity extends AppCompatActivity {
     private int holders = 8;
     private int loaded = 0;
 
+    public static void createJob(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPreferences.getBoolean("pref_mutePhone", true)) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            int s;
+            if (!isInSchool()) {
+                final AudioManager mode = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+                editor.putInt("ringer_mode", mode.getRingerMode());
+                editor.apply();
+                int start = secondsUntilStart(getNextStartTime()) * 1000;
+                s = new JobRequest.Builder(StartJob.TAG)
+                        .setExact(start)
+                        .setUpdateCurrent(true)
+                        .build()
+                        .schedule();
+            } else {
+                s = new JobRequest.Builder(StartJob.TAG)
+                        .setUpdateCurrent(true)
+                        .startNow()
+                        .build()
+                        .schedule();
+            }
+            editor.putInt("startid", s);
+        }
+    }
+
+    private static boolean isInSchool() {
+        Calendar now = Calendar.getInstance();
+        now.setTime(new java.util.Date());
+
+        Calendar start = Calendar.getInstance();
+        start.setTime(new java.util.Date());
+        start.set(Calendar.HOUR_OF_DAY, 7);
+        start.set(Calendar.MINUTE, 50);
+        start.set(Calendar.SECOND, 0);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(new java.util.Date());
+        end.set(Calendar.HOUR_OF_DAY, 7);
+        end.set(Calendar.MINUTE, 50);
+        end.set(Calendar.SECOND, 0);
+        List<Lesson> lessons = SpHolder.getDay(end.get(Calendar.DAY_OF_WEEK) - 1);
+        end.add(Calendar.MINUTE, LessonUtils.endTimes[lessons.size() - 1] + 20); // End time of last lesson + 10 minutes ( + 10 minutes for 7:50am to 8:00am)
+
+        return now.after(start) && now.before(end);
+    }
+
+    private static java.util.Date getNextStartTime() {
+        java.util.Date now = new java.util.Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+        cal.set(Calendar.HOUR_OF_DAY, 7);
+        cal.set(Calendar.MINUTE, 50);
+        cal.set(Calendar.SECOND, 0);
+        if (now.after(cal.getTime())) {
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+        }
+        return cal.getTime();
+    }
+
+    private static int secondsUntilStart(java.util.Date start) {
+        final long millis = start.getTime() - System.currentTimeMillis();
+        long hours = TimeUnit.MILLISECONDS.toHours(millis);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis));
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis));
+        return (int) (hours * 3600 + minutes * 60 + seconds);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+        JobManager.create(this).addJobCreator(new JobCreator());
         new Thread(() -> {
             // Check the login data...
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -332,6 +411,7 @@ public class LoadingActivity extends AppCompatActivity {
         TextView progressText = findViewById(R.id.progressText);
         runOnUiThread(() -> progressText.setText(String.valueOf((loaded / holders) * 100) + " %"));
         if (loaded == holders) {
+            createJob(this);
             Intent intent = new Intent(this, MainActivity.class);
             if (getIntent().getStringExtra("page") != null) {
                 intent.putExtra("page", getIntent().getStringExtra("page"));

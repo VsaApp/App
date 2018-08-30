@@ -12,8 +12,13 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="pref_showVpinSp"
-            android:summary="Nutzbar mit der obigen Einstellung"
-            android:title="Vertretungsplan im Stundenplan anzeigen" />
+            android:summary="@string/preferenceSummary_showVpinSp"
+            android:title="@string/preferenceTitle_showVpinSp" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_mutePhone"
+            android:summary="@string/preferenceSummary_mutePhone"
+            android:title="@string/preferenceTitle_mutePhone" />
 
     </PreferenceCategory>
 

@@ -78,6 +78,12 @@
     <string name="documents">Dokumente</string>
     <string name="ok">OK</string>
     <string name="cancel">Abbrechen</string>
+    <string name="in_school">In der Schule</string>
+    <string name="phone_muted">Handy stumm gestellt</string>
+    <string name="preferenceSummary_showVpinSp">Nutzbar mit der obigen Einstellung</string>
+    <string name="preferenceTitle_showVpinSp">Vertretungsplan im Stundenplan anzeigen</string>
+    <string name="preferenceSummary_mutePhone">Dein Handy wird während der Unterrichtszeit stummgestellt</string>
+    <string name="preferenceTitle_mutePhone">Handy stummstellen</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>

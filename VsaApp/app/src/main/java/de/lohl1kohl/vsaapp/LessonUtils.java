@@ -6,8 +6,8 @@ import java.util.List;
 
 public class LessonUtils {
 
+    public static int[] endTimes = new int[]{60, 130, 210, 280, 360, 420, 480, 545};
     private static int[] startTimes = new int[]{0, 70, 150, 220, 300, 360, 420, 485};
-    private static int[] endTimes = new int[]{60, 130, 210, 280, 360, 420, 480, 545};
     private static List<String> weekdays;
 
     public static boolean isDayPassed(String day) {
