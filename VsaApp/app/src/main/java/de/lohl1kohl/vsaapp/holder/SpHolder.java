@@ -123,16 +123,6 @@ public class SpHolder {
                     if (ls.numberOfSubjects() > 1) {
                         ls.readSavedSubject(context);
                     }
-                    try {
-                        boolean isPassed = LessonUtils.isLessonPassed(ls.getSubject().unit);
-                        boolean isFuture = LessonUtils.isDayInFuture(ls.getSubject().day);
-                        if (LessonUtils.isDayPassed(ls.getSubject().day)) ls.setGray(true);
-                        else if (isPassed && !isFuture) {
-                            ls.setGray(true);
-                        }
-                    } catch (Exception ignored) {
-
-                    }
                     spDay.add(ls);
                 }
                 // Delete last free lessons...
