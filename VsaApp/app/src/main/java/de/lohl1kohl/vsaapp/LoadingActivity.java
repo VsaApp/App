@@ -91,7 +91,7 @@ public class LoadingActivity extends AppCompatActivity {
         end.set(Calendar.HOUR_OF_DAY, 7);
         end.set(Calendar.MINUTE, 50);
         end.set(Calendar.SECOND, 0);
-        List<Lesson> lessons = SpHolder.getDay(end.get(Calendar.DAY_OF_WEEK) - 1);
+        List<Lesson> lessons = SpHolder.getDay(end.get(Calendar.DAY_OF_WEEK) - 2);
         end.add(Calendar.MINUTE, LessonUtils.endTimes[lessons.size() - 1] + 20); // End time of last lesson + 10 minutes ( + 10 minutes for 7:50am to 8:00am)
 
         return now.after(start) && now.before(end);

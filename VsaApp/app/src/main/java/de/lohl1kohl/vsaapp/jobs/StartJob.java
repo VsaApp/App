@@ -72,7 +72,7 @@ public class StartJob extends Job {
                 Date now = new Date();
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(now);
-                List<Lesson> lessons = SpHolder.getDay(cal.get(Calendar.DAY_OF_WEEK) - 1);
+                List<Lesson> lessons = SpHolder.getDay(cal.get(Calendar.DAY_OF_WEEK) - 2);
                 cal.set(Calendar.HOUR_OF_DAY, 7);
                 cal.set(Calendar.MINUTE, 50);
                 cal.set(Calendar.SECOND, 0);
