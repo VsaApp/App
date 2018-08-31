@@ -28,7 +28,6 @@ public class TeacherHolder {
         List<Teacher> savedTeachers = getSavedTeachers(context);
         if (savedTeachers != null) {
             teachers = savedTeachers;
-            if (teachersLoadedCallback != null) teachersLoadedCallback.onOldLoaded();
         } else {
             update = true;
         }

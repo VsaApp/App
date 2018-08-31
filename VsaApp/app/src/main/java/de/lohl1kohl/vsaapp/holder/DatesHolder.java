@@ -35,10 +35,6 @@ public class DatesHolder {
             return;
         }
 
-        // Show the old dates first (for a faster reaction time)...
-        readSavedDates(context);
-        if (datesLoadedCallback != null) datesLoadedCallback.onOldLoaded();
-
         de.lohl1kohl.vsaapp.server.Callbacks.datesCallback datesCallback = new de.lohl1kohl.vsaapp.server.Callbacks.datesCallback() {
 
             public void onReceived(String output) {

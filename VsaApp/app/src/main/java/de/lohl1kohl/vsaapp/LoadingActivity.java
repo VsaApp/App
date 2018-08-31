@@ -168,7 +168,8 @@ public class LoadingActivity extends AppCompatActivity {
         new Thread(() -> TeacherHolder.load(this, true, new Callbacks.teachersLoadedCallback() {
             @Override
             public void onOldLoaded() {
-
+                Log.d("VsaApp/LoadingActivity", "TeacherHolder loaded");
+                checkFinish();
             }
 
             @Override
@@ -188,7 +189,8 @@ public class LoadingActivity extends AppCompatActivity {
         new Thread(() -> DatesHolder.load(this, new Callbacks.datesLoadedCallback() {
             @Override
             public void onOldLoaded() {
-
+                Log.d("VsaApp/LoadingActivity", "DatesHolder loaded");
+                checkFinish();
             }
 
             @Override
