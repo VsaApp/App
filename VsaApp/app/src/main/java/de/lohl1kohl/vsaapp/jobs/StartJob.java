@@ -67,7 +67,7 @@ public class StartJob extends Job {
                         .setContentIntent(i);
 
                 NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.notify(1, builder.build());
+                notificationManager.notify(-1, builder.build());
 
                 Date now = new Date();
                 Calendar cal = Calendar.getInstance();

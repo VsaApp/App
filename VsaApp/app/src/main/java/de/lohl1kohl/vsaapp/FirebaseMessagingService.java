@@ -37,6 +37,25 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 tText = tText.split("\n").length + " Änderungen";
             }
 
+            int day = 0;
+            switch (title) {
+                case "Montag":
+                    day = SpHolder.MONDAY;
+                    break;
+                case "Dienstag":
+                    day = SpHolder.TUESDAY;
+                    break;
+                case "Mittwoch":
+                    day = SpHolder.WEDNESDAY;
+                    break;
+                case "Donnerstag":
+                    day = SpHolder.THURSDAY;
+                    break;
+                case "Freitag":
+                    day = SpHolder.FRIDAY;
+                    break;
+            }
+
             Intent intent = new Intent(this, LoadingActivity.class);
             intent.putExtra("page", "vp");
             intent.putExtra("day", title);
@@ -54,9 +73,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                     .setContentIntent(i);
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(0, builder.build());
+            notificationManager.notify(day, builder.build());
         }
-
     }
 
     @Override

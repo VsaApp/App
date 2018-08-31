@@ -25,7 +25,6 @@ import de.lohl1kohl.vsaapp.holder.VpHolder;
 public class SettingsFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 
-
     @SuppressLint("ApplySharedPref")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +68,7 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                     editor.apply();
                     mode.setRingerMode(sharedPreferences.getInt("ringer_mode", AudioManager.RINGER_MODE_VIBRATE));
                     NotificationManager notificationManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.cancel(1);
+                    notificationManager.cancel(-1);
                     JobManager.instance().cancel(sharedPreferences.getInt("startid", 0));
                     JobManager.instance().cancel(sharedPreferences.getInt("endid", 0));
                 } else {
@@ -105,11 +104,13 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                         connected = true;
             }
 
-            if (connected){
+            if (connected) {
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
                 int currentIndex = 0;
                 String[] grades = getResources().getStringArray(R.array.nameOfGrades);
-                for (int i = 0; i < grades.length; i++) if (grades[i].equals(sharedPref.getString("pref_grade", null))) currentIndex = i;
+                for (int i = 0; i < grades.length; i++)
+                    if (grades[i].equals(sharedPref.getString("pref_grade", null)))
+                        currentIndex = i;
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
                 builder.setTitle(getString(R.string.choose_grade));
                 builder.setSingleChoiceItems(grades, currentIndex, (dialog, which) -> {
@@ -122,7 +123,7 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                     new Thread(() -> SpHolder.load(mActivity, true)).start();
                     new Thread(() -> VpHolder.load(mActivity)).start();
                     TextView headerName = mActivity.findViewById(R.id.header_name);
-                    headerName.setText(String.format("%s - %s",  mActivity.getResources().getString(R.string.app_name), grades[which]));
+                    headerName.setText(String.format("%s - %s", mActivity.getResources().getString(R.string.app_name), grades[which]));
                 });
 
                 builder.setPositiveButton(getString(R.string.OK), (dialog, which) -> {
@@ -132,8 +133,7 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                 android.support.v7.app.AlertDialog dialog = builder.create();
                 dialog.show();
 
-            }
-            else {
+            } else {
                 Toast.makeText(mActivity, getString(R.string.changeGradeOnlyWithNetworkConnection), Toast.LENGTH_LONG).show();
             }
             return true;
@@ -144,7 +144,7 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-        if (key.equals("pref_showVpOnlyForYou")){
+        if (key.equals("pref_showVpOnlyForYou")) {
             new Thread(() -> VpHolder.load(mActivity)).start();
         }
     }
