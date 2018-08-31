@@ -72,10 +72,9 @@ public class VpDayFragment extends BaseFragment {
 
             TextView textView = root.findViewById(R.id.vpStand);
             if (today)
-                textView.setText(String.format(getString(R.string.for_s_the_s_from_s), VpHolder.weekdayToday, VpHolder.dateToday, VpHolder.timeToday));
+                mActivity.runOnUiThread(() -> textView.setText(String.format(getString(R.string.for_s_the_s_from_s), VpHolder.weekdayToday, VpHolder.dateToday, VpHolder.timeToday)));
             else
-                textView.setText(String.format(getString(R.string.for_s_the_s_from_s), VpHolder.weekdayTomorrow, VpHolder.dateTomorrow, VpHolder.timeTomorrow));
-
+                mActivity.runOnUiThread(() -> textView.setText(String.format(getString(R.string.for_s_the_s_from_s), VpHolder.weekdayTomorrow, VpHolder.dateTomorrow, VpHolder.timeTomorrow)));
 
         }).start();
 

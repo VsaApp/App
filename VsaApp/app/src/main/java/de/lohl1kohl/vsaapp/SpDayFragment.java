@@ -63,7 +63,6 @@ public class SpDayFragment extends BaseFragment {
                         for (int unit = 0; unit < spDay.size(); unit++) {
                             Lesson lesson = spDay.get(unit);
                             if (unit == 5) continue;
-                            Log.i("VsaApp/SpDayFragment", String.format("Add free lesson: %s %d", weekday, unit));
                             lesson.addSubject(new Subject(weekday, unit, getString(R.string.lesson_free), "-", "-"));
                             lesson.readSavedSubject(mActivity);
                         }

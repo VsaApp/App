@@ -1,5 +1,6 @@
 package de.lohl1kohl.vsaapp;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -47,7 +49,7 @@ import static de.lohl1kohl.vsaapp.WebFragment.pushChoices;
 
 public class LoadingActivity extends AppCompatActivity {
 
-    private int holders = 8;
+    private int holders = 9;
     private int loaded = 0;
 
     public static void createJob(Context context) {
@@ -123,6 +125,7 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
         JobManager.create(this).addJobCreator(new JobCreator());
+
         new Thread(() -> {
             // Check the login data...
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -170,11 +173,13 @@ public class LoadingActivity extends AppCompatActivity {
 
             @Override
             public void onNewLoaded() {
+                Log.d("VsaApp/LoadingActivity", "TeacherHolder loaded");
                 checkFinish();
             }
 
             @Override
             public void onConnectionFailed() {
+                Log.d("VsaApp/LoadingActivity", "TeacherHolder loaded");
                 checkFinish();
             }
         })).start();
@@ -188,11 +193,13 @@ public class LoadingActivity extends AppCompatActivity {
 
             @Override
             public void onNewLoaded() {
+                Log.d("VsaApp/LoadingActivity", "DatesHolder loaded");
                 checkFinish();
             }
 
             @Override
             public void onConnectionFailed() {
+                Log.d("VsaApp/LoadingActivity", "DatesHolder loaded");
                 checkFinish();
             }
         })).start();
@@ -200,6 +207,7 @@ public class LoadingActivity extends AppCompatActivity {
         // Init subjectSymbolsHolder...
         new Thread(() -> {
             SubjectSymbolsHolder.load(this);
+            Log.d("VsaApp/LoadingActivity", "SubjectSymbolsHolder loaded");
             checkFinish();
         }).start();
 
@@ -212,11 +220,13 @@ public class LoadingActivity extends AppCompatActivity {
 
             @Override
             public void onNewLoaded() {
+                Log.d("VsaApp/LoadingActivity", "DocumentsHolder loaded");
                 checkFinish();
             }
 
             @Override
             public void onConnectionFailed() {
+                Log.d("VsaApp/LoadingActivity", "DocumentsHolder loaded");
                 checkFinish();
             }
         })).start();
@@ -239,6 +249,7 @@ public class LoadingActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    Log.d("VsaApp/LoadingActivity", "VpHolder loaded");
                     checkFinish();
                 }
 
@@ -248,6 +259,7 @@ public class LoadingActivity extends AppCompatActivity {
                         VpFragment.selectDay(LoadingActivity.this.getIntent().getStringExtra("day"));
                     }
                     checkFinish();
+                    Log.d("VsaApp/LoadingActivity", "VpHolder loaded");
                 }
             };
 
@@ -255,22 +267,25 @@ public class LoadingActivity extends AppCompatActivity {
                 @Override
                 public void onOldLoaded() {
                     new Thread(() -> VpHolder.load(LoadingActivity.this, vpLoadedCallback)).start();
-                }
+                    Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
+                    checkFinish();                }
 
                 @Override
                 public void onNewLoaded() {
                     new Thread(() -> VpHolder.load(LoadingActivity.this, vpLoadedCallback)).start();
+                    Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
                     checkFinish();
                 }
 
                 @Override
                 public void onConnectionFailed() {
+                    new Thread(() -> VpHolder.load(LoadingActivity.this, vpLoadedCallback)).start();
+                    Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
                     checkFinish();
                 }
 
                 @Override
                 public void onNoSp() {
-
                 }
             };
             SpHolder.load(this, true, spLoadedCallback);
@@ -285,11 +300,13 @@ public class LoadingActivity extends AppCompatActivity {
 
                 @Override
                 public void onNewLoaded() {
+                    Log.d("VsaApp/LoadingActivity", "AGsHolder loaded");
                     checkFinish();
                 }
 
                 @Override
                 public void onConnectionFailed() {
+                    Log.d("VsaApp/LoadingActivity", "AGsHolder loaded");
                     checkFinish();
                 }
             };
@@ -306,16 +323,18 @@ public class LoadingActivity extends AppCompatActivity {
 
                 @Override
                 public void onNewLoaded() {
+                    Log.d("VsaApp/LoadingActivity", "CafetoriaHolder loaded");
                     checkFinish();
                 }
 
                 @Override
                 public void onConnectionFailed() {
+                    Log.d("VsaApp/LoadingActivity", "CafetoriaHolder loaded");
                     checkFinish();
                 }
             };
             CafetoriaHolder.load(LoadingActivity.this, settings.getString("pref_cafetoria_id", "-1"), settings.getString("pref_cafetoria_pin", "-1"), cafetoriaLoadedCallback);
-        });
+        }).start();
     }
 
     @SuppressLint("SetTextI18n")
@@ -405,11 +424,17 @@ public class LoadingActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void checkFinish() {
+        Log.d("VsaApp/LoadingActivity", "Check finish: " + Integer.toString(loaded + 1));
         loaded++;
-        ProgressBar progressBar = findViewById(R.id.progressBar);
-        progressBar.setProgress((loaded / holders) * 100);
         TextView progressText = findViewById(R.id.progressText);
-        runOnUiThread(() -> progressText.setText(String.valueOf((loaded / holders) * 100) + " %"));
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+        runOnUiThread(() -> {
+            progressText.setText(Integer.toString((int) Math.round(((double) loaded / (double) holders) * 100)) + " %");
+            ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", (int) Math.round(((double) loaded / (double) holders) * 100) - 1 / holders, (int) Math.round(((double) loaded / (double) holders) * 100));
+            progressAnimator.setDuration(1000);
+            progressAnimator.setInterpolator(new LinearInterpolator());
+            progressAnimator.start();
+        });
         if (loaded == holders) {
             createJob(this);
             Intent intent = new Intent(this, MainActivity.class);

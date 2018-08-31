@@ -46,10 +46,6 @@ public class SpHolder {
         }
         lastGrade = grade;
 
-        // Show the old sp first (for a faster reaction time)...
-        sp = getSavedSp(context);
-        if (spLoadedCallback != null) spLoadedCallback.onOldLoaded();
-
         if (update) {
 
             spCallback spCallback = new spCallback() {
@@ -83,6 +79,10 @@ public class SpHolder {
             // Send request to server...
             new Sp().updateSp(grade, spCallback);
         }
+        else {
+            sp = getSavedSp(context);
+        }
+
     }
 
     @Nullable
