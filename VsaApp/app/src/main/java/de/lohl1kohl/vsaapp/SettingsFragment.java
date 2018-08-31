@@ -9,10 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.evernote.android.job.JobManager;
 
@@ -20,6 +23,8 @@ import de.lohl1kohl.vsaapp.holder.SpHolder;
 import de.lohl1kohl.vsaapp.holder.VpHolder;
 
 public class SettingsFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+
 
     @SuppressLint("ApplySharedPref")
     @Override
@@ -85,20 +90,61 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                 return true;
             }
         });
+
+        Preference gradePref = findPreference("pref_grade");
+        gradePref.setOnPreferenceClickListener(preference -> {
+            boolean connected = false;
+            ConnectivityManager cm = (ConnectivityManager) mActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+            for (NetworkInfo ni : netInfo) {
+                if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                    if (ni.isConnected())
+                        connected = true;
+                if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                    if (ni.isConnected())
+                        connected = true;
+            }
+
+            if (connected){
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
+                int currentIndex = 0;
+                String[] grades = getResources().getStringArray(R.array.nameOfGrades);
+                for (int i = 0; i < grades.length; i++) if (grades[i].equals(sharedPref.getString("pref_grade", null))) currentIndex = i;
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
+                builder.setTitle(getString(R.string.choose_grade));
+                builder.setSingleChoiceItems(grades, currentIndex, (dialog, which) -> {
+                    dialog.cancel();
+                    // Save settings...
+                    sharedPref.edit().putString("pref_grade", grades[which]).commit();
+                    // Update sp, vp and firebase...
+                    FirebaseHandler.unsubscribeAll(mActivity.getApplicationContext());
+                    FirebaseHandler.subscribe(mActivity.getApplicationContext(), grades[which]);
+                    new Thread(() -> SpHolder.load(mActivity, true)).start();
+                    new Thread(() -> VpHolder.load(mActivity)).start();
+                    TextView headerName = mActivity.findViewById(R.id.header_name);
+                    headerName.setText(String.format("%s - %s",  mActivity.getResources().getString(R.string.app_name), grades[which]));
+                });
+
+                builder.setPositiveButton(getString(R.string.OK), (dialog, which) -> {
+                    dialog.cancel();
+                });
+
+                android.support.v7.app.AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+            else {
+                Toast.makeText(mActivity, getString(R.string.changeGradeOnlyWithNetworkConnection), Toast.LENGTH_LONG).show();
+            }
+            return true;
+        });
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("pref_grade")) {
-            String gradename = sharedPreferences.getString("pref_grade", "-1");
-            FirebaseHandler.unsubscribeAll(mActivity.getApplicationContext());
-            FirebaseHandler.subscribe(mActivity.getApplicationContext(), gradename);
-            new Thread(() -> SpHolder.load(mActivity, true)).start();
-            new Thread(() -> VpHolder.load(mActivity)).start();
-            TextView headerName = mActivity.findViewById(R.id.header_name);
-            headerName.setText(String.format("%s - %s", mActivity.getResources().getString(R.string.app_name), gradename));
-        } else if (key.equals("pref_showVpOnlyForYou")) {
+
+        if (key.equals("pref_showVpOnlyForYou")){
             new Thread(() -> VpHolder.load(mActivity)).start();
         }
     }

@@ -26,13 +26,8 @@
         android:key="button_userInfo"
         android:title="@string/preferenceCategory_userInfo">
 
-        <ListPreference
-            android:defaultValue="180"
-            android:entries="@array/nameOfGrades"
-            android:entryValues="@array/nameOfGrades"
+        <Preference
             android:key="pref_grade"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
             android:summary="@string/choose_grade"
             android:title="@string/preferenceTitle_classname" />
 

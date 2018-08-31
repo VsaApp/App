@@ -84,6 +84,7 @@
     <string name="preferenceTitle_showVpinSp">Vertretungsplan im Stundenplan anzeigen</string>
     <string name="preferenceSummary_mutePhone">Dein Handy wird während der Unterrichtszeit stummgestellt</string>
     <string name="preferenceTitle_mutePhone">Handy stummstellen</string>
+    <string name="changeGradeOnlyWithNetworkConnection">Die Klasse kann nur mit einer aktiven Internetverbindung geändert werden</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>
