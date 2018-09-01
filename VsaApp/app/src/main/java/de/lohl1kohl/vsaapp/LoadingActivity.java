@@ -93,6 +93,7 @@ public class LoadingActivity extends AppCompatActivity {
         end.set(Calendar.HOUR_OF_DAY, 7);
         end.set(Calendar.MINUTE, 50);
         end.set(Calendar.SECOND, 0);
+        if (end.get(Calendar.DAY_OF_WEEK) == 1 || end.get(Calendar.DAY_OF_WEEK) == 7) return false;
         List<Lesson> lessons = SpHolder.getDay(end.get(Calendar.DAY_OF_WEEK) - 2);
         end.add(Calendar.MINUTE, LessonUtils.endTimes[lessons.size() - 1] + 20); // End time of last lesson + 10 minutes ( + 10 minutes for 7:50am to 8:00am)
 
@@ -109,6 +110,8 @@ public class LoadingActivity extends AppCompatActivity {
         if (now.after(cal.getTime())) {
             cal.add(Calendar.DAY_OF_YEAR, 1);
         }
+        if (cal.get(Calendar.DAY_OF_WEEK) == 1) cal.add(Calendar.DAY_OF_YEAR, 2);
+        else if (cal.get(Calendar.DAY_OF_WEEK) == 7) cal.add(Calendar.DAY_OF_YEAR, 1);
         return cal.getTime();
     }
 
