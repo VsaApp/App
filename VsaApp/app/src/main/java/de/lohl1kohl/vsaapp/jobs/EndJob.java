@@ -25,7 +25,7 @@ public class EndJob extends Job {
         mode.setRingerMode(sharedPreferences.getInt("ringer_mode", AudioManager.RINGER_MODE_VIBRATE));
 
         NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(1);
+        notificationManager.cancel(-1);
 
         Callbacks.spLoadedCallback spLoadedCallback = new Callbacks.spLoadedCallback() {
             @Override
