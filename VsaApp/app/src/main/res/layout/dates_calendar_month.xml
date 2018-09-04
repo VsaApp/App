@@ -9,13 +9,14 @@
         android:id="@+id/dates_calendar_grid_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="1px"
-        android:orientation="horizontal"/>
+        android:orientation="horizontal"
+        android:paddingBottom="1px" />
 
     <LinearLayout
         android:id="@+id/dates_calendar_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"/>
+        android:background="@android:color/white"
+        android:orientation="vertical" />
 
 </LinearLayout>

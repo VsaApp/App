@@ -19,8 +19,4 @@ public class Event {
         this.start = start;
         this.end = end;
     }
-
-    public boolean isFullTime() {
-        return start == end;
-    }
 }

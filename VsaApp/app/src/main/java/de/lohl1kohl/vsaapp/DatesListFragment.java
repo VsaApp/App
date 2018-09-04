@@ -1,7 +1,6 @@
 package de.lohl1kohl.vsaapp;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -22,7 +21,6 @@ public class DatesListFragment extends BaseFragment {
         View root = inflater.inflate(R.layout.dates_list, container, false);
 
         LinearLayout ll = root.findViewById(R.id.datesList);
-        LayoutInflater layoutinflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         List<Day> calendar = DatesHolder.getFilteredCalendar(mActivity);
 
@@ -30,7 +28,7 @@ public class DatesListFragment extends BaseFragment {
             for (int position = 0; position < calendar.size(); position++) {
                 // Create the view...
                 ViewHolder listViewHolder = new ViewHolder();
-                View convertView = layoutinflater.inflate(R.layout.dates_list_item, null);
+                View convertView = inflater.inflate(R.layout.dates_list_item, null);
                 listViewHolder.dateInListView = convertView.findViewById(R.id.event_date);
                 listViewHolder.listInListView = convertView.findViewById(R.id.event_events);
                 convertView.setTag(listViewHolder);
