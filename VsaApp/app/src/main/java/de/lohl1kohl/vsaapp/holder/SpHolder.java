@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.lohl1kohl.vsaapp.Lesson;
-import de.lohl1kohl.vsaapp.LessonUtils;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.Subject;
 import de.lohl1kohl.vsaapp.holder.Callbacks.spLoadedCallback;
@@ -28,9 +27,9 @@ public class SpHolder {
     public static final int WEDNESDAY = 2;
     public static final int THURSDAY = 3;
     public static final int FRIDAY = 4;
+    private static boolean loaded = false;
 
     private static List<List<Lesson>> sp;
-    private static String lastGrade = "";
 
     public static void load(Context context, boolean update) {
         load(context, update, null);
@@ -39,12 +38,6 @@ public class SpHolder {
     public static void load(Context context, boolean update, spLoadedCallback spLoadedCallback) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String grade = sharedPref.getString("pref_grade", "-1");
-
-        if (grade.equals(lastGrade)) {
-            if (spLoadedCallback != null) spLoadedCallback.onOldLoaded();
-            return;
-        }
-        lastGrade = grade;
 
         if (update) {
 
@@ -78,9 +71,12 @@ public class SpHolder {
 
             // Send request to server...
             new Sp().updateSp(grade, spCallback);
-        }
-        else {
+        } else {
             sp = getSavedSp(context);
+            if (!loaded) {
+                if (spLoadedCallback != null) spLoadedCallback.onOldLoaded();
+                loaded = true;
+            }
         }
 
     }
