@@ -14,8 +14,9 @@ import org.json.JSONObject;
 
 import java.util.Random;
 
-import de.lohl1kohl.vsaapp.holder.Callbacks;
-import de.lohl1kohl.vsaapp.holder.SpHolder;
+import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
+import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
+import de.lohl1kohl.vsaapp.fragments.sp.Subject;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 

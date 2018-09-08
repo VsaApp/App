@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
-class FirebaseHandler {
+public class FirebaseHandler {
 
     public static void subscribe(final Context context, final String topic) {
         FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnCompleteListener(task -> {

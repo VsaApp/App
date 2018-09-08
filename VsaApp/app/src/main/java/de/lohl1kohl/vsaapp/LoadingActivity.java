@@ -32,20 +32,20 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import de.lohl1kohl.vsaapp.holder.AGsHolder;
-import de.lohl1kohl.vsaapp.holder.CafetoriaHolder;
-import de.lohl1kohl.vsaapp.holder.Callbacks;
-import de.lohl1kohl.vsaapp.holder.DatesHolder;
-import de.lohl1kohl.vsaapp.holder.DocumentsHolder;
-import de.lohl1kohl.vsaapp.holder.SpHolder;
-import de.lohl1kohl.vsaapp.holder.SubjectSymbolsHolder;
-import de.lohl1kohl.vsaapp.holder.TeacherHolder;
-import de.lohl1kohl.vsaapp.holder.VpHolder;
+import de.lohl1kohl.vsaapp.fragments.ags.AGsHolder;
+import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaHolder;
+import de.lohl1kohl.vsaapp.fragments.calendar.DatesHolder;
+import de.lohl1kohl.vsaapp.fragments.documents.DocumentsHolder;
+import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
+import de.lohl1kohl.vsaapp.fragments.sp.LessonUtils;
+import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
+import de.lohl1kohl.vsaapp.fragments.teachers.TeacherHolder;
+import de.lohl1kohl.vsaapp.fragments.vp.VpFragment;
+import de.lohl1kohl.vsaapp.fragments.vp.VpHolder;
 import de.lohl1kohl.vsaapp.jobs.JobCreator;
 import de.lohl1kohl.vsaapp.jobs.StartJob;
-import de.lohl1kohl.vsaapp.server.Login;
 
-import static de.lohl1kohl.vsaapp.WebFragment.pushChoices;
+import static de.lohl1kohl.vsaapp.fragments.web.WebFragment.pushChoices;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -137,7 +137,7 @@ public class LoadingActivity extends AppCompatActivity {
             if (username.equals("-1") || password.equals("-1")) {
                 runOnUiThread(this::showLoginScreen);
             } else {
-                de.lohl1kohl.vsaapp.server.Callbacks.credentialsCallback callback = new de.lohl1kohl.vsaapp.server.Callbacks.credentialsCallback() {
+                de.lohl1kohl.vsaapp.Callbacks.credentialsCallback callback = new de.lohl1kohl.vsaapp.Callbacks.credentialsCallback() {
                     @Override
                     public void onSuccess() {
                         Log.i("VsaApp/Server", "Password success");
@@ -273,7 +273,8 @@ public class LoadingActivity extends AppCompatActivity {
                 public void onOldLoaded() {
                     new Thread(() -> VpHolder.load(LoadingActivity.this, vpLoadedCallback)).start();
                     Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
-                    checkFinish();                }
+                    checkFinish();
+                }
 
                 @Override
                 public void onNewLoaded() {
@@ -395,7 +396,7 @@ public class LoadingActivity extends AppCompatActivity {
                 feedback.setText(R.string.no_class);
                 return;
             }
-            de.lohl1kohl.vsaapp.server.Callbacks.credentialsCallback callback = new de.lohl1kohl.vsaapp.server.Callbacks.credentialsCallback() {
+            de.lohl1kohl.vsaapp.Callbacks.credentialsCallback callback = new de.lohl1kohl.vsaapp.Callbacks.credentialsCallback() {
                 @Override
                 public void onSuccess() {
                     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(LoadingActivity.this);

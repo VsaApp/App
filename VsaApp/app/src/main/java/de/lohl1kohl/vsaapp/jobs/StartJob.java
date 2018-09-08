@@ -20,12 +20,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import de.lohl1kohl.vsaapp.Lesson;
-import de.lohl1kohl.vsaapp.LessonUtils;
+import de.lohl1kohl.vsaapp.Callbacks;
 import de.lohl1kohl.vsaapp.LoadingActivity;
 import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.holder.Callbacks;
-import de.lohl1kohl.vsaapp.holder.SpHolder;
+import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
+import de.lohl1kohl.vsaapp.fragments.sp.LessonUtils;
+import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
 
 public class StartJob extends Job {
 

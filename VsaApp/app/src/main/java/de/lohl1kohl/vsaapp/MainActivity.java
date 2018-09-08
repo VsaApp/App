@@ -19,6 +19,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import de.lohl1kohl.vsaapp.fragments.ags.AGsFragment;
+import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaFragment;
+import de.lohl1kohl.vsaapp.fragments.calendar.DatesFragment;
+import de.lohl1kohl.vsaapp.fragments.documents.DocumentsFragment;
+import de.lohl1kohl.vsaapp.fragments.settings.SettingsFragment;
+import de.lohl1kohl.vsaapp.fragments.sp.SpFragment;
+import de.lohl1kohl.vsaapp.fragments.teachers.TeacherFragment;
+import de.lohl1kohl.vsaapp.fragments.vp.VpFragment;
+import de.lohl1kohl.vsaapp.fragments.web.WebFragment;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private final MainActivity mainActivity = this;

@@ -9,9 +9,9 @@ import android.support.annotation.NonNull;
 
 import com.evernote.android.job.Job;
 
+import de.lohl1kohl.vsaapp.Callbacks;
 import de.lohl1kohl.vsaapp.LoadingActivity;
-import de.lohl1kohl.vsaapp.holder.Callbacks;
-import de.lohl1kohl.vsaapp.holder.SpHolder;
+import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
 
 public class EndJob extends Job {
 
