@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -30,52 +31,53 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     }
 
     public void notifyUser(String title, String text) {
-        if (text.length() != 0) {
-            text = text.substring(0, text.length() - 1);
-
-            String tText = text;
-            if (tText.split("\n").length > 1) {
-                tText = tText.split("\n").length + " Änderungen";
-            }
-
-            int day = 0;
-            switch (title) {
-                case "Montag":
-                    day = SpHolder.MONDAY;
-                    break;
-                case "Dienstag":
-                    day = SpHolder.TUESDAY;
-                    break;
-                case "Mittwoch":
-                    day = SpHolder.WEDNESDAY;
-                    break;
-                case "Donnerstag":
-                    day = SpHolder.THURSDAY;
-                    break;
-                case "Freitag":
-                    day = SpHolder.FRIDAY;
-                    break;
-            }
-
-            Intent intent = new Intent(this, LoadingActivity.class);
-            intent.putExtra("page", "vp");
-            intent.putExtra("day", title);
-            Random generator = new Random();
-
-            PendingIntent i = PendingIntent.getActivity(getApplicationContext(), generator.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), String.valueOf(generator.nextInt()))
-                    .setSmallIcon(R.mipmap.logo_white)
-                    .setContentTitle(title)
-                    .setContentText(tText)
-                    .setColor(getResources().getColor(R.color.colorPrimary))
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
-                    .setVibrate(new long[]{250, 250, 250, 250})
-                    .setContentIntent(i);
-
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(day, builder.build());
+        if (text.length() == 0) {
+            text = getString(R.string.no_changes);
         }
+        text = text.substring(0, text.length() - 1);
+
+        String tText = text;
+        if (tText.split("\n").length > 1) {
+            tText = tText.split("\n").length + " Änderungen";
+        }
+
+        int day = 0;
+        switch (title) {
+            case "Montag":
+                day = SpHolder.MONDAY;
+                break;
+            case "Dienstag":
+                day = SpHolder.TUESDAY;
+                break;
+            case "Mittwoch":
+                day = SpHolder.WEDNESDAY;
+                break;
+            case "Donnerstag":
+                day = SpHolder.THURSDAY;
+                break;
+            case "Freitag":
+                day = SpHolder.FRIDAY;
+                break;
+        }
+
+        Intent intent = new Intent(this, LoadingActivity.class);
+        intent.putExtra("page", "vp");
+        intent.putExtra("day", title);
+        Random generator = new Random();
+
+        PendingIntent i = PendingIntent.getActivity(getApplicationContext(), generator.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), String.valueOf(generator.nextInt()))
+                .setSmallIcon(R.mipmap.logo_white)
+                .setContentTitle(title)
+                .setContentText(tText)
+                .setColor(getResources().getColor(R.color.colorPrimary))
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
+                .setVibrate(new long[]{250, 250, 250, 250})
+                .setContentIntent(i);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(day, builder.build());
     }
 
     @Override
@@ -121,6 +123,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     }
 
     public void onSp(JSONArray changes, String weekday) throws JSONException {
+        Log.i("changes", changes.toString());
         StringBuilder text = new StringBuilder();
         for (int i = 0; i < changes.length(); i++) {
             JSONObject change = changes.getJSONObject(i);

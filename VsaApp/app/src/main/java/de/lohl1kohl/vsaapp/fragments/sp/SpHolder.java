@@ -24,9 +24,8 @@ public class SpHolder {
     public static final int WEDNESDAY = 2;
     public static final int THURSDAY = 3;
     public static final int FRIDAY = 4;
-    private static boolean loaded = false;
 
-    private static List<List<Lesson>> sp;
+    public static List<List<Lesson>> sp;
 
     public static void load(Context context, boolean update) {
         load(context, update, null);
@@ -70,10 +69,7 @@ public class SpHolder {
             new Sp().updateSp(grade, spCallback);
         } else {
             sp = getSavedSp(context);
-            if (!loaded) {
-                if (spLoadedCallback != null) spLoadedCallback.onOldLoaded();
-                loaded = true;
-            }
+            if (spLoadedCallback != null) spLoadedCallback.onOldLoaded();
         }
 
     }

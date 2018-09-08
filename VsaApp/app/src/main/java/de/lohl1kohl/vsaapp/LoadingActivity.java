@@ -294,6 +294,7 @@ public class LoadingActivity extends AppCompatActivity {
                 public void onNoSp() {
                 }
             };
+            SpHolder.sp = new ArrayList<>();
             SpHolder.load(this, true, spLoadedCallback);
         }).start();
 

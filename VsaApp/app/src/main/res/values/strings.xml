@@ -87,6 +87,7 @@
     <string name="loadingScreenPercentValue">0 %</string>
     <string name="back">Zurück</string>
     <string name="eventsDialog">Events Dialog</string>
+    <string name="no_changes">Keine Änderungen</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>

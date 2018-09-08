@@ -266,8 +266,8 @@ public class SpDayFragment extends BaseFragment {
                     parent.removeView(convertView);
                     parent.addView(newView, i);
                 });
-            } catch (NullPointerException e) {
-                e.printStackTrace();
+            } catch (NullPointerException ignored) {
+
             }
         }).start();
         return convertView;
