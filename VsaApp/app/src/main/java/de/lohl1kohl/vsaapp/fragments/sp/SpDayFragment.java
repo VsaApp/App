@@ -114,8 +114,10 @@ public class SpDayFragment extends BaseFragment {
         // Get the current lesson...
         Lesson lesson = spDay.get(position);
 
+        Boolean lock = sharedPref.getBoolean("pref_lockSubjects", false);
+
         // Set the buttons...
-        if (lesson.numberOfSubjects() <= 1) {
+        if (lesson.numberOfSubjects() <= 1 || lock) {
             listViewHolder.leftButton.setEnabled(false);
             listViewHolder.leftButton.setVisibility(ImageButton.INVISIBLE);
             listViewHolder.rightButton.setEnabled(false);

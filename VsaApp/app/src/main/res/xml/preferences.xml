@@ -15,6 +15,11 @@
             android:summary="@string/preferenceSummary_showVpinSp"
             android:title="@string/preferenceTitle_showVpinSp" />
         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_lockSubjects"
+            android:summary="@string/preferenceSummary_lockSubjects"
+            android:title="@string/preferenceTitle_lockSubjects" />
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="pref_mutePhone"
             android:summary="@string/preferenceSummary_mutePhone"
