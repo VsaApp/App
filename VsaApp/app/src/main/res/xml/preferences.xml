@@ -25,6 +25,11 @@
             android:summary="@string/preferenceSummary_mutePhone"
             android:title="@string/preferenceTitle_mutePhone" />
 
+        <Preference
+            android:key="pref_clear_cache"
+            android:summary="@string/preferenceSummary_clear_cache"
+            android:title="@string/preferenceTitle_clear_cache" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

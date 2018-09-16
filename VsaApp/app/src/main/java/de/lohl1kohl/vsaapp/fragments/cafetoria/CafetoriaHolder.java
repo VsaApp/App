@@ -13,21 +13,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lohl1kohl.vsaapp.Callbacks;
-import de.lohl1kohl.vsaapp.Callbacks.cafetoriaCallback;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class CafetoriaHolder {
 
     public static List<Day> days = new ArrayList<>();
 
-    public static void load(Context context, String id, String password, Callbacks.cafetoriaLoadedCallback cafetoriaLoadedCallback) {
+    public static void load(Context context, String id, String password, Callbacks.baseLoadedCallback cafetoriaLoadedCallback) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
         // Show the old days first (for a faster reaction time)...
         days = getSavedDays(context);
         if (cafetoriaLoadedCallback != null) cafetoriaLoadedCallback.onOldLoaded();
 
-        cafetoriaCallback cafetoriaCallback = new cafetoriaCallback() {
+        Callbacks.baseCallback cafetoriaCallback = new Callbacks.baseCallback() {
 
             public void onReceived(String output) {
                 days = convertJsonToArray(output);
@@ -64,6 +63,7 @@ public class CafetoriaHolder {
 
     @Nullable
     private static List<Day> convertJsonToArray(String array) {
+        Log.i("array", array);
         List<Day> days = new ArrayList<>();
         try {
             JSONArray jsonArray = new JSONObject(array).getJSONArray("menues");

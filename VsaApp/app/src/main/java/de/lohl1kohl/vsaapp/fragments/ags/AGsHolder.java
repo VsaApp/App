@@ -14,44 +14,43 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.lohl1kohl.vsaapp.Callbacks;
-import de.lohl1kohl.vsaapp.Callbacks.agsCallback;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class AGsHolder {
 
     private static List<AG> ags = new ArrayList<>();
 
 
-    public static void load(Context context, Callbacks.agsLoadedCallback agsLoadedCallback) {
+    public static void load(Context context, boolean update, Callbacks.baseLoadedCallback agsLoadedCallback) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        // Show the old ags first (for a faster reaction time)...
-        ags = getSavedAGs(context);
-        if (agsLoadedCallback != null) agsLoadedCallback.onOldLoaded();
+        if (update) {
 
+            Callbacks.baseCallback agsCallback = new Callbacks.baseCallback() {
 
-        agsCallback agsCallback = new agsCallback() {
+                public void onReceived(String output) {
+                    ags = convertJsonToArray(output);
 
-            public void onReceived(String output) {
-                ags = convertJsonToArray(output);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("pref_ags", output);
+                    editor.apply();
 
-                // Save the current sp in the settings...
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString("pref_ags", output);
-                editor.apply();
+                    if (agsLoadedCallback != null) agsLoadedCallback.onNewLoaded();
+                }
 
-                if (agsLoadedCallback != null) agsLoadedCallback.onNewLoaded();
-            }
+                public void onConnectionFailed() {
+                    ags = getSavedAGs(context);
+                    if (agsLoadedCallback != null)
+                        agsLoadedCallback.onConnectionFailed();
+                }
+            };
 
-            public void onConnectionFailed() {
-                ags = getSavedAGs(context);
-                if (agsLoadedCallback != null)
-                    agsLoadedCallback.onConnectionFailed();
-            }
-        };
-
-        // Send request to server...
-        new AGs().getAGs(agsCallback);
+            // Send request to server...
+            new AGs().getAGs(agsCallback);
+        } else {
+            ags = getSavedAGs(context);
+            if (agsLoadedCallback != null) agsLoadedCallback.onOldLoaded();
+        }
     }
 
     @Nullable

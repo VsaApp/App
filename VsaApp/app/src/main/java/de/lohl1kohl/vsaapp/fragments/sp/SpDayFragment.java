@@ -23,13 +23,13 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.List;
 
-import de.lohl1kohl.vsaapp.Callbacks;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.StringUtils;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
 import de.lohl1kohl.vsaapp.fragments.teachers.TeacherHolder;
 import de.lohl1kohl.vsaapp.fragments.vp.VpHolder;
 import de.lohl1kohl.vsaapp.fragments.web.Push;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class SpDayFragment extends BaseFragment {
 
@@ -144,7 +144,7 @@ public class SpDayFragment extends BaseFragment {
                         try {
                             JSONArray jsonArray = new JSONArray();
                             jsonArray.put(new JSONObject().put("weekday", subject.day).put("unit", subject.unit).put("subject", subject.name).put("teacher", StringUtils.poop(subject.teacher)));
-                            Callbacks.pushCallback pushCallback = new Callbacks.pushCallback() {
+                            Callbacks.baseCallback pushCallback = new Callbacks.baseCallback() {
                                 @Override
                                 public void onReceived(String output) {
 

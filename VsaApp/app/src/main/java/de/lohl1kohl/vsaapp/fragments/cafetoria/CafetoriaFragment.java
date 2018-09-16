@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.lohl1kohl.vsaapp.Callbacks;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 
 public class CafetoriaFragment extends BaseFragment {
@@ -35,13 +36,34 @@ public class CafetoriaFragment extends BaseFragment {
         if (id.equals("-1")) {
             showCafetoriaLoginDialog();
         } else {
-            displayMenues();
+            loadMenues();
         }
         return root;
     }
 
     void displayMenues() {
+        Log.i("cafetoria", String.valueOf(CafetoriaHolder.days));
+    }
 
+    void loadMenues() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
+        Callbacks.baseLoadedCallback cafetoriaLoadedCallback = new Callbacks.baseLoadedCallback() {
+            @Override
+            public void onOldLoaded() {
+                displayMenues();
+            }
+
+            @Override
+            public void onNewLoaded() {
+                displayMenues();
+            }
+
+            @Override
+            public void onConnectionFailed() {
+                displayMenues();
+            }
+        };
+        CafetoriaHolder.load(mActivity, settings.getString("pref_cafetoria_id", "-1"), settings.getString("pref_cafetoria_pin", "-1"), cafetoriaLoadedCallback);
     }
 
     public void showCafetoriaLoginDialog() {
@@ -69,7 +91,7 @@ public class CafetoriaFragment extends BaseFragment {
                 feedback.setText(R.string.no_pin_set);
                 return;
             }
-            Callbacks.cafetoriaCallback cafetoriaCallback = new Callbacks.cafetoriaCallback() {
+            Callbacks.baseCallback cafetoriaCallback = new Callbacks.baseCallback() {
                 @Override
                 public void onReceived(String output) {
                     try {
@@ -83,7 +105,7 @@ public class CafetoriaFragment extends BaseFragment {
                             loginDialog.cancel();
 
                             Toast.makeText(mActivity, R.string.login_success, Toast.LENGTH_SHORT).show();
-                            displayMenues();
+                            loadMenues();
                         } else {
                             feedback.setText(R.string.cafetoriaDialog_statusFailed);
                         }

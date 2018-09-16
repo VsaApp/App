@@ -26,7 +26,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lohl1kohl.vsaapp.Callbacks;
 import de.lohl1kohl.vsaapp.MainActivity;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.StringUtils;
@@ -36,6 +35,7 @@ import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
 import de.lohl1kohl.vsaapp.fragments.web.connections.Connect;
 import de.lohl1kohl.vsaapp.fragments.web.connections.Delete;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
@@ -60,7 +60,7 @@ public class WebFragment extends BaseFragment {
                 }
             }
         }
-        Callbacks.pushCallback pushCallback = new Callbacks.pushCallback() {
+        Callbacks.baseCallback pushCallback = new Callbacks.baseCallback() {
             @Override
             public void onReceived(String output) {
 
@@ -93,7 +93,7 @@ public class WebFragment extends BaseFragment {
                 return;
             //Getting the passed result
             String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_result");
-            Callbacks.connectCallback connectCallback = new Callbacks.connectCallback() {
+            Callbacks.baseCallback connectCallback = new Callbacks.baseCallback() {
                 @Override
                 public void onReceived(String output) {
                     try {
@@ -119,7 +119,7 @@ public class WebFragment extends BaseFragment {
 
     @SuppressLint("InflateParams")
     public void listConnections() {
-        Callbacks.connectionsCallback connectionsCallback = new Callbacks.connectionsCallback() {
+        Callbacks.baseCallback connectionsCallback = new Callbacks.baseCallback() {
             @Override
             public void onReceived(String output) {
                 List<RelativeLayout> views = new ArrayList<>();
@@ -137,7 +137,7 @@ public class WebFragment extends BaseFragment {
                             time.setText(connection.getString("time"));
                             ImageButton delete = view.findViewById(R.id.web_cell_delete);
                             delete.setOnClickListener(view1 -> {
-                                Callbacks.deleteCallback deleteCallback = new Callbacks.deleteCallback() {
+                                Callbacks.baseCallback deleteCallback = new Callbacks.baseCallback() {
                                     @Override
                                     public void onReceived(String output1) {
                                         listConnections();

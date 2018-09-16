@@ -13,9 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.lohl1kohl.vsaapp.Callbacks;
-import de.lohl1kohl.vsaapp.Callbacks.spCallback;
 import de.lohl1kohl.vsaapp.R;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class SpHolder {
 
@@ -31,14 +30,14 @@ public class SpHolder {
         load(context, update, null);
     }
 
-    public static void load(Context context, boolean update, Callbacks.spLoadedCallback spLoadedCallback) {
+    public static void load(Context context, boolean update, Callbacks.baseLoadedCallback baseLoadedCallback) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String grade = sharedPref.getString("pref_grade", "-1");
 
         if (update) {
 
-            spCallback spCallback = new spCallback() {
-
+            Callbacks.baseCallback spCallback = new Callbacks.baseCallback() {
+                @Override
                 public void onReceived(String output) {
                     sp = convertJsonToArray(context, output);
 
@@ -47,21 +46,13 @@ public class SpHolder {
                     editor.putString("pref_sp_" + grade, output);
                     editor.apply();
 
-                    if (spLoadedCallback != null) spLoadedCallback.onNewLoaded();
+                    if (baseLoadedCallback != null) baseLoadedCallback.onNewLoaded();
                 }
 
+                @Override
                 public void onConnectionFailed() {
                     sp = getSavedSp(context);
-                    if (spLoadedCallback != null) spLoadedCallback.onConnectionFailed();
-                }
-
-                public void onNoSp() {
-                    // Create a empty sp...
-                    sp = new ArrayList<>();
-                    for (int i = 0; i < 5; i++) {
-                        sp.add(new ArrayList<>());
-                    }
-                    if (spLoadedCallback != null) spLoadedCallback.onNoSp();
+                    if (baseLoadedCallback != null) baseLoadedCallback.onConnectionFailed();
                 }
             };
 
@@ -69,7 +60,7 @@ public class SpHolder {
             new Sp().updateSp(grade, spCallback);
         } else {
             sp = getSavedSp(context);
-            if (spLoadedCallback != null) spLoadedCallback.onOldLoaded();
+            if (baseLoadedCallback != null) baseLoadedCallback.onOldLoaded();
         }
 
     }

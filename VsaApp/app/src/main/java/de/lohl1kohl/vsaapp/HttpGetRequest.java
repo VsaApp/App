@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import de.lohl1kohl.vsaapp.loader.AsyncResponse;
+
 public class HttpGetRequest extends AsyncTask<String, Void, String> {
     private static final String REQUEST_METHOD = "GET";
     private static final int READ_TIMEOUT = 15000;

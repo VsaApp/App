@@ -14,12 +14,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.lohl1kohl.vsaapp.Callbacks;
-import de.lohl1kohl.vsaapp.Callbacks.vpCallback;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.SubjectSymbolsHolder;
 import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class VpHolder {
     public static String weekdayToday, dateToday, timeToday;
@@ -27,11 +26,11 @@ public class VpHolder {
     private static List<List<Subject>> vp;
     private static int countDownloadedVps = 0;
 
-    public static void load(Context context) {
-        load(context, null);
+    public static void load(Context context, boolean update) {
+        load(context, update, null);
     }
 
-    public static void load(Context context, Callbacks.vpLoadedCallback vpLoadedCallback) {
+    public static void load(Context context, boolean update, Callbacks.baseLoadedCallback vpLoadedCallback) {
         // Get grade...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String grade = sharedPref.getString("pref_grade", "-1");
@@ -42,50 +41,52 @@ public class VpHolder {
         for (int i = 0; i < 2; i++) {
             boolean today = (i == 0);
 
-            // Show saved sp first...
-            List<Subject> savedVP = getSavedVp(context, today);
-            if (savedVP != null) vp.add(today ? 0 : 1, savedVP);
-            if (vpLoadedCallback != null && countDownloadedVps == 2) vpLoadedCallback.onOldLoaded();
+            if (update) {
+                // Create callback...
+                Callbacks.baseCallback callback = new Callbacks.baseCallback() {
+                    @Override
+                    public void onReceived(String output) {
+                        vp.add(today ? 0 : (vp.size() == 0 ? 0 : 1), convertJsonToArray(context, output, today));
 
-            // Create callback...
-            vpCallback callback = new vpCallback() {
-                @Override
-                public void onReceived(String output) {
-                    vp.add(today ? 0 : (vp.size() == 0 ? 0 : 1), convertJsonToArray(context, output, today));
+                        // Save the current sp...
+                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putString("pref_vp_" + grade + "_" + (today ? "today" : "tomorrow"), output);
+                        editor.apply();
 
-                    // Save the current sp...
-                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString("pref_vp_" + grade + "_" + (today ? "today" : "tomorrow"), output);
-                    editor.apply();
+                        countDownloadedVps++;
 
-                    countDownloadedVps++;
+                        if (vpLoadedCallback != null && countDownloadedVps == 2)
+                            vpLoadedCallback.onNewLoaded();
+                    }
 
-                    if (vpLoadedCallback != null && countDownloadedVps == 2)
-                        vpLoadedCallback.onNewLoaded();
-                }
+                    @Override
+                    public void onConnectionFailed() {
+                        // Show saved sp...
+                        List<Subject> savedVP = getSavedVp(context, today);
+                        if (savedVP != null) vp.add(today ? 0 : 1, savedVP);
 
-                @Override
-                public void onConnectionFailed() {
-                    // Show saved sp...
-                    List<Subject> savedVP = getSavedVp(context, today);
-                    if (savedVP != null) vp.add(today ? 0 : 1, savedVP);
+                        countDownloadedVps++;
 
-                    countDownloadedVps++;
-
-                    if (vpLoadedCallback != null && countDownloadedVps == 2)
-                        vpLoadedCallback.onConnectionFailed();
-                }
-            };
-
-            new Thread(() -> {
-                // Send request to server...
-                if (today) {
-                    new Today().updateVp(grade, callback);
-                } else {
-                    new Tomorrow().updateVp(grade, callback);
-                }
-            }).start();
+                        if (vpLoadedCallback != null && countDownloadedVps == 2)
+                            vpLoadedCallback.onConnectionFailed();
+                    }
+                };
+                new Thread(() -> {
+                    // Send request to server...
+                    if (today) {
+                        new Today().updateVp(grade, callback);
+                    } else {
+                        new Tomorrow().updateVp(grade, callback);
+                    }
+                }).start();
+            } else {
+                // Show saved sp first...
+                List<Subject> savedVP = getSavedVp(context, today);
+                if (savedVP != null) vp.add(today ? 0 : 1, savedVP);
+                if (vpLoadedCallback != null && countDownloadedVps == 2)
+                    vpLoadedCallback.onOldLoaded();
+            }
         }
     }
 

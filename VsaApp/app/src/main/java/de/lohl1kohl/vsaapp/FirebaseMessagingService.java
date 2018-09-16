@@ -18,17 +18,9 @@ import java.util.Random;
 import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
 import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
-
-    public void onNoSp(JSONArray changes, String weekday) throws JSONException {
-        StringBuilder text = new StringBuilder();
-        for (int i = 0; i < changes.length(); i++) {
-            JSONObject change = changes.getJSONObject(i);
-            text.append(change.getString("unit")).append(". Stunde ").append(change.getJSONObject("changed").getString("teacher")).append(" ").append(change.getJSONObject("changed").getString("info")).append(" ").append(change.getJSONObject("changed").getString("room")).append("\n");
-        }
-        this.notifyUser(weekday, text.toString());
-    }
 
     public void notifyUser(String title, String text) {
         if (text.length() == 0) {
@@ -88,20 +80,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             String weekday = jsonObject.getString("weekday");
             JSONArray changes = jsonObject.getJSONArray("changes");
             FirebaseMessagingService service = this;
-            SpHolder.load(getApplicationContext(), false, new Callbacks.spLoadedCallback() {
+            SpHolder.load(getApplicationContext(), false, new Callbacks.baseLoadedCallback() {
                 @Override
                 public void onOldLoaded() {
                     try {
                         service.onSp(changes, weekday);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNoSp() {
-                    try {
-                        service.onNoSp(changes, weekday);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

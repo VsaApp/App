@@ -20,12 +20,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import de.lohl1kohl.vsaapp.Callbacks;
 import de.lohl1kohl.vsaapp.LoadingActivity;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
 import de.lohl1kohl.vsaapp.fragments.sp.LessonUtils;
 import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class StartJob extends Job {
 
@@ -42,7 +42,7 @@ public class StartJob extends Job {
     @NonNull
     @Override
     protected Result onRunJob(@NonNull Params params) {
-        Callbacks.spLoadedCallback spLoadedCallback = new Callbacks.spLoadedCallback() {
+        Callbacks.baseLoadedCallback baseLoadedCallback = new Callbacks.baseLoadedCallback() {
             @SuppressLint("WrongConstant")
             @Override
             public void onOldLoaded() {
@@ -52,6 +52,7 @@ public class StartJob extends Job {
                 editor.apply();
                 final AudioManager mode = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
                 mode.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+
 
                 Intent intent = new Intent(getContext(), LoadingActivity.class);
                 Random generator = new Random();
@@ -68,6 +69,7 @@ public class StartJob extends Job {
 
                 NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(-1, builder.build());
+
 
                 Date now = new Date();
                 Calendar cal = Calendar.getInstance();
@@ -98,13 +100,8 @@ public class StartJob extends Job {
             public void onConnectionFailed() {
 
             }
-
-            @Override
-            public void onNoSp() {
-
-            }
         };
-        SpHolder.load(getContext(), false, spLoadedCallback);
+        SpHolder.load(getContext(), false, baseLoadedCallback);
         return Result.SUCCESS;
     }
 }

@@ -5,18 +5,19 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.util.Log;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import de.lohl1kohl.vsaapp.AsyncResponse;
-import de.lohl1kohl.vsaapp.Callbacks;
-import de.lohl1kohl.vsaapp.HttpGetRequest;
+import de.lohl1kohl.vsaapp.loader.BaseLoader;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
-public class Connect implements AsyncResponse {
+public class Connect extends BaseLoader {
 
-    private Callbacks.connectCallback connectCallback;
+    static {
+        TAG = "Web";
+        url = "https://vsa.lohl1kohl.de/connect?client=%s&web=%s&grade=%s&username=%s&password=%s";
+    }
 
     private static String bytesToHexString(byte[] bytes) {
         // http://stackoverflow.com/questions/332079
@@ -31,22 +32,12 @@ public class Connect implements AsyncResponse {
         return sb.toString();
     }
 
-    @Override
-    public void processFinish(String output) {
-        if (output == null) {
-            connectCallback.onConnectionFailed();
-        } else {
-            connectCallback.onReceived(output);
-        }
-    }
-
     @SuppressLint("HardwareIds")
     private String getMyID(Context context) {
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
-    public void connect(Context context, String id, Callbacks.connectCallback c) {
-        connectCallback = c;
+    public void connect(Context context, String id, Callbacks.baseCallback c) {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String grade = sharedPref.getString("pref_grade", "-1");
@@ -65,15 +56,8 @@ public class Connect implements AsyncResponse {
             e1.printStackTrace();
         }
 
-        String url = String.format("https://vsa.lohl1kohl.de/connect?client=%s&web=%s&grade=%s&username=%s&password=%s", getMyID(context), id, grade, hashUsername, hashPassword);
-        Log.i("VsaApp/Server/Web", "Open: " + url);
+        url = String.format(url, getMyID(context), id, grade, hashUsername, hashPassword);
 
-        HttpGetRequest asyncTask = new HttpGetRequest();
-
-        //this to set delegate/listener back to this class
-        asyncTask.delegate = this;
-
-        //execute the async task
-        asyncTask.execute(url);
+        this.get(c);
     }
 }

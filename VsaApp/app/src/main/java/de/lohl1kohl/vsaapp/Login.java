@@ -3,6 +3,9 @@ package de.lohl1kohl.vsaapp;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import de.lohl1kohl.vsaapp.loader.AsyncResponse;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
+
 public class Login implements AsyncResponse {
 
     private Callbacks.credentialsCallback credentialsCallback;

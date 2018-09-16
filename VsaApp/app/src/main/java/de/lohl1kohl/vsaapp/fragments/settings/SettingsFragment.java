@@ -60,6 +60,21 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                     .setNegativeButton(R.string.cancel, null).show();
             return true;
         });
+        Preference clearCache = findPreference("pref_clear_cache");
+        clearCache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
+                sharedPref.edit().remove("pref_sums").remove("pref_cafetoria").commit();
+                Intent mStartActivity = new Intent(mActivity, LoadingActivity.class);
+                int mPendingIntentId = 123456;
+                PendingIntent mPendingIntent = PendingIntent.getActivity(mActivity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager mgr = (AlarmManager) mActivity.getSystemService(Context.ALARM_SERVICE);
+                mgr.set(AlarmManager.RTC, 0, mPendingIntent);
+                System.exit(0);
+                return true;
+            }
+        });
         Preference mutePhone = findPreference("pref_mutePhone");
         mutePhone.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -125,7 +140,7 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                     FirebaseHandler.unsubscribeAll(mActivity.getApplicationContext());
                     FirebaseHandler.subscribe(mActivity.getApplicationContext(), grades[which]);
                     new Thread(() -> SpHolder.load(mActivity, true)).start();
-                    new Thread(() -> VpHolder.load(mActivity)).start();
+                    new Thread(() -> VpHolder.load(mActivity, true)).start();
                     TextView headerName = mActivity.findViewById(R.id.header_name);
                     headerName.setText(String.format("%s - %s", mActivity.getResources().getString(R.string.app_name), grades[which]));
                 });
@@ -149,7 +164,7 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
         if (key.equals("pref_showVpOnlyForYou")) {
-            new Thread(() -> VpHolder.load(mActivity)).start();
+            new Thread(() -> VpHolder.load(mActivity, false)).start();
         }
     }
 }

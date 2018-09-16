@@ -13,46 +13,49 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import de.lohl1kohl.vsaapp.Callbacks;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class DatesHolder {
     private static List<Event> events;
     private static List<Day> calendar;
 
-    public static void load(Context context) {
-        load(context, null);
+    public static void load(Context context, boolean update) {
+        load(context, update, null);
     }
 
-    public static void load(Context context, Callbacks.datesLoadedCallback datesLoadedCallback) {
+    public static void load(Context context, boolean update, Callbacks.baseLoadedCallback datesLoadedCallback) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        // If the dates are already loaded stop process...
-        if (events != null) {
-            if (datesLoadedCallback != null) datesLoadedCallback.onOldLoaded();
-            return;
-        }
+        if (update) {
 
-        de.lohl1kohl.vsaapp.Callbacks.datesCallback datesCallback = new de.lohl1kohl.vsaapp.Callbacks.datesCallback() {
+            Callbacks.baseCallback datesCallback = new Callbacks.baseCallback() {
 
-            public void onReceived(String output) {
-                convertJson(context, output);
+                public void onReceived(String output) {
+                    convertJson(context, output);
 
-                // Save the current sp in the settings...
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString("pref_dates", output);
-                editor.apply();
+                    // Save the current sp in the settings...
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("pref_dates", output);
+                    editor.apply();
 
-                if (datesLoadedCallback != null) datesLoadedCallback.onNewLoaded();
-            }
+                    if (datesLoadedCallback != null) datesLoadedCallback.onNewLoaded();
+                }
 
-            public void onConnectionFailed() {
+                public void onConnectionFailed() {
+                    readSavedDates(context);
+                    if (datesLoadedCallback != null) datesLoadedCallback.onConnectionFailed();
+                }
+            };
+
+            // Send request to server...
+            new Dates().updateDates(datesCallback);
+        } else {
+            // If the dates are already loaded stop process...
+            if (events == null) {
                 readSavedDates(context);
-                if (datesLoadedCallback != null) datesLoadedCallback.onConnectionFailed();
+                if (datesLoadedCallback != null) datesLoadedCallback.onOldLoaded();
             }
-        };
-
-        // Send request to server...
-        new Dates().updateDates(datesCallback);
+        }
     }
 
     private static void readSavedDates(Context context) {

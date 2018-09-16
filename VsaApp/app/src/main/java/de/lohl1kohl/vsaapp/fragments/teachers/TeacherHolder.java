@@ -12,9 +12,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lohl1kohl.vsaapp.Callbacks;
-import de.lohl1kohl.vsaapp.Callbacks.teachersCallback;
 import de.lohl1kohl.vsaapp.SubjectSymbolsHolder;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class TeacherHolder {
     @SuppressLint("StaticFieldLeak")
@@ -24,7 +23,7 @@ public class TeacherHolder {
         load(context, update, null);
     }
 
-    public static void load(Context context, boolean update, Callbacks.teachersLoadedCallback teachersLoadedCallback) {
+    public static void load(Context context, boolean update, Callbacks.baseLoadedCallback teachersLoadedCallback) {
         List<Teacher> savedTeachers = getSavedTeachers(context);
         if (savedTeachers != null) {
             teachers = savedTeachers;
@@ -32,7 +31,7 @@ public class TeacherHolder {
             update = true;
         }
         if (update) {
-            teachersCallback teachersCallback = new teachersCallback() {
+            Callbacks.baseCallback teachersCallback = new Callbacks.baseCallback() {
                 @SuppressLint("CommitPrefEdits")
                 @Override
                 public void onReceived(String output) {

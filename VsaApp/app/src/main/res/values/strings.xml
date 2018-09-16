@@ -90,6 +90,8 @@
     <string name="no_changes">Keine Änderungen</string>
     <string name="preferenceSummary_lockSubjects">Im Stundenplan können keine Fächer mehr ausgewählt werden</string>
     <string name="preferenceTitle_lockSubjects">Keine Fächerwahl im Stundenplan</string>
+    <string name="preferenceSummary_clear_cache">Aktualisierung der Daten wird erzwungen</string>
+    <string name="preferenceTitle_clear_cache">Netzwerk-Cache löschen</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>

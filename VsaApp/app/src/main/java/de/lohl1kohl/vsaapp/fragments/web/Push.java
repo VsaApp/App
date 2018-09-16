@@ -3,25 +3,17 @@ package de.lohl1kohl.vsaapp.fragments.web;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.provider.Settings;
-import android.util.Log;
 
 import org.json.JSONArray;
 
-import de.lohl1kohl.vsaapp.AsyncResponse;
-import de.lohl1kohl.vsaapp.Callbacks;
-import de.lohl1kohl.vsaapp.HttpGetRequest;
+import de.lohl1kohl.vsaapp.loader.BaseLoader;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
-public class Push implements AsyncResponse {
+public class Push extends BaseLoader {
 
-    private Callbacks.pushCallback pushCallback;
-
-    @Override
-    public void processFinish(String output) {
-        if (output == null) {
-            pushCallback.onConnectionFailed();
-        } else {
-            pushCallback.onReceived(output);
-        }
+    static {
+        TAG = "Web";
+        url = "https://vsa.lohl1kohl.de/push?id=%s&choice=%s";
     }
 
     @SuppressLint("HardwareIds")
@@ -29,18 +21,8 @@ public class Push implements AsyncResponse {
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
-    public void push(Context context, JSONArray choice, Callbacks.pushCallback c) {
-        pushCallback = c;
-
-        String url = String.format("https://vsa.lohl1kohl.de/push?id=%s&choice=%s", getMyID(context), choice.toString());
-        Log.i("VsaApp/Server/Web", "Open: " + url);
-
-        HttpGetRequest asyncTask = new HttpGetRequest();
-
-        //this to set delegate/listener back to this class
-        asyncTask.delegate = this;
-
-        //execute the async task
-        asyncTask.execute(url);
+    public void push(Context context, JSONArray choice, Callbacks.baseCallback c) {
+        url = String.format(url, getMyID(context), choice.toString());
+        this.get(c);
     }
 }

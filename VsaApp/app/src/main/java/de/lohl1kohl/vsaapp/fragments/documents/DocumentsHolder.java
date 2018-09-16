@@ -12,38 +12,46 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lohl1kohl.vsaapp.Callbacks;
-import de.lohl1kohl.vsaapp.Callbacks.documentsCallback;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class DocumentsHolder {
     @SuppressLint("StaticFieldLeak")
     private static List<Document> documents = new ArrayList<>();
 
-    public static void load(Context context) {
-        load(context, null);
+    public static void load(Context context, boolean update) {
+        load(context, update, null);
     }
 
-    public static void load(Context context, Callbacks.documentsLoadedCallback documentsLoadedCallback) {
+    public static void load(Context context, boolean update, Callbacks.baseLoadedCallback documentsLoadedCallback) {
         List<Document> savedDocuments = getSavedDocuments(context);
-        if (savedDocuments != null) {
-            documents = savedDocuments;
-            if (documentsLoadedCallback != null) documentsLoadedCallback.onOldLoaded();
-        }
-        documentsCallback documentsCallback = new documentsCallback() {
-            @SuppressLint("CommitPrefEdits")
-            @Override
-            public void onReceived(String output) {
-                DocumentsHolder.documents = convertJsonToArray(output);
-                if (documentsLoadedCallback != null) documentsLoadedCallback.onNewLoaded();
-            }
 
-            @Override
-            public void onConnectionFailed() {
-                if (documentsLoadedCallback != null)
-                    documentsLoadedCallback.onConnectionFailed();
+        if (update) {
+            Callbacks.baseCallback documentsCallback = new Callbacks.baseCallback() {
+                @SuppressLint("CommitPrefEdits")
+                @Override
+                public void onReceived(String output) {
+                    DocumentsHolder.documents = convertJsonToArray(output);
+                    if (documentsLoadedCallback != null) documentsLoadedCallback.onNewLoaded();
+                }
+
+                @Override
+                public void onConnectionFailed() {
+                    if (savedDocuments != null) {
+                        documents = savedDocuments;
+                    }
+
+                    if (documentsLoadedCallback != null)
+                        documentsLoadedCallback.onConnectionFailed();
+                }
+            };
+            new Documents().getDocuments(documentsCallback);
+        } else {
+            if (savedDocuments != null) {
+                documents = savedDocuments;
             }
-        };
-        new Documents().getDocuments(documentsCallback);
+            if (documentsLoadedCallback != null)
+                documentsLoadedCallback.onOldLoaded();
+        }
     }
 
     public static List<Document> searchDocuments(String str) {
