@@ -23,6 +23,8 @@ public class CafetoriaHolder {
     public static void load(Context context, String id, String password, Callbacks.baseLoadedCallback cafetoriaLoadedCallback) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
+        days = getSavedDays(context);
+
         Callbacks.baseCallback cafetoriaCallback = new Callbacks.baseCallback() {
 
             public void onReceived(String output) {
