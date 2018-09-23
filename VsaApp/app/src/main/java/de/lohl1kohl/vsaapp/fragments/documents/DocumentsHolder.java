@@ -23,6 +23,7 @@ public class DocumentsHolder {
     }
 
     public static void load(Context context, boolean update, Callbacks.baseLoadedCallback documentsLoadedCallback) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         List<Document> savedDocuments = getSavedDocuments(context);
 
         if (update) {
@@ -31,6 +32,9 @@ public class DocumentsHolder {
                 @Override
                 public void onReceived(String output) {
                     DocumentsHolder.documents = convertJsonToArray(output);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("pref_documents", output);
+                    editor.apply();
                     if (documentsLoadedCallback != null) documentsLoadedCallback.onNewLoaded();
                 }
 
