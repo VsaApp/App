@@ -2,34 +2,21 @@ package de.lohl1kohl.vsaapp.fragments.cafetoria;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
 import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaHolder.Day;
 import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaHolder.Menu;
-import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaHolder.Extra;
-import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaHolder.Snack;
 
 public class CafetoriaDayFragment extends BaseFragment {
 
@@ -99,8 +86,10 @@ public class CafetoriaDayFragment extends BaseFragment {
 
         topicHolder.menu.setText(menu.food);
         topicHolder.price.setText(String.format(Locale.GERMAN, "%1$,.2f€", menu.price));
-        if (!menu.startTime.equals("") && !menu.endTime.equals("")) topicHolder.time.setText(String.format(getString(R.string.cafetoriaTime), menu.startTime, menu.endTime));
-        else if (!menu.startTime.equals("") && menu.endTime.equals("")) topicHolder.time.setText(String.format(getString(R.string.cafetoriaStartTime), menu.startTime));
+        if (!menu.startTime.equals("") && !menu.endTime.equals(""))
+            topicHolder.time.setText(String.format(getString(R.string.cafetoriaTime), menu.startTime, menu.endTime));
+        else if (!menu.startTime.equals("") && menu.endTime.equals(""))
+            topicHolder.time.setText(String.format(getString(R.string.cafetoriaStartTime), menu.startTime));
         else {
             topicHolder.time.setVisibility(View.GONE);
         }

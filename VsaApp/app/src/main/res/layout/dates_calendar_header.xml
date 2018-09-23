@@ -5,14 +5,14 @@
     android:layout_height="wrap_content"
     android:background="@color/calendarBorder"
     android:orientation="vertical"
-    android:paddingRight="1px"
-    android:paddingEnd="1px">
+    android:paddingEnd="1px"
+    android:paddingRight="1px">
 
     <TextView
         android:id="@+id/weekday_short"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:background="@color/calendarHeader"/>
+        android:background="@color/calendarHeader"
+        android:gravity="center" />
 
 </LinearLayout>

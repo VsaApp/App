@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
@@ -182,7 +181,7 @@ public class DatesCalendarMonthFragment extends BaseFragment {
 
         List<Event> events = day.getEvents();
 
-        if (day.day == today.get(Calendar.DAY_OF_MONTH) && day.month == today.get(Calendar.MONTH) && day.year == today.get(Calendar.YEAR)){
+        if (day.day == today.get(Calendar.DAY_OF_MONTH) && day.month == today.get(Calendar.MONTH) && day.year == today.get(Calendar.YEAR)) {
             RelativeLayout layout = convertView.findViewById(R.id.dates_calendar_item_layout);
             layout.setBackgroundColor(getResources().getColor(R.color.today));
             dayOfMonthInListView.setTextColor(getResources().getColor(R.color.today));
@@ -194,10 +193,9 @@ public class DatesCalendarMonthFragment extends BaseFragment {
         } else if (month != day.month) {
             rl.setBackgroundColor(getResources().getColor(R.color.calendarItemOtherMonth));
         } else {
-            if (day.day == today.get(Calendar.DAY_OF_MONTH) && day.month == today.get(Calendar.MONTH) && day.year == today.get(Calendar.YEAR)){
+            if (day.day == today.get(Calendar.DAY_OF_MONTH) && day.month == today.get(Calendar.MONTH) && day.year == today.get(Calendar.YEAR)) {
                 rl.setBackgroundColor(getResources().getColor(R.color.todayBackground));
-            }
-            else rl.setBackgroundColor(getResources().getColor(R.color.calendarItem));
+            } else rl.setBackgroundColor(getResources().getColor(R.color.calendarItem));
         }
 
         return convertView;

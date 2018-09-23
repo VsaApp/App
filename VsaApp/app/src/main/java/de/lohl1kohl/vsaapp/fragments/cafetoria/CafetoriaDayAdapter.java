@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.fragments.sp.SpDayFragment;
 
 public class CafetoriaDayAdapter extends FragmentStatePagerAdapter {
 

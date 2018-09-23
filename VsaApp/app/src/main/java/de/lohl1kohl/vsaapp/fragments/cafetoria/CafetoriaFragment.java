@@ -14,7 +14,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,11 +24,11 @@ import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
 import de.lohl1kohl.vsaapp.fragments.sp.LessonUtils;
-import de.lohl1kohl.vsaapp.fragments.sp.SpDayAdapter;
 import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
@@ -52,7 +53,15 @@ public class CafetoriaFragment extends BaseFragment {
     void displayMenues() {
         Log.i("cafetoria", String.valueOf(CafetoriaHolder.days));
 
+        RelativeLayout progressView = cafetoriaView.findViewById(R.id.cafetoria_loading_widget);
+        ProgressBar progressBar = cafetoriaView.findViewById(R.id.cafetoria_loading_progress);
+        progressView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+
         mActivity.runOnUiThread(() -> {
+            TextView saldo = cafetoriaView.findViewById(R.id.cafetoria_saldo);
+            mActivity.runOnUiThread(() -> saldo.setText(String.format(Locale.GERMAN, getString(R.string.cafetoriaSaldo), CafetoriaHolder.saldo)));
+
             ViewPager pager = cafetoriaView.findViewById(R.id.cafetoria_viewpager);
             CafetoriaDayAdapter adapter = new CafetoriaDayAdapter(mActivity, getFragmentManager());
             pager.setAdapter(adapter);
@@ -78,6 +87,11 @@ public class CafetoriaFragment extends BaseFragment {
     }
 
     void loadMenues() {
+        RelativeLayout progressView = cafetoriaView.findViewById(R.id.cafetoria_loading_widget);
+        ProgressBar progressBar = cafetoriaView.findViewById(R.id.cafetoria_loading_progress);
+        progressView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
         Callbacks.baseLoadedCallback cafetoriaLoadedCallback = new Callbacks.baseLoadedCallback() {
             @Override

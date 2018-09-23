@@ -97,6 +97,7 @@
     <string name="cafetoriaSnacks">Snacks</string>
     <string name="cafetoriaTime">%s - %s Uhr</string>
     <string name="cafetoriaStartTime">%s Uhr</string>
+    <string name="cafetoriaSaldo">Saldo: %1$,.2f€</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>

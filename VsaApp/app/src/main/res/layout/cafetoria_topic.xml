@@ -7,10 +7,10 @@
         android:id="@+id/cafetoria_topic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
         android:background="@drawable/cafetoria_header"
         android:gravity="center"
-        android:textColor="@android:color/white"/>
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

@@ -18,13 +18,10 @@ import de.lohl1kohl.vsaapp.loader.Callbacks;
 public class CafetoriaHolder {
 
     public static List<Day> days = new ArrayList<>();
+    public static Double saldo;
 
     public static void load(Context context, String id, String password, Callbacks.baseLoadedCallback cafetoriaLoadedCallback) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-
-        // Show the old days first (for a faster reaction time)...
-        days = getSavedDays(context);
-        if (cafetoriaLoadedCallback != null) cafetoriaLoadedCallback.onOldLoaded();
 
         Callbacks.baseCallback cafetoriaCallback = new Callbacks.baseCallback() {
 
@@ -66,6 +63,7 @@ public class CafetoriaHolder {
         Log.i("array", array);
         List<Day> days = new ArrayList<>();
         try {
+            saldo = new JSONObject(array).getDouble("saldo");
             JSONArray jsonArray = new JSONObject(array).getJSONArray("menues");
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -97,7 +95,7 @@ public class CafetoriaHolder {
         return days;
     }
 
-    public static Day getDay(int day){
+    public static Day getDay(int day) {
         return days.get(day);
     }
 

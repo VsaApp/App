@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/cafetoria_menus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="false"
-        android:orientation="vertical"
-        android:paddingBottom="20dp" />
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/cafetoria_extras"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="false"
-        android:orientation="vertical"
-        android:paddingBottom="20dp"
-        android:gravity="center"/>
+        <LinearLayout
+            android:id="@+id/cafetoria_menus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="false"
+            android:orientation="vertical"
+            android:paddingBottom="20dp" />
 
-    <LinearLayout
-        android:id="@+id/cafetoria_snacks"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="false"
-        android:orientation="vertical"
-        android:paddingBottom="20dp"
-        android:gravity="center"/>
+        <LinearLayout
+            android:id="@+id/cafetoria_extras"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="false"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="20dp" />
 
-</LinearLayout>
+        <LinearLayout
+            android:id="@+id/cafetoria_snacks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="false"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="20dp" />
+
+    </LinearLayout>
+
+</ScrollView>
