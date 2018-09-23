@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_home) displayView(R.id.nav_sp);
         return item.getItemId() == R.id.action_home || super.onOptionsItemSelected(item);
     }
 
