@@ -97,6 +97,10 @@ public class CafetoriaHolder {
         return days;
     }
 
+    public static Day getDay(int day){
+        return days.get(day);
+    }
+
     public static class Menu {
         public String food;
         public double price;

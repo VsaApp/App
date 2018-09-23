@@ -92,6 +92,11 @@
     <string name="preferenceTitle_lockSubjects">Keine Fächerwahl im Stundenplan</string>
     <string name="preferenceSummary_clear_cache">Aktualisierung der Daten wird erzwungen</string>
     <string name="preferenceTitle_clear_cache">Netzwerk-Cache löschen</string>
+    <string name="cafetoriaExtra">Extras</string>
+    <string name="cafetoriaMenus">Menüs</string>
+    <string name="cafetoriaSnacks">Snacks</string>
+    <string name="cafetoriaTime">%s - %s Uhr</string>
+    <string name="cafetoriaStartTime">%s Uhr</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>
