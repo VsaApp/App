@@ -108,6 +108,10 @@ public class SpHolder {
                             lesson.readSavedSubject(context);
                         }
                     }
+                    if (unit == 6 || unit == 7) {
+                        lesson.addSubject(new Subject(weekday, unit, context.getString(R.string.lesson_free), "-", "-"));
+                        lesson.readSavedSubject(context);
+                    }
                 }
             }
         }

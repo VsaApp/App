@@ -154,6 +154,7 @@
         <item>VE:Vertiefung Englisch</item>
         <item>FF:Französisch Förder</item>
         <item>LF:Latein Förder</item>
+        <item>PJ:Projektkurs</item>
     </string-array>
 
     <string-array name="weekdays">
