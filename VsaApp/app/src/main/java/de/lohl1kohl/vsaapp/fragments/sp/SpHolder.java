@@ -79,6 +79,7 @@ public class SpHolder {
 
     @Nullable
     private static List<List<Lesson>> convertJsonToArray(Context context, String array) {
+        List<List<Lesson>> globalSp = sp;
         List<List<Lesson>> sp = new ArrayList<>();
         try {
             JSONArray jsonArray = new JSONArray(array);
@@ -115,6 +116,8 @@ public class SpHolder {
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("VsaApp/SpHolder", "Cannot convert JSONarray!");
+            // Only to fix the bug in 1.1.2 (later, this can be deleted!!!)...
+            if (globalSp == null) load(context, true);
             return sp;
         }
 
