@@ -92,7 +92,7 @@ public class CafetoriaHolder {
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("VsaApp/CafetoriaHolder", "Cannot convert JSONarray!");
-            return null;
+            return days;
         }
         return days;
     }

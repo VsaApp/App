@@ -68,6 +68,8 @@
     <string name="scan">Scannen</string>
     <string name="scan_instruction">Öffne https://vsa.lohl1kohl.de in einem Browser und scanne den QR-Code</string>
     <string name="ags">AGs</string>
+    <string name="ag_room">In Raum: %s</string>
+    <string name="ag_grade">Für Klassen: %s</string>
     <string name="write_email">Eine Email schreiben</string>
     <string name="shortName">Kürzel:</string>
     <string name="subjects">Fächer:</string>
@@ -98,6 +100,7 @@
     <string name="cafetoriaTime">%s - %s Uhr</string>
     <string name="cafetoriaStartTime">%s Uhr</string>
     <string name="cafetoriaSaldo">Saldo: %1$,.2f€</string>
+    <string name="convertingFailed">Fehler beim konvertieren vom %s</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>

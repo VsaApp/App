@@ -160,7 +160,7 @@ public class VpHolder {
             }
 
         } catch (JSONException e) {
-            Log.i("VsaApp/SpFragment", "Cannot convert output to array!");
+            Log.e("VsaApp/VpHolder", "Cannot convert output to array!");
         }
 
         return subjects;

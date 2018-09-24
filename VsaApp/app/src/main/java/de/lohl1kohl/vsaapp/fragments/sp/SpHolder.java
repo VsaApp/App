@@ -115,7 +115,7 @@ public class SpHolder {
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("VsaApp/SpHolder", "Cannot convert JSONarray!");
-            return null;
+            return sp;
         }
 
         return sp;

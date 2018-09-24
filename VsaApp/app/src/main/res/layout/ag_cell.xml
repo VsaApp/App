@@ -1,61 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_centerHorizontal="true"
-    android:padding="10dp">
+    android:paddingTop="10dp"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/ag_cell_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
 
     <TextView
-        android:id="@+id/ag_cell_weekday"
-        android:layout_width="wrap_content"
+        android:id="@+id/ag_cell_grade"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ag_cell_name"
-        android:layout_centerHorizontal="true"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/ag_cell_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ag_cell_weekday"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/ag_cell_room"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:textSize="18sp"
-        tools:ignore="RelativeOverlap" />
+        android:gravity="center"/>
 
     <TextView
-        android:id="@+id/ag_cell_grades"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textSize="18sp" />
-
-    <include
-        android:id="@+id/line"
-        layout="@layout/line"
+        android:id="@+id/ag_cell_time"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:textSize="18sp"
+        android:gravity="center"/>
 
-</RelativeLayout>
+</LinearLayout>

@@ -3,53 +3,63 @@ package de.lohl1kohl.vsaapp.fragments.ags;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
+import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaDayAdapter;
+import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaHolder;
+import de.lohl1kohl.vsaapp.fragments.sp.LessonUtils;
+import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
 
 
 public class AGsFragment extends BaseFragment {
     @SuppressLint("StaticFieldLeak")
-    private static LinearLayout list;
     private LayoutInflater inflater;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.inflater = inflater;
         View root = inflater.inflate(R.layout.fragment_ags, container, false);
-        list = root.findViewById(R.id.agsList);
-        listAGs();
+        createView(root);
         return root;
     }
 
-    @SuppressLint("InflateParams")
-    public void listAGs() {
-        mActivity.runOnUiThread(list::removeAllViews);
-        for (AGsHolder.AG ag : AGsHolder.getFilteredAGs(mActivity)) {
-            View view = inflater.inflate(R.layout.ag_cell, null);
-            TextView weekday = view.findViewById(R.id.ag_cell_weekday);
-            TextView name = view.findViewById(R.id.ag_cell_name);
-            TextView time = view.findViewById(R.id.ag_cell_time);
-            TextView room = view.findViewById(R.id.ag_cell_room);
-            TextView grades = view.findViewById(R.id.ag_cell_grades);
-            weekday.setText(ag.weekday);
-            name.setText(ag.name);
-            time.setText(ag.time);
-            room.setText(ag.room);
-            grades.setText(ag.grades);
-            mActivity.runOnUiThread(() -> list.addView(view));
-        }
+    public void createView(View root){
         mActivity.runOnUiThread(() -> {
+
+            ViewPager pager = root.findViewById(R.id.ags_viewpager);
+            AGsDayAdapter adapter = new AGsDayAdapter(mActivity, getFragmentManager());
+            pager.setAdapter(adapter);
+            TabLayout tabLayout = root.findViewById(R.id.ags_tabs);
+            tabLayout.setupWithViewPager(pager);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
             try {
-                list.getChildAt(list.getChildCount() - 1).findViewById(R.id.line).setVisibility(View.GONE);
-            } catch (NullPointerException ignored) {
+                if (weekday == -1 | weekday == 5) weekday = 0;
+                else if (LessonUtils.isLessonPassed(SpHolder.getNumberOfLessons(weekday) - 1))
+                    weekday++;
+                TabLayout.Tab tab = tabLayout.getTabAt(weekday);
+                try {
+                    tab.select();
+                } catch (Exception ignored) {
+
+                }
+            } catch (IndexOutOfBoundsException ignored) {
 
             }
         });
+
     }
 }

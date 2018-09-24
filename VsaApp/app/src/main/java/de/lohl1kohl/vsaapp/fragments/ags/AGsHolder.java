@@ -14,10 +14,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class AGsHolder {
 
+    private static List<ArrayList<AG>> days = new ArrayList<>();
     private static List<AG> ags = new ArrayList<>();
 
 
@@ -51,6 +53,8 @@ public class AGsHolder {
             ags = getSavedAGs(context);
             if (agsLoadedCallback != null) agsLoadedCallback.onOldLoaded();
         }
+
+        fillDays(context);
     }
 
     @Nullable
@@ -79,9 +83,23 @@ public class AGsHolder {
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("VsaApp/AGsHolder", "Cannot convert JSONarray!");
-            return null;
+            return ags;
         }
         return ags;
+    }
+
+    private static void fillDays(Context context){
+        ArrayList weekdays = new ArrayList<>(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)));
+        for (int i = 0; i < 5; i++){
+            days.add(new ArrayList<>());
+        }
+        for (int i = 0; i < ags.size(); i++){
+            days.get(weekdays.indexOf(ags.get(i).weekday)).add(ags.get(i));
+        }
+    }
+
+    public static ArrayList<AG> getDay(int day){
+        return days.get(day);
     }
 
     public static List<AG> getFilteredAGs(Context context) {
