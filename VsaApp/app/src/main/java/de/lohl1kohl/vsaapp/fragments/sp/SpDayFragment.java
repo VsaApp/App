@@ -45,44 +45,13 @@ public class SpDayFragment extends BaseFragment {
         View root = inflater.inflate(R.layout.sp_day, container, false);
         new Thread(() -> {
             try {
-                List<Lesson> spDay = SpHolder.getDay(day);
+                // Get preferences...
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
+                List<Lesson> spDay;
+                if (sharedPref.getBoolean("pref_lockSubjects", false)) spDay = SpHolder.getDay(day);
+                else spDay = SpHolder.getUntrimmedDay(day);
                 String weekday = Arrays.asList(root.getResources().getStringArray(R.array.weekdays)).get(day);
                 LinearLayout ll = root.findViewById(R.id.sp_day);
-
-                // Ignore the last free lessons...
-                for (int i = spDay.size() - 1; i >= 0; i--) {
-                    if (spDay.get(i).numberOfSubjects() > 0) break;
-                    else spDay.remove(i);
-                }
-
-                // If the grade is EF, Q1 or Q2 add the option for a free lesson...
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
-                String grade = sharedPref.getString("pref_grade", "-1").toUpperCase();
-
-                if (!spDay.get(0).containsSubject(getString(R.string.lesson_free))) {
-                    if (grade.equals("EF") | grade.equals("Q1") | grade.equals("Q2")) {
-                        for (int unit = 0; unit < spDay.size(); unit++) {
-                            Lesson lesson = spDay.get(unit);
-                            if (unit == 5) continue;
-                            lesson.addSubject(new Subject(weekday, unit, getString(R.string.lesson_free), "-", "-"));
-                            lesson.readSavedSubject(mActivity);
-                        }
-                    }
-                }
-                if (!grade.equals("EF") && !grade.equals("Q1") && !grade.equals("Q2")) {
-                    for (int unit = 0; unit < spDay.size(); unit++) {
-                        Lesson lesson = spDay.get(unit);
-                        if (unit == 5) continue;
-                        if (lesson.containsSubject(getString(R.string.lesson_tandem))) continue;
-                        if (lesson.numberOfSubjects() >= 2) {
-                            if (lesson.getSubject(0).getName().equals(getString(R.string.lesson_french)) || lesson.getSubject(0).getName().equals(getString(R.string.lesson_latin))) {
-                                // Add the tandem lesson...
-                                lesson.addSubject(new Subject(weekday, unit, getString(R.string.lesson_tandem), getString(R.string.lesson_french), getString(R.string.lesson_latin)));
-                                lesson.readSavedSubject(mActivity);
-                            }
-                        }
-                    }
-                }
 
                 LayoutInflater layoutinflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -111,10 +80,10 @@ public class SpDayFragment extends BaseFragment {
         listViewHolder.relativeLayout = convertView.findViewById(R.id.sp_rl);
         convertView.setTag(listViewHolder);
 
+        Boolean lock = sharedPref.getBoolean("pref_lockSubjects", false);
+
         // Get the current lesson...
         Lesson lesson = spDay.get(position);
-
-        Boolean lock = sharedPref.getBoolean("pref_lockSubjects", false);
 
         // Set the buttons...
         if (lesson.numberOfSubjects() <= 1 || lock) {

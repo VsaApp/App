@@ -345,7 +345,7 @@ public class LoadingActivity extends AppCompatActivity {
                             checkFinish();
                         }
                     };
-                    SpHolder.sp = new ArrayList<>();
+                    SpHolder.clearSp();
                     SpHolder.load(this, update, baseLoadedCallback);
                     break;
                 case "vp/today":

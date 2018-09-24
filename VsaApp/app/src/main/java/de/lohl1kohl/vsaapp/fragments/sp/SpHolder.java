@@ -24,7 +24,8 @@ public class SpHolder {
     public static final int THURSDAY = 3;
     public static final int FRIDAY = 4;
 
-    public static List<List<Lesson>> sp;
+    private static List<List<Lesson>> untrimmedSp;
+    private static List<List<Lesson>> sp;
 
     public static void load(Context context, boolean update) {
         load(context, update, null);
@@ -62,7 +63,70 @@ public class SpHolder {
             sp = getSavedSp(context);
             if (baseLoadedCallback != null) baseLoadedCallback.onOldLoaded();
         }
+        // Add lessons and trim days...
+        addSpecialLessons(context);
+        untrimmedSp = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            untrimmedSp.add(new ArrayList<>());
+            untrimmedSp.get(i).addAll(sp.get(i));
+        }
+        ignoreLastFreeLessons(context);
+    }
 
+    public static void clearSp(){
+        sp = new ArrayList<>();
+    }
+
+    private static void addSpecialLessons(Context context){
+        // Get preferences...
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        String grade = sharedPref.getString("pref_grade", "-1").toUpperCase();
+        List<String> weekdays = Arrays.asList(context.getResources().getStringArray(R.array.weekdays));
+
+        for (int i = 0; i < 5; i++) {
+            List<Lesson> spDay = sp.get(i);
+            String weekday = weekdays.get(i);
+            if (!spDay.get(0).containsSubject(context.getString(R.string.lesson_free))) {
+                if (grade.equals("EF") | grade.equals("Q1") | grade.equals("Q2")) {
+                    for (int unit = 0; unit < spDay.size(); unit++) {
+                        Lesson lesson = spDay.get(unit);
+                        if (unit == 5) continue;
+                        lesson.addSubject(new Subject(weekday, unit, context.getString(R.string.lesson_free), "-", "-"));
+                        lesson.readSavedSubject(context);
+                    }
+                }
+            }
+            if (!grade.equals("EF") && !grade.equals("Q1") && !grade.equals("Q2")) {
+                for (int unit = 0; unit < spDay.size(); unit++) {
+                    Lesson lesson = spDay.get(unit);
+                    if (unit == 5) continue;
+                    if (lesson.containsSubject(context.getString(R.string.lesson_tandem))) continue;
+                    if (lesson.numberOfSubjects() >= 2) {
+                        if (lesson.getSubject(0).getName().equals(context.getString(R.string.lesson_french)) || lesson.getSubject(0).getName().equals(context.getString(R.string.lesson_latin))) {
+                            // Add the tandem lesson...
+                            lesson.addSubject(new Subject(weekday, unit, context.getString(R.string.lesson_tandem), context.getString(R.string.lesson_french), context.getString(R.string.lesson_latin)));
+                            lesson.readSavedSubject(context);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void ignoreLastFreeLessons(Context context){
+        // Get preferences...
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        String grade = sharedPref.getString("pref_grade", "-1").toUpperCase();
+
+        for (int i = 0; i < 5; i++) {
+            List<Lesson> spDay = sp.get(i);
+            // Ignore the last free lessons...
+            for (int j = spDay.size() - 1; j >= 0; j--) {
+                if (spDay.get(j).numberOfSubjects() > 0 && !spDay.get(j).getSubject().name.equals(context.getString(R.string.lesson_free))) break;
+                else if (spDay.get(j).numberOfSubjects() == 0) spDay.remove(j);
+                else if (spDay.get(j).getSubject().name.equals(context.getString(R.string.lesson_free))) spDay.remove(j);
+            }
+        }
     }
 
     @Nullable
@@ -130,6 +194,10 @@ public class SpHolder {
 
     public static List<Lesson> getDay(int day) {
         return sp.get(day);
+    }
+
+    public static List<Lesson> getUntrimmedDay(int day){
+        return untrimmedSp.get(day);
     }
 
     public static int getNumberOfLessons(int weekday) {
