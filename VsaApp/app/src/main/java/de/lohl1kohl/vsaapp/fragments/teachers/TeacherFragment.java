@@ -33,6 +33,8 @@ public class TeacherFragment extends BaseFragment {
     @SuppressLint({"SetTextI18n", "InflateParams"})
     private void listTeachers(List<Teacher> teachers) {
         List<View> views = new ArrayList<>();
+        int viewCount = 0;
+        mActivity.runOnUiThread(() -> list.removeAllViews());
         for (Teacher teacher : teachers) {
             View v = LayoutInflater.from(mActivity).inflate(R.layout.teacher_item, null);
             ((TextView) v.findViewById(R.id.teacherLongName)).setText(teacher.getGenderizedName());
@@ -67,17 +69,12 @@ public class TeacherFragment extends BaseFragment {
                 teacherDialog.show();
                 teacherDialog.getWindow().setAttributes(lWindowParams);
             });
-            views.add(v);
+            mActivity.runOnUiThread(() -> list.addView(v));
+            viewCount++;
         }
-        if (views.size() == 0) {
-            views.add(LayoutInflater.from(mActivity).inflate(R.layout.no_teacher, null));
+        if (viewCount == 0) {
+            mActivity.runOnUiThread(() -> list.addView(LayoutInflater.from(mActivity).inflate(R.layout.no_teacher, null)));
         }
-        mActivity.runOnUiThread(() -> {
-            list.removeAllViews();
-            for (View v : views) {
-                list.addView(v);
-            }
-        });
     }
 
     @Override

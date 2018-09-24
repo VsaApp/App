@@ -29,29 +29,21 @@ public class DocumentsFragment extends BaseFragment {
 
     @SuppressLint({"SetTextI18n", "InflateParams"})
     private void listDocuments(List<Document> documents) {
-        List<View> views = new ArrayList<>();
+        int viewsCount = 0;
+        mActivity.runOnUiThread(() -> list.removeAllViews());
         for (Document document : documents) {
             View v = LayoutInflater.from(mActivity).inflate(R.layout.document_item, null);
             ((TextView) v.findViewById(R.id.documentText)).setText(document.getText());
             ((TextView) v.findViewById(R.id.documentGroupName)).setText(document.getGroupName());
             Uri uri = Uri.parse("https://docs.google.com/viewer?url=" + URLEncoder.encode(document.getUrl()));
             v.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW, uri)));
-            views.add(v);
+            mActivity.runOnUiThread(() -> list.addView(v));
+            viewsCount++;
         }
-        if (views.size() == 0) {
-            views.add(LayoutInflater.from(mActivity).inflate(R.layout.no_document, null));
+        if (viewsCount == 0) {
+            mActivity.runOnUiThread(() -> list.addView(LayoutInflater.from(mActivity).inflate(R.layout.no_document, null)));
         }
-        mActivity.runOnUiThread(() -> {
-            list.removeAllViews();
-            try {
-                views.get(views.size() - 1).findViewById(R.id.line).setVisibility(View.GONE);
-                for (View v : views) {
-                    list.addView(v);
-                }
-            } catch (NullPointerException ignored) {
 
-            }
-        });
     }
 
     @Override
