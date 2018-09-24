@@ -26,7 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lohl1kohl.vsaapp.MainActivity;
+import de.lohl1kohl.vsaapp.LoadingActivity;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.StringUtils;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
@@ -68,7 +68,7 @@ public class WebFragment extends BaseFragment {
 
             @Override
             public void onConnectionFailed() {
-                ((MainActivity) context).runOnUiThread(() -> Toast.makeText(context, R.string.no_connection, Toast.LENGTH_LONG).show());
+                ((LoadingActivity) context).runOnUiThread(() -> Toast.makeText(context, R.string.no_connection, Toast.LENGTH_LONG).show());
             }
         };
         new Push().push(context, jsonArray, pushCallback);
