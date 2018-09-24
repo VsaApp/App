@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,17 +43,39 @@ public class SpHolder {
                 public void onReceived(String output) {
                     sp = convertJsonToArray(context, output);
 
-                    // Save the current sp in the settings...
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("pref_sp_" + grade, output);
-                    editor.apply();
+                    if (sp.size() > 0) {
+                        // Save the current sp in the settings...
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("pref_sp_" + grade, output);
+                        editor.apply();
 
-                    if (baseLoadedCallback != null) baseLoadedCallback.onNewLoaded();
+                        if (baseLoadedCallback != null) baseLoadedCallback.onNewLoaded();
+                    }
+                    else {
+                        Toast.makeText(context, String.format(context.getString(R.string.convertingFailed), "SP"), Toast.LENGTH_SHORT).show();
+                        if (baseLoadedCallback != null) baseLoadedCallback.onOldLoaded();
+                    }
+                    // Add lessons and trim days...
+                    addSpecialLessons(context);
+                    untrimmedSp = new ArrayList<>();
+                    for (int i = 0; i < 5; i++) {
+                        untrimmedSp.add(new ArrayList<>());
+                        untrimmedSp.get(i).addAll(sp.get(i));
+                    }
+                    ignoreLastFreeLessons(context);
                 }
 
                 @Override
                 public void onConnectionFailed() {
                     sp = getSavedSp(context);
+                    // Add lessons and trim days...
+                    addSpecialLessons(context);
+                    untrimmedSp = new ArrayList<>();
+                    for (int i = 0; i < 5; i++) {
+                        untrimmedSp.add(new ArrayList<>());
+                        untrimmedSp.get(i).addAll(sp.get(i));
+                    }
+                    ignoreLastFreeLessons(context);
                     if (baseLoadedCallback != null) baseLoadedCallback.onConnectionFailed();
                 }
             };
@@ -61,16 +84,16 @@ public class SpHolder {
             new Sp().updateSp(grade, spCallback);
         } else {
             sp = getSavedSp(context);
+            // Add lessons and trim days...
+            addSpecialLessons(context);
+            untrimmedSp = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+                untrimmedSp.add(new ArrayList<>());
+                untrimmedSp.get(i).addAll(sp.get(i));
+            }
+            ignoreLastFreeLessons(context);
             if (baseLoadedCallback != null) baseLoadedCallback.onOldLoaded();
         }
-        // Add lessons and trim days...
-        addSpecialLessons(context);
-        untrimmedSp = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            untrimmedSp.add(new ArrayList<>());
-            untrimmedSp.get(i).addAll(sp.get(i));
-        }
-        ignoreLastFreeLessons(context);
     }
 
     public static void clearSp(){
@@ -133,7 +156,6 @@ public class SpHolder {
         }
     }
 
-    @Nullable
     private static List<List<Lesson>> getSavedSp(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String grade = sharedPref.getString("pref_grade", "-1");
@@ -145,7 +167,6 @@ public class SpHolder {
         return convertJsonToArray(context, savedSP);
     }
 
-    @Nullable
     private static List<List<Lesson>> convertJsonToArray(Context context, String array) {
         List<List<Lesson>> globalSp = sp;
         List<List<Lesson>> sp = new ArrayList<>();
@@ -184,7 +205,7 @@ public class SpHolder {
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("VsaApp/SpHolder", "Cannot convert JSONarray!");
-            // Only to fix the bug in 1.1.2 (later, this can be deleted!!!)...
+            // Only to fix the bug in 1.1.8 (later, this can be deleted!!!)...
             if (globalSp == null) load(context, true);
             return sp;
         }

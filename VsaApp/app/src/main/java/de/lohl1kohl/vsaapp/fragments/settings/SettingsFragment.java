@@ -14,17 +14,24 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.evernote.android.job.JobManager;
+
+import org.json.JSONException;
 
 import de.lohl1kohl.vsaapp.FirebaseHandler;
 import de.lohl1kohl.vsaapp.LoadingActivity;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BasePreferenceFragment;
 import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
+import de.lohl1kohl.vsaapp.fragments.vp.VpFragment;
 import de.lohl1kohl.vsaapp.fragments.vp.VpHolder;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
+
+import static de.lohl1kohl.vsaapp.fragments.web.WebFragment.pushChoices;
 
 public class SettingsFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -139,8 +146,7 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                     // Update sp, vp and firebase...
                     FirebaseHandler.unsubscribeAll(mActivity.getApplicationContext());
                     FirebaseHandler.subscribe(mActivity.getApplicationContext(), grades[which]);
-                    new Thread(() -> SpHolder.load(mActivity, true)).start();
-                    new Thread(() -> VpHolder.load(mActivity, true)).start();
+                    new Thread(this::reloadData).start();
                     TextView headerName = mActivity.findViewById(R.id.header_name);
                     headerName.setText(String.format("%s - %s", mActivity.getResources().getString(R.string.app_name), grades[which]));
                 });
@@ -157,6 +163,63 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
             }
             return true;
         });
+    }
+
+    private void reloadData(){
+        Callbacks.baseLoadedCallback vpLoadedCallback = new Callbacks.baseLoadedCallback() {
+            @Override
+            public void onOldLoaded() {
+                if (mActivity.getIntent().getStringExtra("day") != null) {
+                    VpFragment.selectDay(mActivity.getIntent().getStringExtra("day"));
+                }
+                Log.d("VsaApp/LoadingActivity", "VpHolder loaded");
+            }
+
+            @Override
+            public void onNewLoaded() {
+                SpHolder.load(mActivity, false);
+                if (mActivity.getIntent().getStringExtra("day") != null) {
+                    VpFragment.selectDay(mActivity.getIntent().getStringExtra("day"));
+                }
+                try {
+                    pushChoices(mActivity);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d("VsaApp/LoadingActivity", "VpHolder loaded");
+            }
+
+            @Override
+            public void onConnectionFailed() {
+                if (mActivity.getIntent().getStringExtra("day") != null) {
+                    VpFragment.selectDay(mActivity.getIntent().getStringExtra("day"));
+                }
+                Log.d("VsaApp/LoadingActivity", "VpHolder loaded");
+            }
+        };
+
+        Callbacks.baseLoadedCallback baseLoadedCallback = new Callbacks.baseLoadedCallback() {
+            @Override
+            public void onOldLoaded() {
+                new Thread(() -> VpHolder.load(mActivity, true, vpLoadedCallback)).start();
+                Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
+            }
+
+            @Override
+            public void onNewLoaded() {
+                new Thread(() -> VpHolder.load(mActivity, true, vpLoadedCallback)).start();
+                Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
+            }
+
+            @Override
+            public void onConnectionFailed() {
+                new Thread(() -> VpHolder.load(mActivity, true, vpLoadedCallback)).start();
+                Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
+            }
+        };
+        SpHolder.clearSp();
+        SpHolder.load(mActivity, true, baseLoadedCallback);
+
     }
 
     @SuppressLint("SetTextI18n")

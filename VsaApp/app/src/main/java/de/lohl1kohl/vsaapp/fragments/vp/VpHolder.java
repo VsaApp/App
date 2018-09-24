@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,16 +49,23 @@ public class VpHolder {
                     public void onReceived(String output) {
                         vp.add(today ? 0 : (vp.size() == 0 ? 0 : 1), convertJsonToArray(context, output, today));
 
-                        // Save the current sp...
-                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putString("pref_vp_" + grade + "_" + (today ? "today" : "tomorrow"), output);
-                        editor.apply();
+                        if (vp.get(today ? 0 : (vp.size() == 0 ? 0 : 1)).size() > 0) {
+                            // Save the current sp...
+                            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putString("pref_vp_" + grade + "_" + (today ? "today" : "tomorrow"), output);
+                            editor.apply();
+
+                            if (vpLoadedCallback != null && countDownloadedVps == 2)
+                                vpLoadedCallback.onNewLoaded();
+                        }
+                        else {
+                            Toast.makeText(context, String.format(context.getString(R.string.convertingFailed), "VP"), Toast.LENGTH_SHORT).show();
+                            if (vpLoadedCallback != null && countDownloadedVps == 2)
+                                vpLoadedCallback.onOldLoaded();
+                        }
 
                         countDownloadedVps++;
-
-                        if (vpLoadedCallback != null && countDownloadedVps == 2)
-                            vpLoadedCallback.onNewLoaded();
                     }
 
                     @Override
@@ -140,7 +148,7 @@ public class VpHolder {
                     if (subject == null)
                         subject = new Subject(weekday, unit, normalLesson, "?", "");
                     subject.changes = new Subject(weekday, unit, info, room, teacher);
-                    if (!isShowOnlySelectedSubjects(context) || subject == SpHolder.getLesson(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday), unit).getSubject()) {
+                    if (!isShowOnlySelectedSubjects(context) || compaireSubjects(context, subject, SpHolder.getLesson(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday), unit).getSubject())) {
                         subjects.add(subject);
                     }
                 } catch (IndexOutOfBoundsException ignored) {
@@ -164,6 +172,11 @@ public class VpHolder {
         }
 
         return subjects;
+    }
+
+    private static boolean compaireSubjects(Context context, Subject s1, Subject s2){
+        if (s1 == s2) return true;
+        return s2.getName().equals(context.getString(R.string.lesson_tandem)) && (s1.getName().equals(context.getString(R.string.lesson_french)) || s1.getName().equals(context.getString(R.string.lesson_latin)));
     }
 
     public static List<List<Subject>> getVp() {
