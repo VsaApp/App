@@ -300,7 +300,6 @@ public class LoadingActivity extends AppCompatActivity {
 
                         @Override
                         public void onNewLoaded() {
-                            SpHolder.load(LoadingActivity.this, false);
                             if (LoadingActivity.this.getIntent().getStringExtra("day") != null) {
                                 VpFragment.selectDay(LoadingActivity.this.getIntent().getStringExtra("day"));
                             }

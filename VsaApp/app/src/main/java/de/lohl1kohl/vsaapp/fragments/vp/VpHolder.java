@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -47,9 +48,10 @@ public class VpHolder {
                 Callbacks.baseCallback callback = new Callbacks.baseCallback() {
                     @Override
                     public void onReceived(String output) {
-                        vp.add(today ? 0 : (vp.size() == 0 ? 0 : 1), convertJsonToArray(context, output, today));
+                        List<Subject> newVp = convertJsonToArray(context, output, today);
+                        vp.add(today ? 0 : (vp.size() == 0 ? 0 : 1), (newVp != null) ? newVp : new ArrayList<>());
 
-                        if (vp.get(today ? 0 : (vp.size() == 0 ? 0 : 1)).size() > 0) {
+                        if (newVp != null) {
                             // Save the current sp...
                             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
                             SharedPreferences.Editor editor = settings.edit();
@@ -60,6 +62,7 @@ public class VpHolder {
                                 vpLoadedCallback.onNewLoaded();
                         }
                         else {
+                            Log.e("Vsa/Vp", "Size of vp == 0");
                             Toast.makeText(context, String.format(context.getString(R.string.convertingFailed), "VP"), Toast.LENGTH_SHORT).show();
                             if (vpLoadedCallback != null && countDownloadedVps == 2)
                                 vpLoadedCallback.onOldLoaded();
@@ -119,9 +122,11 @@ public class VpHolder {
         String savedVP = sharedPref.getString("pref_vp_" + grade + "_" + (today ? "today" : "tomorrow"), "-1");
 
         if (savedVP.equals("-1")) return null;
-        return convertJsonToArray(context, savedVP, today);
+        List<Subject> vp = convertJsonToArray(context, savedVP, today);
+        return (vp != null) ? vp : new ArrayList<>();
     }
 
+    @Nullable
     private static List<Subject> convertJsonToArray(Context context, String array, boolean today) {
         List<Subject> subjects = new ArrayList<>();
         try {
@@ -169,6 +174,7 @@ public class VpHolder {
 
         } catch (JSONException e) {
             Log.e("VsaApp/VpHolder", "Cannot convert output to array!");
+            return null;
         }
 
         return subjects;
