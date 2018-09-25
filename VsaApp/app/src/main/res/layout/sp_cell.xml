@@ -26,7 +26,6 @@
         android:gravity="center_horizontal"
         android:paddingTop="10dp"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
         android:textStyle="bold"
         tools:ignore="RelativeOverlap" />
 
@@ -37,7 +36,6 @@
         android:layout_below="@id/sp_lesson"
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
         tools:ignore="RelativeOverlap" />
 
     <TextView
@@ -48,7 +46,6 @@
         android:layout_centerHorizontal="true"
         android:paddingBottom="10dp"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
         tools:ignore="RelativeOverlap" />
 
     <ImageView
