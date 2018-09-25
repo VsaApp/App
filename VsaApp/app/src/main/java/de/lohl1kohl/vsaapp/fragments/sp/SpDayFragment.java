@@ -34,6 +34,8 @@ import de.lohl1kohl.vsaapp.loader.Callbacks;
 public class SpDayFragment extends BaseFragment {
 
     int day;
+    int lineHeight;
+    int lineWidth;
 
     public void setDay(int day) {
         this.day = day;
@@ -44,6 +46,9 @@ public class SpDayFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.sp_day, container, false);
         new Thread(() -> {
+            lineHeight = container.getMeasuredHeight() / 5;
+            lineWidth = container.getMeasuredWidth();
+
             try {
                 // Get preferences...
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
@@ -79,6 +84,9 @@ public class SpDayFragment extends BaseFragment {
         listViewHolder.rightButton = convertView.findViewById(R.id.sp_right);
         listViewHolder.relativeLayout = convertView.findViewById(R.id.sp_rl);
         convertView.setTag(listViewHolder);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(lineWidth, lineHeight);
+        listViewHolder.relativeLayout.setLayoutParams(params);
 
         Boolean lock = sharedPref.getBoolean("pref_lockSubjects", false);
 
