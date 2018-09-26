@@ -6,17 +6,17 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/sp_left"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:adjustViewBounds="true"
-        android:background="@null"
-        android:scaleType="fitCenter"
-        android:src="@drawable/go_left"
-        tools:ignore="ContentDescription" />
+            android:id="@+id/sp_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/go_left"
+            tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/sp_lesson"
@@ -49,16 +49,16 @@
         tools:ignore="RelativeOverlap" />
 
     <ImageView
-        android:id="@+id/sp_right"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:adjustViewBounds="true"
-        android:background="@null"
-        android:scaleType="fitCenter"
-        android:src="@drawable/go_right"
-        tools:ignore="ContentDescription" />
+            android:id="@+id/sp_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/go_right"
+            tools:ignore="ContentDescription" />
 
 </RelativeLayout>
