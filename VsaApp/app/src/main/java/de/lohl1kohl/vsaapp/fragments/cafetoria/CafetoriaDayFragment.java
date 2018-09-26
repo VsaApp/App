@@ -35,22 +35,20 @@ public class CafetoriaDayFragment extends BaseFragment {
         new Thread(() -> {
             try {
                 Day cafetoriaDay = CafetoriaHolder.getDay(day);
-                String weekday = Arrays.asList(root.getResources().getStringArray(R.array.weekdays)).get(day);
-                LayoutInflater layoutinflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                 LinearLayout llMenus = root.findViewById(R.id.cafetoria_menus);
-                mActivity.runOnUiThread(() -> llMenus.addView(createTopic(layoutinflater, getString(R.string.cafetoriaMenus))));
-                mActivity.runOnUiThread(() -> llMenus.addView(createView(layoutinflater, cafetoriaDay.menu1)));
-                mActivity.runOnUiThread(() -> llMenus.addView(createView(layoutinflater, cafetoriaDay.menu2)));
+                mActivity.runOnUiThread(() -> llMenus.addView(createTopic(inflater, root.getResources().getString(R.string.cafetoriaMenus))));
+                mActivity.runOnUiThread(() -> llMenus.addView(createView(inflater, cafetoriaDay.menu1)));
+                mActivity.runOnUiThread(() -> llMenus.addView(createView(inflater, cafetoriaDay.menu2)));
 
                 LinearLayout llExtras = root.findViewById(R.id.cafetoria_extras);
-                mActivity.runOnUiThread(() -> llExtras.addView(createTopic(layoutinflater, getString(R.string.cafetoriaExtra))));
-                mActivity.runOnUiThread(() -> llExtras.addView(createView(layoutinflater, cafetoriaDay.extra)));
+                mActivity.runOnUiThread(() -> llExtras.addView(createTopic(inflater, root.getResources().getString(R.string.cafetoriaExtra))));
+                mActivity.runOnUiThread(() -> llExtras.addView(createView(inflater, cafetoriaDay.extra)));
 
                 if (!cafetoriaDay.snack.food.equals("")) {
                     LinearLayout llSnacks = root.findViewById(R.id.cafetoria_snacks);
-                    mActivity.runOnUiThread(() -> llSnacks.addView(createTopic(layoutinflater, getString(R.string.cafetoriaSnacks))));
-                    mActivity.runOnUiThread(() -> llSnacks.addView(createView(layoutinflater, cafetoriaDay.snack)));
+                    mActivity.runOnUiThread(() -> llSnacks.addView(createTopic(inflater, root.getResources().getString(R.string.cafetoriaSnacks))));
+                    mActivity.runOnUiThread(() -> llSnacks.addView(createView(inflater, cafetoriaDay.snack)));
                 }
 
             } catch (IndexOutOfBoundsException ignored) {
@@ -62,7 +60,6 @@ public class CafetoriaDayFragment extends BaseFragment {
         return root;
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private View createTopic(LayoutInflater layoutInflater, String topic) {
         // Create the view...
         TopicHolder topicHolder = new TopicHolder();
@@ -75,7 +72,6 @@ public class CafetoriaDayFragment extends BaseFragment {
         return convertView;
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private View createView(LayoutInflater layoutInflater, Menu menu) {
         // Create the view...
         ViewHolder topicHolder = new ViewHolder();
