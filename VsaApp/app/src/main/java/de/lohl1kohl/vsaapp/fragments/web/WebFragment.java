@@ -31,7 +31,7 @@ import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.StringUtils;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
 import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
-import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
+import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
 import de.lohl1kohl.vsaapp.fragments.web.connections.Connect;
 import de.lohl1kohl.vsaapp.fragments.web.connections.Delete;

@@ -1,4 +1,4 @@
-package de.lohl1kohl.vsaapp.fragments.teachers;
+package de.lohl1kohl.vsaapp.holders;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,7 +12,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lohl1kohl.vsaapp.SubjectSymbolsHolder;
+import de.lohl1kohl.vsaapp.fragments.teachers.Teacher;
+import de.lohl1kohl.vsaapp.fragments.teachers.Teachers;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class TeacherHolder {
@@ -36,15 +37,18 @@ public class TeacherHolder {
                 @Override
                 public void onReceived(String output) {
                     TeacherHolder.teachers = convertJsonToArray(context, output);
-                    if (teachersLoadedCallback != null) teachersLoadedCallback.onNewLoaded();
+                    if (teachersLoadedCallback != null) teachersLoadedCallback.onLoaded();
                 }
 
                 @Override
                 public void onConnectionFailed() {
-                    if (teachersLoadedCallback != null) teachersLoadedCallback.onConnectionFailed();
+                    if (teachersLoadedCallback != null) teachersLoadedCallback.onLoaded();
                 }
             };
             new Teachers().updateSp(teachersCallback);
+        }
+        else {
+            if (teachersLoadedCallback != null) teachersLoadedCallback.onLoaded();
         }
     }
 

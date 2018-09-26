@@ -14,7 +14,8 @@ import android.widget.TextView;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
-import de.lohl1kohl.vsaapp.fragments.teachers.TeacherHolder;
+import de.lohl1kohl.vsaapp.holders.TeacherHolder;
+import de.lohl1kohl.vsaapp.holders.VpHolder;
 
 public class VpDayFragment extends BaseFragment {
 

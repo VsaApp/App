@@ -17,7 +17,8 @@ import android.widget.TextView;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
-import de.lohl1kohl.vsaapp.fragments.teachers.TeacherHolder;
+import de.lohl1kohl.vsaapp.holders.TeacherHolder;
+import de.lohl1kohl.vsaapp.holders.VpHolder;
 
 
 public class VpFragment extends BaseFragment {
@@ -110,8 +111,8 @@ public class VpFragment extends BaseFragment {
         TabLayout tabLayout = vpView.findViewById(R.id.vp_tabs);
         tabLayout.setupWithViewPager(pager);
         if (VpHolder.weekdayToday.equals(VpHolder.weekdayTomorrow)) {
-            tabLayout.removeTabAt(1);
-            adapter.fragments.remove(1);
+            tabLayout.removeTabAt(0);
+            adapter.fragments.remove(0);
             adapter.notifyDataSetChanged();
         }
     }

@@ -26,8 +26,9 @@ import java.util.List;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.StringUtils;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
-import de.lohl1kohl.vsaapp.fragments.teachers.TeacherHolder;
-import de.lohl1kohl.vsaapp.fragments.vp.VpHolder;
+import de.lohl1kohl.vsaapp.holders.SpHolder;
+import de.lohl1kohl.vsaapp.holders.TeacherHolder;
+import de.lohl1kohl.vsaapp.holders.VpHolder;
 import de.lohl1kohl.vsaapp.fragments.web.Push;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 

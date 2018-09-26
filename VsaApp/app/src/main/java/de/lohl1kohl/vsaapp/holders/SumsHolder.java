@@ -1,4 +1,4 @@
-package de.lohl1kohl.vsaapp.loader;
+package de.lohl1kohl.vsaapp.holders;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,16 +12,18 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import de.lohl1kohl.vsaapp.loader.Callbacks;
+import de.lohl1kohl.vsaapp.loader.Sums;
+
 public class SumsHolder {
 
-    public static Map<String, String> sums = new HashMap<>();
-    static Map<String, String> oldSums = new HashMap<>();
+    private static Map<String, String> sums = new HashMap<>();
+    private static Map<String, String> oldSums = new HashMap<>();
 
     public static void load(Context context, Callbacks.baseLoadedCallback sumsLoadedCallback) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
         oldSums = getSavedSums(context);
-        if (sumsLoadedCallback != null) sumsLoadedCallback.onOldLoaded();
         Callbacks.baseCallback sumsCallback = new Callbacks.baseCallback() {
             @Override
             public void onReceived(String output) {
@@ -31,14 +33,14 @@ public class SumsHolder {
                 editor.putString("pref_sums", output);
                 editor.apply();
 
-                if (sumsLoadedCallback != null) sumsLoadedCallback.onNewLoaded();
+                if (sumsLoadedCallback != null) sumsLoadedCallback.onLoaded();
             }
 
             @Override
             public void onConnectionFailed() {
                 sums = getSavedSums(context);
                 if (sumsLoadedCallback != null)
-                    sumsLoadedCallback.onConnectionFailed();
+                    sumsLoadedCallback.onLoaded();
             }
         };
         new Sums().getSums(sumsCallback);

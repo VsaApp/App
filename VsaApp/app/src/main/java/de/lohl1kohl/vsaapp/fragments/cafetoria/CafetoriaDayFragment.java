@@ -15,8 +15,9 @@ import java.util.Locale;
 
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
-import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaHolder.Day;
-import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaHolder.Menu;
+import de.lohl1kohl.vsaapp.holders.CafetoriaHolder;
+import de.lohl1kohl.vsaapp.holders.CafetoriaHolder.Day;
+import de.lohl1kohl.vsaapp.holders.CafetoriaHolder.Menu;
 
 public class CafetoriaDayFragment extends BaseFragment {
 

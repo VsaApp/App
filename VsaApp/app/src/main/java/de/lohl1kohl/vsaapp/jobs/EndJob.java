@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 import com.evernote.android.job.Job;
 
 import de.lohl1kohl.vsaapp.LoadingActivity;
-import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
+import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class EndJob extends Job {
@@ -27,22 +27,7 @@ public class EndJob extends Job {
         NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(-1);
 
-        Callbacks.baseLoadedCallback baseLoadedCallback = new Callbacks.baseLoadedCallback() {
-            @Override
-            public void onOldLoaded() {
-                LoadingActivity.createJob(getContext());
-            }
-
-            @Override
-            public void onNewLoaded() {
-            }
-
-            @Override
-            public void onConnectionFailed() {
-
-            }
-        };
-        SpHolder.load(getContext(), false, baseLoadedCallback);
+        SpHolder.load(getContext(), false, () -> LoadingActivity.createJob(getContext()));
         return Result.SUCCESS;
     }
 }

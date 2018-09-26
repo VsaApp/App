@@ -3,12 +3,8 @@ package de.lohl1kohl.vsaapp.loader;
 public class Callbacks {
 
     public interface baseLoadedCallback {
-        void onOldLoaded();
-
-        void onNewLoaded();
-
-        void onConnectionFailed();
-    }
+        void onLoaded();
+        }
 
     public interface baseCallback {
         void onReceived(String output);

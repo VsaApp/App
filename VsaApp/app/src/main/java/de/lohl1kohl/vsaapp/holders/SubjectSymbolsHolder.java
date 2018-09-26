@@ -1,15 +1,18 @@
-package de.lohl1kohl.vsaapp;
+package de.lohl1kohl.vsaapp.holders;
 
 import android.content.Context;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import de.lohl1kohl.vsaapp.R;
+
 public class SubjectSymbolsHolder {
 
-    private static Map<String, String> subjectSymbols = new HashMap<>();
+    private static Map<String, String> subjectSymbols;
 
     public static void load(Context context) {
+        subjectSymbols = new HashMap<>();
         String[] subjects = context.getResources().getStringArray(R.array.nameOfSubjects);
         for (String subject : subjects) {
             String[] pair = subject.split(":");

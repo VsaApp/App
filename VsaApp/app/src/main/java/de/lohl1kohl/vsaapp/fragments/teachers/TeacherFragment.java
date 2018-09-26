@@ -21,8 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.SubjectSymbolsHolder;
+import de.lohl1kohl.vsaapp.holders.SubjectSymbolsHolder;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
+import de.lohl1kohl.vsaapp.holders.TeacherHolder;
 
 
 public class TeacherFragment extends BaseFragment {

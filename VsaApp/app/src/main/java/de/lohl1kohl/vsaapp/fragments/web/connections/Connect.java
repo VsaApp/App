@@ -14,11 +14,6 @@ import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class Connect extends BaseLoader {
 
-    static {
-        TAG = "Web";
-        url = "https://vsa.lohl1kohl.de/connect?client=%s&web=%s&grade=%s&username=%s&password=%s";
-    }
-
     private static String bytesToHexString(byte[] bytes) {
         // http://stackoverflow.com/questions/332079
         StringBuilder sb = new StringBuilder();
@@ -38,6 +33,8 @@ public class Connect extends BaseLoader {
     }
 
     public void connect(Context context, String id, Callbacks.baseCallback c) {
+        TAG = "Web";
+        url = "https://vsa.lohl1kohl.de/connect?client=%s&web=%s&grade=%s&username=%s&password=%s";
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String grade = sharedPref.getString("pref_grade", "-1");

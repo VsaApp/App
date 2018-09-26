@@ -26,9 +26,9 @@ import de.lohl1kohl.vsaapp.FirebaseHandler;
 import de.lohl1kohl.vsaapp.LoadingActivity;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BasePreferenceFragment;
-import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
+import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.fragments.vp.VpFragment;
-import de.lohl1kohl.vsaapp.fragments.vp.VpHolder;
+import de.lohl1kohl.vsaapp.holders.VpHolder;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 import static de.lohl1kohl.vsaapp.fragments.web.WebFragment.pushChoices;
@@ -166,18 +166,11 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
     }
 
     private void reloadData(){
-        Callbacks.baseLoadedCallback vpLoadedCallback = new Callbacks.baseLoadedCallback() {
-            @Override
-            public void onOldLoaded() {
-                if (mActivity.getIntent().getStringExtra("day") != null) {
-                    VpFragment.selectDay(mActivity.getIntent().getStringExtra("day"));
-                }
-                Log.d("VsaApp/LoadingActivity", "VpHolder loaded");
-            }
+        SpHolder.load(mActivity, true, () -> {
+            Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
 
-            @Override
-            public void onNewLoaded() {
-                SpHolder.load(mActivity, false);
+            // Load Vp...
+            VpHolder.load(mActivity, true, () -> {
                 if (mActivity.getIntent().getStringExtra("day") != null) {
                     VpFragment.selectDay(mActivity.getIntent().getStringExtra("day"));
                 }
@@ -187,39 +180,8 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                     e.printStackTrace();
                 }
                 Log.d("VsaApp/LoadingActivity", "VpHolder loaded");
-            }
-
-            @Override
-            public void onConnectionFailed() {
-                if (mActivity.getIntent().getStringExtra("day") != null) {
-                    VpFragment.selectDay(mActivity.getIntent().getStringExtra("day"));
-                }
-                Log.d("VsaApp/LoadingActivity", "VpHolder loaded");
-            }
-        };
-
-        Callbacks.baseLoadedCallback baseLoadedCallback = new Callbacks.baseLoadedCallback() {
-            @Override
-            public void onOldLoaded() {
-                new Thread(() -> VpHolder.load(mActivity, true, vpLoadedCallback)).start();
-                Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
-            }
-
-            @Override
-            public void onNewLoaded() {
-                new Thread(() -> VpHolder.load(mActivity, true, vpLoadedCallback)).start();
-                Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
-            }
-
-            @Override
-            public void onConnectionFailed() {
-                new Thread(() -> VpHolder.load(mActivity, true, vpLoadedCallback)).start();
-                Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
-            }
-        };
-        SpHolder.clearSp();
-        SpHolder.load(mActivity, true, baseLoadedCallback);
-
+            });
+        });
     }
 
     @SuppressLint("SetTextI18n")

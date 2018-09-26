@@ -5,12 +5,10 @@ import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class Cafetoria extends BaseLoader {
 
-    static {
+    public void updateMenues(String id, String password, Callbacks.baseCallback c) {
         TAG = "Cafetoria";
         url = "https://api.vsa.lohl1kohl.de/cafetoria?id=%s&password=%s";
-    }
 
-    public void updateMenues(String id, String password, Callbacks.baseCallback c) {
         url = String.format(url, id, password);
         this.get(c);
     }

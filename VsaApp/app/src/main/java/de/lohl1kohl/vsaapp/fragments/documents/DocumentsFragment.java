@@ -20,6 +20,7 @@ import java.util.List;
 
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
+import de.lohl1kohl.vsaapp.holders.DocumentsHolder;
 
 
 public class DocumentsFragment extends BaseFragment {

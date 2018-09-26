@@ -1,4 +1,4 @@
-package de.lohl1kohl.vsaapp.fragments.sp;
+package de.lohl1kohl.vsaapp.holders;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,6 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.lohl1kohl.vsaapp.R;
+import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
+import de.lohl1kohl.vsaapp.fragments.sp.Sp;
+import de.lohl1kohl.vsaapp.fragments.sp.Subject;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class SpHolder {
@@ -36,6 +39,8 @@ public class SpHolder {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String grade = sharedPref.getString("pref_grade", "-1");
 
+        untrimmedSp = new ArrayList<>();
+
         if (update) {
 
             Callbacks.baseCallback spCallback = new Callbacks.baseCallback() {
@@ -49,15 +54,15 @@ public class SpHolder {
                         editor.putString("pref_sp_" + grade, output);
                         editor.apply();
 
-                        if (baseLoadedCallback != null) baseLoadedCallback.onNewLoaded();
+                        if (baseLoadedCallback != null) baseLoadedCallback.onLoaded();
                     }
                     else {
                         Toast.makeText(context, String.format(context.getString(R.string.convertingFailed), "SP"), Toast.LENGTH_SHORT).show();
-                        if (baseLoadedCallback != null) baseLoadedCallback.onOldLoaded();
+                        if (baseLoadedCallback != null) baseLoadedCallback.onLoaded();
                     }
                     // Add lessons and trim days...
                     addSpecialLessons(context);
-                    untrimmedSp = new ArrayList<>();
+
                     for (int i = 0; i < 5; i++) {
                         untrimmedSp.add(new ArrayList<>());
                         untrimmedSp.get(i).addAll(sp.get(i));
@@ -70,13 +75,12 @@ public class SpHolder {
                     sp = getSavedSp(context);
                     // Add lessons and trim days...
                     addSpecialLessons(context);
-                    untrimmedSp = new ArrayList<>();
                     for (int i = 0; i < 5; i++) {
                         untrimmedSp.add(new ArrayList<>());
                         untrimmedSp.get(i).addAll(sp.get(i));
                     }
                     ignoreLastFreeLessons(context);
-                    if (baseLoadedCallback != null) baseLoadedCallback.onConnectionFailed();
+                    if (baseLoadedCallback != null) baseLoadedCallback.onLoaded();
                 }
             };
 
@@ -86,18 +90,13 @@ public class SpHolder {
             sp = getSavedSp(context);
             // Add lessons and trim days...
             addSpecialLessons(context);
-            untrimmedSp = new ArrayList<>();
             for (int i = 0; i < 5; i++) {
                 untrimmedSp.add(new ArrayList<>());
                 untrimmedSp.get(i).addAll(sp.get(i));
             }
             ignoreLastFreeLessons(context);
-            if (baseLoadedCallback != null) baseLoadedCallback.onOldLoaded();
+            if (baseLoadedCallback != null) baseLoadedCallback.onLoaded();
         }
-    }
-
-    public static void clearSp(){
-        sp = new ArrayList<>();
     }
 
     private static void addSpecialLessons(Context context){

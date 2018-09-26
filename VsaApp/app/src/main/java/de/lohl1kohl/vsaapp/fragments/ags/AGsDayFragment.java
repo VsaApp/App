@@ -1,7 +1,6 @@
 package de.lohl1kohl.vsaapp.fragments.ags;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -10,14 +9,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
-import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaHolder.Day;
-import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaHolder.Menu;
+import de.lohl1kohl.vsaapp.holders.AGsHolder;
 
 public class AGsDayFragment extends BaseFragment {
 

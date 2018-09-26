@@ -6,8 +6,8 @@ import de.lohl1kohl.vsaapp.HttpGetRequest;
 
 public class BaseLoader implements AsyncResponse {
 
-    public static String TAG;
-    public static String url;
+    public String TAG;
+    public String url;
     private Callbacks.baseCallback callback;
 
     @Override

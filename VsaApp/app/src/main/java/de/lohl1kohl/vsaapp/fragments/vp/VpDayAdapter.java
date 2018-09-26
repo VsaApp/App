@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lohl1kohl.vsaapp.holders.VpHolder;
+
 public class VpDayAdapter extends FragmentStatePagerAdapter {
 
     public List<VpDayFragment> fragments = new ArrayList<>();

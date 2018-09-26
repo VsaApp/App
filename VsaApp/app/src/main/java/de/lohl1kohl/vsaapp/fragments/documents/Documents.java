@@ -5,12 +5,10 @@ import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class Documents extends BaseLoader {
 
-    static {
+    public void getDocuments(Callbacks.baseCallback c) {
         TAG = "Documents";
         url = "https://api.vsa.lohl1kohl.de/documents/list.json";
-    }
 
-    public void getDocuments(Callbacks.baseCallback c) {
         this.get(c);
     }
 }

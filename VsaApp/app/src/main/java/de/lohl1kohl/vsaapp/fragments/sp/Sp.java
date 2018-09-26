@@ -5,12 +5,10 @@ import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class Sp extends BaseLoader {
 
-    static {
+    public void updateSp(String gradename, Callbacks.baseCallback c) {
         TAG = "Sp";
         url = "https://api.vsa.lohl1kohl.de/sp/%s.json";
-    }
 
-    public void updateSp(String gradename, Callbacks.baseCallback c) {
         url = String.format(url, gradename);
         this.get(c);
     }

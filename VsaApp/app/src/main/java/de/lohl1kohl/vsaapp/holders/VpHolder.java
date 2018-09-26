@@ -1,11 +1,10 @@
-package de.lohl1kohl.vsaapp.fragments.vp;
+package de.lohl1kohl.vsaapp.holders;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -17,9 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.SubjectSymbolsHolder;
-import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
+import de.lohl1kohl.vsaapp.fragments.vp.Today;
+import de.lohl1kohl.vsaapp.fragments.vp.Tomorrow;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class VpHolder {
@@ -59,13 +58,13 @@ public class VpHolder {
                             editor.apply();
 
                             if (vpLoadedCallback != null && countDownloadedVps == 2)
-                                vpLoadedCallback.onNewLoaded();
+                                vpLoadedCallback.onLoaded();
                         }
                         else {
                             Log.e("Vsa/Vp", "Size of vp == 0");
                             Toast.makeText(context, String.format(context.getString(R.string.convertingFailed), "VP"), Toast.LENGTH_SHORT).show();
                             if (vpLoadedCallback != null && countDownloadedVps == 2)
-                                vpLoadedCallback.onOldLoaded();
+                                vpLoadedCallback.onLoaded();
                         }
 
                         countDownloadedVps++;
@@ -80,7 +79,7 @@ public class VpHolder {
                         countDownloadedVps++;
 
                         if (vpLoadedCallback != null && countDownloadedVps == 2)
-                            vpLoadedCallback.onConnectionFailed();
+                            vpLoadedCallback.onLoaded();
                     }
                 };
                 new Thread(() -> {
@@ -95,8 +94,9 @@ public class VpHolder {
                 // Show saved sp first...
                 List<Subject> savedVP = getSavedVp(context, today);
                 if (savedVP != null) vp.add(today ? 0 : 1, savedVP);
+                countDownloadedVps++;
                 if (vpLoadedCallback != null && countDownloadedVps == 2)
-                    vpLoadedCallback.onOldLoaded();
+                    vpLoadedCallback.onLoaded();
             }
         }
     }

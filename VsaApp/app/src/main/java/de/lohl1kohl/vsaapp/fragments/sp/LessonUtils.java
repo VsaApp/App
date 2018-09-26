@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import de.lohl1kohl.vsaapp.holders.SpHolder;
+
 public class LessonUtils {
 
     public static int[] endTimes = new int[]{60, 130, 210, 280, 360, 420, 480, 545};

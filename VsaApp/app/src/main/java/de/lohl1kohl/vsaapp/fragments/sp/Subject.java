@@ -1,6 +1,6 @@
 package de.lohl1kohl.vsaapp.fragments.sp;
 
-import de.lohl1kohl.vsaapp.SubjectSymbolsHolder;
+import de.lohl1kohl.vsaapp.holders.SubjectSymbolsHolder;
 
 public class Subject {
     public String day;

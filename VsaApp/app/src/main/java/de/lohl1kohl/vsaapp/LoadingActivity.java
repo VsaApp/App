@@ -33,26 +33,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import de.lohl1kohl.vsaapp.fragments.ags.AGsHolder;
-import de.lohl1kohl.vsaapp.fragments.calendar.DatesHolder;
-import de.lohl1kohl.vsaapp.fragments.documents.DocumentsHolder;
+import de.lohl1kohl.vsaapp.holders.AGsHolder;
+import de.lohl1kohl.vsaapp.holders.DatesHolder;
+import de.lohl1kohl.vsaapp.holders.DocumentsHolder;
+import de.lohl1kohl.vsaapp.holders.SubjectSymbolsHolder;
+import de.lohl1kohl.vsaapp.holders.VpHolder;
+import de.lohl1kohl.vsaapp.holders.SpHolder;
+import de.lohl1kohl.vsaapp.holders.TeacherHolder;
+
 import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
 import de.lohl1kohl.vsaapp.fragments.sp.LessonUtils;
-import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
-import de.lohl1kohl.vsaapp.fragments.teachers.TeacherHolder;
 import de.lohl1kohl.vsaapp.fragments.vp.VpFragment;
-import de.lohl1kohl.vsaapp.fragments.vp.VpHolder;
+
 import de.lohl1kohl.vsaapp.jobs.JobCreator;
 import de.lohl1kohl.vsaapp.jobs.StartJob;
+
 import de.lohl1kohl.vsaapp.loader.Callbacks;
-import de.lohl1kohl.vsaapp.loader.SumsHolder;
+import de.lohl1kohl.vsaapp.holders.SumsHolder;
 
 import static de.lohl1kohl.vsaapp.fragments.web.WebFragment.pushChoices;
 
 public class LoadingActivity extends AppCompatActivity {
 
     private int holders = 8;
-    private int loaded = 0;
+    private int loaded = -1;
+    private Map<String, Boolean> sums;
 
     public static void createJob(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -131,7 +136,17 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
         JobManager.create(this).addJobCreator(new JobCreator());
 
+        /*
+            Structure:
+            - test login
+            - get sums
+            - load all Holder (this::loadAll)
+         */
+
         new Thread(() -> {
+            // Start the progress...
+            updateStatus();
+
             // Check the login data...
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             String username = sharedPref.getString("pref_username", "-1");
@@ -143,7 +158,7 @@ public class LoadingActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess() {
                         Log.i("VsaApp/Server", "Password success");
-                        checkFinish();
+                        updateStatus();
                         loadAll();
                     }
 
@@ -157,7 +172,7 @@ public class LoadingActivity extends AppCompatActivity {
                     public void onConnectionFailed() {
                         Log.e("VsaApp/Server", "No connection");
                         runOnUiThread(() -> Toast.makeText(LoadingActivity.this, R.string.no_connection, Toast.LENGTH_LONG).show());
-                        checkFinish();
+                        updateStatus();
                         loadAll();
                     }
                 };
@@ -172,187 +187,113 @@ public class LoadingActivity extends AppCompatActivity {
         new Thread(() -> {
             SubjectSymbolsHolder.load(this);
             Log.d("VsaApp/LoadingActivity", "SubjectSymbolsHolder loaded");
-            checkFinish();
+            // Load all holders...
+            SumsHolder.load(this, () -> checkChangedSums(SumsHolder.getChangedSums()));
         }).start();
-
-        Callbacks.baseLoadedCallback sumsLoadedCallback = new Callbacks.baseLoadedCallback() {
-            @Override
-            public void onOldLoaded() {
-
-            }
-
-            @Override
-            public void onNewLoaded() {
-                checkChangedSums(SumsHolder.getChangedSums());
-            }
-
-            @Override
-            public void onConnectionFailed() {
-                checkChangedSums(SumsHolder.getChangedSums());
-            }
-        };
-        SumsHolder.load(this, sumsLoadedCallback);
     }
 
     private void checkChangedSums(Map<String, Boolean> sums) {
-        boolean vpUpdated = (sums.get("vp/today") || sums.get("vp/tomorrow"));
-        for (Map.Entry<String, Boolean> entry : sums.entrySet()) {
-            boolean update = entry.getValue();
-            String name = entry.getKey();
-            Log.d("sums/" + name, String.valueOf(update));
-            switch (name) {
-                case "ags":
-                    AGsHolder.load(LoadingActivity.this, update, new Callbacks.baseLoadedCallback() {
-                        @Override
-                        public void onOldLoaded() {
-                            Log.d("VsaApp/LoadingActivity", "AGsHolder loaded");
-                            checkFinish();
-                        }
+        updateStatus();
+        this.sums = sums;
 
-                        @Override
-                        public void onNewLoaded() {
-                            Log.d("VsaApp/LoadingActivity", "AGsHolder loaded");
-                            checkFinish();
-                        }
+        /*
+            Load structure:
+            - load sp
+            - load vp
+            - load dates
+            - load ags
+            - load documents
+            - load teachers
+            - finishedLoading
+                - start jobs
+         */
 
-                        @Override
-                        public void onConnectionFailed() {
-                            Log.d("VsaApp/LoadingActivity", "AGsHolder loaded");
-                            checkFinish();
-                        }
-                    });
-                    break;
-                case "documents":
-                    Log.i(name, String.valueOf(update));
-                    DocumentsHolder.load(this, update, new Callbacks.baseLoadedCallback() {
-                        @Override
-                        public void onOldLoaded() {
-                            Log.d("VsaApp/LoadingActivity", "DocumentsHolder loaded");
-                            checkFinish();
-                        }
+        // Start with the sp...
+        loadSp(sums.get("sp"));
+    }
 
-                        @Override
-                        public void onNewLoaded() {
-                            Log.d("VsaApp/LoadingActivity", "DocumentsHolder loaded");
-                            checkFinish();
-                        }
+    private void loadSp(boolean update){
+        SpHolder.load(this, update, () -> {
+            Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
+            updateStatus();
+            loadVp(sums.get("vp/today") || sums.get("vp/tomorrow"));
+        });
+    }
 
-                        @Override
-                        public void onConnectionFailed() {
-                            Log.d("VsaApp/LoadingActivity", "DocumentsHolder loaded");
-                            checkFinish();
-                        }
-                    });
-                    break;
-                case "teachers":
-                    TeacherHolder.load(this, update, new Callbacks.baseLoadedCallback() {
-                        @Override
-                        public void onOldLoaded() {
-                            Log.d("VsaApp/LoadingActivity", "TeacherHolder loaded");
-                            checkFinish();
-                        }
-
-                        @Override
-                        public void onNewLoaded() {
-                            Log.d("VsaApp/LoadingActivity", "TeacherHolder loaded");
-                            checkFinish();
-                        }
-
-                        @Override
-                        public void onConnectionFailed() {
-                            Log.d("VsaApp/LoadingActivity", "TeacherHolder loaded");
-                            checkFinish();
-                        }
-                    });
-                    break;
-                case "dates":
-                    Log.i("dates", String.valueOf(update));
-                    DatesHolder.load(this, update, new Callbacks.baseLoadedCallback() {
-                        @Override
-                        public void onOldLoaded() {
-                            Log.d("VsaApp/LoadingActivity", "DatesHolder loaded");
-                            checkFinish();
-                        }
-
-                        @Override
-                        public void onNewLoaded() {
-                            Log.d("VsaApp/LoadingActivity", "DatesHolder loaded");
-                            checkFinish();
-                        }
-
-                        @Override
-                        public void onConnectionFailed() {
-                            Log.d("VsaApp/LoadingActivity", "DatesHolder loaded");
-                            checkFinish();
-                        }
-                    });
-                    break;
-                case "sp":
-                    Callbacks.baseLoadedCallback vpLoadedCallback = new Callbacks.baseLoadedCallback() {
-                        @Override
-                        public void onOldLoaded() {
-                            if (LoadingActivity.this.getIntent().getStringExtra("day") != null) {
-                                VpFragment.selectDay(LoadingActivity.this.getIntent().getStringExtra("day"));
-                            }
-                            Log.d("VsaApp/LoadingActivity", "VpHolder loaded");
-                            checkFinish();
-                        }
-
-                        @Override
-                        public void onNewLoaded() {
-                            if (LoadingActivity.this.getIntent().getStringExtra("day") != null) {
-                                VpFragment.selectDay(LoadingActivity.this.getIntent().getStringExtra("day"));
-                            }
-                            try {
-                                pushChoices(LoadingActivity.this);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            Log.d("VsaApp/LoadingActivity", "VpHolder loaded");
-                            checkFinish();
-                        }
-
-                        @Override
-                        public void onConnectionFailed() {
-                            if (LoadingActivity.this.getIntent().getStringExtra("day") != null) {
-                                VpFragment.selectDay(LoadingActivity.this.getIntent().getStringExtra("day"));
-                            }
-                            Log.d("VsaApp/LoadingActivity", "VpHolder loaded");
-                            checkFinish();
-                        }
-                    };
-
-                    Callbacks.baseLoadedCallback baseLoadedCallback = new Callbacks.baseLoadedCallback() {
-                        @Override
-                        public void onOldLoaded() {
-                            new Thread(() -> VpHolder.load(LoadingActivity.this, vpUpdated, vpLoadedCallback)).start();
-                            Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
-                            checkFinish();
-                        }
-
-                        @Override
-                        public void onNewLoaded() {
-                            new Thread(() -> VpHolder.load(LoadingActivity.this, vpUpdated, vpLoadedCallback)).start();
-                            Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
-                            checkFinish();
-                        }
-
-                        @Override
-                        public void onConnectionFailed() {
-                            new Thread(() -> VpHolder.load(LoadingActivity.this, vpUpdated, vpLoadedCallback)).start();
-                            Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
-                            checkFinish();
-                        }
-                    };
-                    SpHolder.clearSp();
-                    SpHolder.load(this, update, baseLoadedCallback);
-                    break;
-                case "vp/today":
-                case "vp/tomorrow":
-                    checkFinish();
-                    break;
+    private void loadVp(boolean update){
+        VpHolder.load(this, update, () -> {
+            if (this.getIntent().getStringExtra("day") != null) {
+                VpFragment.selectDay(LoadingActivity.this.getIntent().getStringExtra("day"));
             }
+            try {
+                pushChoices(LoadingActivity.this);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.d("VsaApp/LoadingActivity", "VpHolder loaded");
+            updateStatus();
+            loadDates(sums.get("dates"));
+        });
+    }
+
+    private void loadDates(boolean update){
+        DatesHolder.load(this, update, () -> {
+            Log.d("VsaApp/LoadingActivity", "DatesHolder loaded");
+            updateStatus();
+            loadAGs(sums.get("ags"));
+        });
+    }
+
+    private void loadAGs(boolean update){
+        AGsHolder.load(this, update, () -> {
+            Log.d("VsaApp/LoadingActivity", "AGsHolder loaded");
+            updateStatus();
+            loadDocs(sums.get("documents"));
+        });
+    }
+
+    private void loadDocs(boolean update){
+        DocumentsHolder.load(this, update, () -> {
+            Log.d("VsaApp/LoadingActivity", "DocumentsHolder loaded");
+            updateStatus();
+            loadTeachers(sums.get("teachers"));
+        });
+
+    }
+
+    private void loadTeachers(boolean update){
+        TeacherHolder.load(this, update, () -> {
+            Log.d("VsaApp/LoadingActivity", "TeacherHolder loaded");
+            updateStatus();
+            finishedLoading();
+        });
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void updateStatus(){
+        Log.d("VsaApp/LoadingActivity", "Check finish: " + Integer.toString(loaded + 1));
+        loaded++;
+
+        TextView progressText = findViewById(R.id.progressText);
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+        runOnUiThread(() -> {
+            progressText.setText(Integer.toString((int) Math.round(((double) loaded / (double) holders) * 100)) + " %");
+            ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", (int) Math.round(((double) loaded / (double) holders) * 100) - 1 / holders, (int) Math.round(((double) loaded / (double) holders) * 100));
+            progressAnimator.setDuration(1000);
+            progressAnimator.setInterpolator(new LinearInterpolator());
+            progressAnimator.start();
+        });
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void finishedLoading() {
+        createJob(this);
+        Intent intent = new Intent(this, MainActivity.class);
+        if (getIntent().getStringExtra("page") != null) {
+            intent.putExtra("page", getIntent().getStringExtra("page"));
         }
+        startActivity(intent);
+        finish();
     }
 
     @SuppressLint("SetTextI18n")
@@ -420,7 +361,7 @@ public class LoadingActivity extends AppCompatActivity {
                     editor.apply();
                     loginDialog.cancel();
                     Toast.makeText(LoadingActivity.this, R.string.login_success, Toast.LENGTH_SHORT).show();
-                    checkFinish();
+                    updateStatus();
                     loadAll();
                 }
 
@@ -440,29 +381,4 @@ public class LoadingActivity extends AppCompatActivity {
         loginDialog.getWindow().setAttributes(lWindowParams);
     }
 
-    @SuppressLint("SetTextI18n")
-    private void checkFinish() {
-        Log.d("VsaApp/LoadingActivity", "Check finish: " + Integer.toString(loaded + 1));
-        loaded++;
-        if (loaded <= holders) {
-            TextView progressText = findViewById(R.id.progressText);
-            ProgressBar progressBar = findViewById(R.id.progressBar);
-            runOnUiThread(() -> {
-                progressText.setText(Integer.toString((int) Math.round(((double) loaded / (double) holders) * 100)) + " %");
-                ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", (int) Math.round(((double) loaded / (double) holders) * 100) - 1 / holders, (int) Math.round(((double) loaded / (double) holders) * 100));
-                progressAnimator.setDuration(1000);
-                progressAnimator.setInterpolator(new LinearInterpolator());
-                progressAnimator.start();
-            });
-            if (loaded == holders) {
-                createJob(this);
-                Intent intent = new Intent(this, MainActivity.class);
-                if (getIntent().getStringExtra("page") != null) {
-                    intent.putExtra("page", getIntent().getStringExtra("page"));
-                }
-                startActivity(intent);
-                finish();
-            }
-        }
-    }
 }

@@ -29,7 +29,8 @@ import java.util.Locale;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
 import de.lohl1kohl.vsaapp.fragments.sp.LessonUtils;
-import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
+import de.lohl1kohl.vsaapp.holders.SpHolder;
+import de.lohl1kohl.vsaapp.holders.CafetoriaHolder;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 
@@ -93,22 +94,7 @@ public class CafetoriaFragment extends BaseFragment {
         progressBar.setVisibility(View.VISIBLE);
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        Callbacks.baseLoadedCallback cafetoriaLoadedCallback = new Callbacks.baseLoadedCallback() {
-            @Override
-            public void onOldLoaded() {
-                displayMenues();
-            }
-
-            @Override
-            public void onNewLoaded() {
-                displayMenues();
-            }
-
-            @Override
-            public void onConnectionFailed() {
-                displayMenues();
-            }
-        };
+        Callbacks.baseLoadedCallback cafetoriaLoadedCallback = this::displayMenues;
         CafetoriaHolder.load(mActivity, settings.getString("pref_cafetoria_id", "-1"), settings.getString("pref_cafetoria_pin", "-1"), cafetoriaLoadedCallback);
     }
 

@@ -1,4 +1,4 @@
-package de.lohl1kohl.vsaapp.fragments.calendar;
+package de.lohl1kohl.vsaapp.holders;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import de.lohl1kohl.vsaapp.fragments.calendar.Date;
+import de.lohl1kohl.vsaapp.fragments.calendar.Dates;
+import de.lohl1kohl.vsaapp.fragments.calendar.Day;
+import de.lohl1kohl.vsaapp.fragments.calendar.Event;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class DatesHolder {
@@ -38,12 +42,12 @@ public class DatesHolder {
                     editor.putString("pref_dates", output);
                     editor.apply();
 
-                    if (datesLoadedCallback != null) datesLoadedCallback.onNewLoaded();
+                    if (datesLoadedCallback != null) datesLoadedCallback.onLoaded();
                 }
 
                 public void onConnectionFailed() {
                     readSavedDates(context);
-                    if (datesLoadedCallback != null) datesLoadedCallback.onConnectionFailed();
+                    if (datesLoadedCallback != null) datesLoadedCallback.onLoaded();
                 }
             };
 
@@ -51,10 +55,8 @@ public class DatesHolder {
             new Dates().updateDates(datesCallback);
         } else {
             // If the dates are already loaded stop process...
-            if (events == null) {
-                readSavedDates(context);
-                if (datesLoadedCallback != null) datesLoadedCallback.onOldLoaded();
-            }
+            if (events == null) readSavedDates(context);
+            if (datesLoadedCallback != null) datesLoadedCallback.onLoaded();
         }
     }
 

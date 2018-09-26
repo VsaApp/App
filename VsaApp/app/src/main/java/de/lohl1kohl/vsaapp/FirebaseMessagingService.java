@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import java.util.Random;
 
 import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
-import de.lohl1kohl.vsaapp.fragments.sp.SpHolder;
+import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
@@ -80,24 +80,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             String weekday = jsonObject.getString("weekday");
             JSONArray changes = jsonObject.getJSONArray("changes");
             FirebaseMessagingService service = this;
-            SpHolder.load(getApplicationContext(), false, new Callbacks.baseLoadedCallback() {
-                @Override
-                public void onOldLoaded() {
-                    try {
-                        service.onSp(changes, weekday);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNewLoaded() {
-
-                }
-
-                @Override
-                public void onConnectionFailed() {
-
+            SpHolder.load(getApplicationContext(), false, () -> {
+                try {
+                    service.onSp(changes, weekday);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             });
         } catch (JSONException e) {

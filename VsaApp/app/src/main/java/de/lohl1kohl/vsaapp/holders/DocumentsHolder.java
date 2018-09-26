@@ -1,4 +1,4 @@
-package de.lohl1kohl.vsaapp.fragments.documents;
+package de.lohl1kohl.vsaapp.holders;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,6 +12,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lohl1kohl.vsaapp.fragments.documents.Document;
+import de.lohl1kohl.vsaapp.fragments.documents.Documents;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class DocumentsHolder {
@@ -31,11 +33,11 @@ public class DocumentsHolder {
                 @SuppressLint("CommitPrefEdits")
                 @Override
                 public void onReceived(String output) {
-                    DocumentsHolder.documents = convertJsonToArray(output);
+                    documents = convertJsonToArray(output);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("pref_documents", output);
                     editor.apply();
-                    if (documentsLoadedCallback != null) documentsLoadedCallback.onNewLoaded();
+                    if (documentsLoadedCallback != null) documentsLoadedCallback.onLoaded();
                 }
 
                 @Override
@@ -45,7 +47,7 @@ public class DocumentsHolder {
                     }
 
                     if (documentsLoadedCallback != null)
-                        documentsLoadedCallback.onConnectionFailed();
+                        documentsLoadedCallback.onLoaded();
                 }
             };
             new Documents().getDocuments(documentsCallback);
@@ -54,7 +56,7 @@ public class DocumentsHolder {
                 documents = savedDocuments;
             }
             if (documentsLoadedCallback != null)
-                documentsLoadedCallback.onOldLoaded();
+                documentsLoadedCallback.onLoaded();
         }
     }
 

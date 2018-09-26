@@ -1,4 +1,4 @@
-package de.lohl1kohl.vsaapp.fragments.cafetoria;
+package de.lohl1kohl.vsaapp.holders;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lohl1kohl.vsaapp.fragments.cafetoria.Cafetoria;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class CafetoriaHolder {
@@ -35,13 +36,13 @@ public class CafetoriaHolder {
                 editor.putString("pref_cafetoria", output);
                 editor.apply();
 
-                if (cafetoriaLoadedCallback != null) cafetoriaLoadedCallback.onNewLoaded();
+                if (cafetoriaLoadedCallback != null) cafetoriaLoadedCallback.onLoaded();
             }
 
             public void onConnectionFailed() {
                 days = getSavedDays(context);
                 if (cafetoriaLoadedCallback != null)
-                    cafetoriaLoadedCallback.onConnectionFailed();
+                    cafetoriaLoadedCallback.onLoaded();
             }
         };
 

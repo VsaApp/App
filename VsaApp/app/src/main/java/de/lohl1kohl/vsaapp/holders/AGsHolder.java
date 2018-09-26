@@ -1,4 +1,4 @@
-package de.lohl1kohl.vsaapp.fragments.ags;
+package de.lohl1kohl.vsaapp.holders;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.lohl1kohl.vsaapp.R;
+import de.lohl1kohl.vsaapp.fragments.ags.AGs;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class AGsHolder {
@@ -25,6 +26,8 @@ public class AGsHolder {
 
     public static void load(Context context, boolean update, Callbacks.baseLoadedCallback agsLoadedCallback) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+
+        days = new ArrayList<>();
 
         if (update) {
 
@@ -37,13 +40,13 @@ public class AGsHolder {
                     editor.putString("pref_ags", output);
                     editor.apply();
 
-                    if (agsLoadedCallback != null) agsLoadedCallback.onNewLoaded();
+                    if (agsLoadedCallback != null) agsLoadedCallback.onLoaded();
                 }
 
                 public void onConnectionFailed() {
                     ags = getSavedAGs(context);
                     if (agsLoadedCallback != null)
-                        agsLoadedCallback.onConnectionFailed();
+                        agsLoadedCallback.onLoaded();
                 }
             };
 
@@ -51,7 +54,7 @@ public class AGsHolder {
             new AGs().getAGs(agsCallback);
         } else {
             ags = getSavedAGs(context);
-            if (agsLoadedCallback != null) agsLoadedCallback.onOldLoaded();
+            if (agsLoadedCallback != null) agsLoadedCallback.onLoaded();
         }
 
         fillDays(context);
