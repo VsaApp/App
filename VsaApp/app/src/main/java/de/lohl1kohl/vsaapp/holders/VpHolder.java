@@ -50,6 +50,8 @@ public class VpHolder {
                         List<Subject> newVp = convertJsonToArray(context, output, today);
                         vp.add(today ? 0 : (vp.size() == 0 ? 0 : 1), (newVp != null) ? newVp : new ArrayList<>());
 
+                        countDownloadedVps++;
+
                         if (newVp != null) {
                             // Save the current sp...
                             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -66,8 +68,6 @@ public class VpHolder {
                             if (vpLoadedCallback != null && countDownloadedVps == 2)
                                 vpLoadedCallback.onLoaded();
                         }
-
-                        countDownloadedVps++;
                     }
 
                     @Override
