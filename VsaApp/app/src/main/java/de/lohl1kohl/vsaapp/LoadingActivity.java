@@ -63,6 +63,19 @@ public class LoadingActivity extends AppCompatActivity {
     private int holders = 8;
     private int loaded = 0;
     private Map<String, Boolean> sums;
+    private boolean visible = true;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        visible = true;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        visible = false;
+    }
 
     public static void createJob(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -205,8 +218,7 @@ public class LoadingActivity extends AppCompatActivity {
         runOnUiThread(() -> text2.setVisibility(View.VISIBLE));
 
         new Thread(() -> {
-            boolean connected = false;
-            while (!connected){
+            while (true){
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
@@ -214,15 +226,19 @@ public class LoadingActivity extends AppCompatActivity {
                 }
                 ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+                boolean connected = false;
                 for (NetworkInfo ni : netInfo) {
                     if (ni.getTypeName().equalsIgnoreCase("WIFI"))
                         if (ni.isConnected())
-                            connected = true;
+                            if (visible) connected = true;
                     if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
                         if (ni.isConnected())
-                            connected = true;
+                            if (visible) connected = true;
                 }
+
+                if (connected) break;
             }
+
 
             // Switch views...
             runOnUiThread(() -> progress1.setVisibility(View.VISIBLE));
