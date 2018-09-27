@@ -18,6 +18,7 @@ import java.util.Random;
 import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
 import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
+import de.lohl1kohl.vsaapp.holders.SubjectSymbolsHolder;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
@@ -80,6 +81,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             String weekday = jsonObject.getString("weekday");
             JSONArray changes = jsonObject.getJSONArray("changes");
             FirebaseMessagingService service = this;
+            SubjectSymbolsHolder.load(this);
             SpHolder.load(getApplicationContext(), false, () -> {
                 try {
                     service.onSp(changes, weekday);
