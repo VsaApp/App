@@ -46,6 +46,10 @@ public class SumsHolder {
         new Sums().getSums(sumsCallback);
     }
 
+    public static boolean isLoaded(){
+        return sums.size() > 0;
+    }
+
     public static Map<String, String> getSavedSums(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String savedSums = sharedPref.getString("pref_sums", "-1");

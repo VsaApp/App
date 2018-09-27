@@ -60,6 +60,10 @@ public class DatesHolder {
         }
     }
 
+    public static boolean isLoaded(){
+        return events != null || calendar != null;
+    }
+
     private static void readSavedDates(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String savedSP = sharedPref.getString("pref_dates", "-1");

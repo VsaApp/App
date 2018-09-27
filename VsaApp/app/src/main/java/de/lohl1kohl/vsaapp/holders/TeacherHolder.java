@@ -52,6 +52,10 @@ public class TeacherHolder {
         }
     }
 
+    public static boolean isLoaded(){
+        return teachers.size() > 0;
+    }
+
     public static List<Teacher> searchTeachers(String str) {
         str = str.toLowerCase();
         List<Teacher> teachers = new ArrayList<>();

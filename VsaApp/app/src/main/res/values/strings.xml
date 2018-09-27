@@ -25,6 +25,8 @@
     </string>
     <string name="login_success">Erfolgreich angemeldet</string>
     <string name="no_connection">Verbindung zum Server fehlgeschagen</string>
+    <string name="need_connection">Beim ersten mal starten wird immer eine Internetverbindung benötigt!</string>
+    <string name="wait_for_connection">Warte auf eine Internetverbindung…</string>
     <string name="no_class">Keine Klasse gesetzt</string>
     <string name="choose_grade">Klasse auswählen</string>
     <string name="search_teacher">Lehrer mit Namen, Kürzel oder Fach suchen</string>

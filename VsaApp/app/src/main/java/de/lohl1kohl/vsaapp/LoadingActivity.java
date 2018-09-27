@@ -7,12 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
@@ -181,6 +184,46 @@ public class LoadingActivity extends AppCompatActivity {
         }).start();
     }
 
+    private void noConnection(){
+        runOnUiThread(() -> Toast.makeText(LoadingActivity.this, R.string.need_connection, Toast.LENGTH_LONG).show());
+
+        // Change progress bar...
+        ProgressBar progress1 = findViewById(R.id.progressBar);
+        runOnUiThread(() -> progress1.setVisibility(View.GONE));
+        ProgressBar progress2 = findViewById(R.id.waitingForConnection);
+        runOnUiThread(() -> progress2.setVisibility(View.VISIBLE));
+        TextView text = findViewById(R.id.progressText);
+        runOnUiThread(() -> text.setText(R.string.wait_for_connection));
+
+        new Thread(() -> {
+            boolean connected = false;
+            while (!connected){
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+                for (NetworkInfo ni : netInfo) {
+                    if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                        if (ni.isConnected())
+                            connected = true;
+                    if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                        if (ni.isConnected())
+                            connected = true;
+                }
+            }
+
+            // Change progress bar...
+            runOnUiThread(() -> progress1.setVisibility(View.VISIBLE));
+            runOnUiThread(() -> progress2.setVisibility(View.GONE));
+
+            loadAll();
+        }).start();
+
+    }
+
     private void loadAll() {
         LessonUtils.setWeekdays(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weekdays))));
 
@@ -193,6 +236,7 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void checkChangedSums(Map<String, Boolean> sums) {
+        if (!SumsHolder.isLoaded()) {noConnection(); return;}
         updateStatus();
         this.sums = sums;
 
@@ -214,6 +258,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     private void loadSp(boolean update){
         SpHolder.load(this, update, () -> {
+            if (!SpHolder.isLoaded()) {noConnection(); return;}
             Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
             updateStatus();
             loadVp(sums.get("vp/today") || sums.get("vp/tomorrow"));
@@ -222,6 +267,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     private void loadVp(boolean update){
         VpHolder.load(this, update, () -> {
+            if (!VpHolder.isLoaded()) {noConnection(); return;}
             if (this.getIntent().getStringExtra("day") != null) {
                 VpFragment.selectDay(LoadingActivity.this.getIntent().getStringExtra("day"));
             }
@@ -238,6 +284,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     private void loadDates(boolean update){
         DatesHolder.load(this, update, () -> {
+            if (!DatesHolder.isLoaded()) {noConnection(); return;}
             Log.d("VsaApp/LoadingActivity", "DatesHolder loaded");
             updateStatus();
             loadAGs(sums.get("ags"));
@@ -246,6 +293,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     private void loadAGs(boolean update){
         AGsHolder.load(this, update, () -> {
+            if (!AGsHolder.isLoaded()) {noConnection(); return;}
             Log.d("VsaApp/LoadingActivity", "AGsHolder loaded");
             updateStatus();
             loadDocs(sums.get("documents"));
@@ -254,6 +302,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     private void loadDocs(boolean update){
         DocumentsHolder.load(this, update, () -> {
+            if (!DocumentsHolder.isLoaded()) {noConnection(); return;}
             Log.d("VsaApp/LoadingActivity", "DocumentsHolder loaded");
             updateStatus();
             loadTeachers(sums.get("teachers"));
@@ -263,6 +312,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     private void loadTeachers(boolean update){
         TeacherHolder.load(this, update, () -> {
+            if (!TeacherHolder.isLoaded()) {noConnection(); return;}
             Log.d("VsaApp/LoadingActivity", "TeacherHolder loaded");
             updateStatus();
             finishedLoading();
@@ -287,6 +337,9 @@ public class LoadingActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void finishedLoading() {
+        // Control if everything is loaded...
+
+
         createJob(this);
         Intent intent = new Intent(this, MainActivity.class);
         if (getIntent().getStringExtra("page") != null) {

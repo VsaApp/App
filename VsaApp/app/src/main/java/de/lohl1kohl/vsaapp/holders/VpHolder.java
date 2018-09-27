@@ -101,6 +101,10 @@ public class VpHolder {
         }
     }
 
+    public static boolean isLoaded(){
+        return vp.size() > 0;
+    }
+
     private static boolean isShowOnlySelectedSubjects(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         return sharedPref.getBoolean("pref_showVpOnlyForYou", true);

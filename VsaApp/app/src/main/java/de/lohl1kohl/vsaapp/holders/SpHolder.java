@@ -99,6 +99,10 @@ public class SpHolder {
         }
     }
 
+    public static boolean isLoaded(){
+        return sp.size() > 0;
+    }
+
     private static void addSpecialLessons(Context context){
         // Get preferences...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);

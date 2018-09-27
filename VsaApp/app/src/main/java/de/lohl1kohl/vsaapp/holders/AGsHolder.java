@@ -61,6 +61,10 @@ public class AGsHolder {
         }
     }
 
+    public static boolean isLoaded(){
+        return ags.size() > 0;
+    }
+
     @Nullable
     private static List<AG> getSavedAGs(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);

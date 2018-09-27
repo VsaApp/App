@@ -60,6 +60,10 @@ public class DocumentsHolder {
         }
     }
 
+    public static boolean isLoaded(){
+        return documents.size() > 0;
+    }
+
     public static List<Document> searchDocuments(String str) {
         str = str.toLowerCase();
         List<Document> documents = new ArrayList<>();
