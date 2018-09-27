@@ -47,8 +47,10 @@ public class SpDayFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.sp_day, container, false);
         new Thread(() -> {
-            lineHeight = container.getMeasuredHeight() / 5;
-            lineWidth = container.getMeasuredWidth();
+            if (container != null){
+                lineHeight = container.getMeasuredHeight() / 5;
+                lineWidth = container.getMeasuredWidth();
+            }
 
             try {
                 // Get preferences...
@@ -86,8 +88,10 @@ public class SpDayFragment extends BaseFragment {
         listViewHolder.relativeLayout = convertView.findViewById(R.id.sp_rl);
         convertView.setTag(listViewHolder);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(lineWidth, lineHeight);
-        listViewHolder.relativeLayout.setLayoutParams(params);
+        if (lineHeight != 0) {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(lineWidth, lineHeight);
+            listViewHolder.relativeLayout.setLayoutParams(params);
+        }
 
         Boolean lock = sharedPref.getBoolean("pref_lockSubjects", false);
 

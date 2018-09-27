@@ -35,6 +35,7 @@ public class AGsHolder {
 
                 public void onReceived(String output) {
                     ags = convertJsonToArray(output);
+                    fillDays(context);
 
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("pref_ags", output);
@@ -45,6 +46,7 @@ public class AGsHolder {
 
                 public void onConnectionFailed() {
                     ags = getSavedAGs(context);
+                    fillDays(context);
                     if (agsLoadedCallback != null)
                         agsLoadedCallback.onLoaded();
                 }
@@ -54,10 +56,9 @@ public class AGsHolder {
             new AGs().getAGs(agsCallback);
         } else {
             ags = getSavedAGs(context);
+            fillDays(context);
             if (agsLoadedCallback != null) agsLoadedCallback.onLoaded();
         }
-
-        fillDays(context);
     }
 
     @Nullable

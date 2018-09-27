@@ -120,7 +120,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 Subject subject = lesson.getSubject();
                 String normal = subject.name;
                 String changed = change.getString("lesson").split(" ")[0];
-                if (normal.equals(changed)) {
+                if (normal.equals(changed) || (normal.equals(getString(R.string.lesson_tandem)) && (changed.equals(getString(R.string.lesson_french)) || changed.equals(getString(R.string.lesson_latin))))) {
                     text.append(change.getString("unit")).append(". Stunde ").append(change.getJSONObject("changed").getString("teacher")).append(" ").append(change.getJSONObject("changed").getString("info")).append(" ").append(change.getJSONObject("changed").getString("room")).append("\n");
                 }
             } catch (IndexOutOfBoundsException ignored) {
