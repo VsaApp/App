@@ -16,11 +16,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +61,7 @@ import static de.lohl1kohl.vsaapp.fragments.web.WebFragment.pushChoices;
 public class LoadingActivity extends AppCompatActivity {
 
     private int holders = 8;
-    private int loaded = -1;
+    private int loaded = 0;
     private Map<String, Boolean> sums;
 
     public static void createJob(Context context) {
@@ -139,17 +141,20 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
         JobManager.create(this).addJobCreator(new JobCreator());
 
+        startLoading();
+
+    }
+
+    private void startLoading(){
         /*
             Structure:
             - test login
             - get sums
             - load all Holder (this::loadAll)
          */
+        loaded = 0;
 
         new Thread(() -> {
-            // Start the progress...
-            updateStatus();
-
             // Check the login data...
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             String username = sharedPref.getString("pref_username", "-1");
@@ -187,13 +192,17 @@ public class LoadingActivity extends AppCompatActivity {
     private void noConnection(){
         runOnUiThread(() -> Toast.makeText(LoadingActivity.this, R.string.need_connection, Toast.LENGTH_LONG).show());
 
-        // Change progress bar...
+        // Get all views...
         ProgressBar progress1 = findViewById(R.id.progressBar);
-        runOnUiThread(() -> progress1.setVisibility(View.GONE));
         ProgressBar progress2 = findViewById(R.id.waitingForConnection);
+        TextView text1 = findViewById(R.id.progressText);
+        TextView text2 = findViewById(R.id.waitingText);
+
+        // Switch views...
+        runOnUiThread(() -> progress1.setVisibility(View.GONE));
         runOnUiThread(() -> progress2.setVisibility(View.VISIBLE));
-        TextView text = findViewById(R.id.progressText);
-        runOnUiThread(() -> text.setText(R.string.wait_for_connection));
+        runOnUiThread(() -> text1.setVisibility(View.GONE));
+        runOnUiThread(() -> text2.setVisibility(View.VISIBLE));
 
         new Thread(() -> {
             boolean connected = false;
@@ -215,11 +224,13 @@ public class LoadingActivity extends AppCompatActivity {
                 }
             }
 
-            // Change progress bar...
+            // Switch views...
             runOnUiThread(() -> progress1.setVisibility(View.VISIBLE));
             runOnUiThread(() -> progress2.setVisibility(View.GONE));
+            runOnUiThread(() -> text1.setVisibility(View.VISIBLE));
+            runOnUiThread(() -> text2.setVisibility(View.GONE));
 
-            loadAll();
+            startLoading();
         }).start();
 
     }
