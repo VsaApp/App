@@ -133,6 +133,7 @@ public class VpHolder {
     @Nullable
     private static List<Subject> convertJsonToArray(Context context, String array, boolean today) {
         List<Subject> subjects = new ArrayList<>();
+        List<Subject> unfilteredSubjects = new ArrayList<>();
         try {
             JSONObject header = new JSONObject(array);
             String date = header.getString("date");
@@ -184,7 +185,7 @@ public class VpHolder {
         return subjects;
     }
 
-    private static boolean compaireSubjects(Context context, Subject s1, Subject s2){
+    public static boolean compaireSubjects(Context context, Subject s1, Subject s2){
         if (s1 == s2) return true;
         return s2.getName().equals(context.getString(R.string.lesson_tandem)) && (s1.getName().equals(context.getString(R.string.lesson_french)) || s1.getName().equals(context.getString(R.string.lesson_latin)));
     }

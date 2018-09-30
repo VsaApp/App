@@ -174,7 +174,7 @@ public class DatesCalendarMonthFragment extends BaseFragment {
         calendar.set(Calendar.YEAR, day.year);
         int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
         if (weekday == -1 || weekday == 5) {
-            dayOfMonthInListView.setTextColor(getResources().getColor(R.color.calendarWeekend));
+            dayOfMonthInListView.setTextColor(mActivity.getResources().getColor(R.color.calendarWeekend));
         }
 
         Calendar today = Calendar.getInstance();
@@ -184,19 +184,19 @@ public class DatesCalendarMonthFragment extends BaseFragment {
 
         if (day.day == today.get(Calendar.DAY_OF_MONTH) && day.month == today.get(Calendar.MONTH) && day.year == today.get(Calendar.YEAR)) {
             RelativeLayout layout = convertView.findViewById(R.id.dates_calendar_item_layout);
-            layout.setBackgroundColor(getResources().getColor(R.color.today));
-            dayOfMonthInListView.setTextColor(getResources().getColor(R.color.today));
+            layout.setBackgroundColor(mActivity.getResources().getColor(R.color.today));
+            dayOfMonthInListView.setTextColor(mActivity.getResources().getColor(R.color.today));
         }
 
         if (events.size() > 0) {
-            rl.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            rl.setBackgroundColor(mActivity.getResources().getColor(R.color.colorAccent));
             convertView.setOnClickListener(view -> showEvents(mActivity, layoutinflater, events));
         } else if (month != day.month) {
-            rl.setBackgroundColor(getResources().getColor(R.color.calendarItemOtherMonth));
+            rl.setBackgroundColor(mActivity.getResources().getColor(R.color.calendarItemOtherMonth));
         } else {
             if (day.day == today.get(Calendar.DAY_OF_MONTH) && day.month == today.get(Calendar.MONTH) && day.year == today.get(Calendar.YEAR)) {
-                rl.setBackgroundColor(getResources().getColor(R.color.todayBackground));
-            } else rl.setBackgroundColor(getResources().getColor(R.color.calendarItem));
+                rl.setBackgroundColor(mActivity.getResources().getColor(R.color.todayBackground));
+            } else rl.setBackgroundColor(mActivity.getResources().getColor(R.color.calendarItem));
         }
 
         return convertView;
