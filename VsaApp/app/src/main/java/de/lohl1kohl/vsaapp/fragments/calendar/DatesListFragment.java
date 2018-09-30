@@ -1,15 +1,18 @@
 package de.lohl1kohl.vsaapp.fragments.calendar;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.TimeZone;
 
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
@@ -54,6 +57,17 @@ public class DatesListFragment extends BaseFragment {
                             timeView.setText(String.format(mActivity.getResources().getString(R.string.to_day), event.end.getDay(), event.end.getMonth(mActivity), event.end.getYear()));
                     else
                         timeView.setText(mActivity.getResources().getString(R.string.whole_day));
+
+                    v.setOnClickListener(view -> {
+                        Intent intent = new Intent(Intent.ACTION_EDIT);
+                        intent.setType("vnd.android.cursor.item/event");
+                        intent.putExtra("beginTime", event.getStartTime(mActivity));
+                        intent.putExtra("allDay", event.start.getHour() == event.end.getHour());
+                        intent.putExtra("endTime", event.getEndTime(mActivity));
+                        intent.putExtra("title", event.name);
+                        intent.putExtra("description",  event.info);
+                        startActivity(intent);
+                    });
 
                     listViewHolder.listInListView.addView(v);
                 }

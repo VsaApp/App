@@ -117,4 +117,15 @@ public class Date {
     private String getMonthName(Context context, int month) {
         return Arrays.asList(context.getResources().getStringArray(R.array.monthNames)).get(month - 1);
     }
+
+    public long getTimeInMillis(Context context){
+        Calendar date = Calendar.getInstance();
+        date.set(Calendar.YEAR, getYear());
+        date.set(Calendar.MONTH, getMonth(context) - 1);
+        date.set(Calendar.DAY_OF_MONTH, getDay());
+        date.set(Calendar.HOUR, getHour());
+        date.set(Calendar.MINUTE, getMin());
+
+        return date.getTimeInMillis();
+    }
 }

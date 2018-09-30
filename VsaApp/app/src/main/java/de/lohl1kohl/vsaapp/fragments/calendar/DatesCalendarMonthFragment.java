@@ -3,6 +3,7 @@ package de.lohl1kohl.vsaapp.fragments.calendar;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -49,6 +51,7 @@ public class DatesCalendarMonthFragment extends BaseFragment {
             View v = inflater.inflate(R.layout.dialog_events_item, null);
             TextView nameView = v.findViewById(R.id.dialog_event_name);
             TextView timeView = v.findViewById(R.id.dialog_event_time);
+            ImageButton button = v.findViewById(R.id.export_button);
 
             nameView.setText(event.name);
 
@@ -59,6 +62,18 @@ public class DatesCalendarMonthFragment extends BaseFragment {
                     timeView.setText(String.format(context.getResources().getString(R.string.to_day), event.end.getDay(), event.end.getMonth(context), event.end.getYear()));
             else
                 timeView.setText(context.getResources().getString(R.string.whole_day));
+
+            button.setOnClickListener(view -> {
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setType("vnd.android.cursor.item/event");
+                intent.putExtra("beginTime", event.getStartTime(context));
+                intent.putExtra("allDay", event.start.getHour() == event.end.getHour());
+                intent.putExtra("endTime", event.getEndTime(context));
+                intent.putExtra("title", event.name);
+                intent.putExtra("description",  event.info);
+                context.startActivity(intent);
+            });
+
             ll.addView(v);
         }
         eventsDialog.show();
