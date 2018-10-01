@@ -78,11 +78,8 @@ public class TeacherHolder {
 
     public static Teacher searchTeacher(String str) {
         str = str.toLowerCase();
-        List<Teacher> teachers = new ArrayList<>();
         for (Teacher teacher : TeacherHolder.teachers) {
             if (teacher.getShortName().toLowerCase().contains(str)) {
-                return teacher;
-            } else if (teacher.getLongName().toLowerCase().contains(str)) {
                 return teacher;
             }
         }
