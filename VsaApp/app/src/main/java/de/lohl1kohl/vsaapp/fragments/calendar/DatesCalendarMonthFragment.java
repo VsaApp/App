@@ -10,20 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
+import de.lohl1kohl.vsaapp.R;
+import de.lohl1kohl.vsaapp.fragments.BaseFragment;
+import de.lohl1kohl.vsaapp.holders.DatesHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.fragments.BaseFragment;
-import de.lohl1kohl.vsaapp.holders.DatesHolder;
 
 public class DatesCalendarMonthFragment extends BaseFragment {
 
@@ -70,7 +65,7 @@ public class DatesCalendarMonthFragment extends BaseFragment {
                 intent.putExtra("allDay", event.start.getHour() == event.end.getHour());
                 intent.putExtra("endTime", event.getEndTime(context));
                 intent.putExtra("title", event.name);
-                intent.putExtra("description",  event.info);
+                intent.putExtra("description", event.info);
                 context.startActivity(intent);
             });
 

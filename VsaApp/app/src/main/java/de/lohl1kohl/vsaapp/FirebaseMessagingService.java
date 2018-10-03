@@ -6,20 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
 import com.google.firebase.messaging.RemoteMessage;
-
+import de.lohl1kohl.vsaapp.fragments.pinboard.PinBoardActivity;
+import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
+import de.lohl1kohl.vsaapp.fragments.sp.Subject;
+import de.lohl1kohl.vsaapp.holders.SpHolder;
+import de.lohl1kohl.vsaapp.holders.SubjectSymbolsHolder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Random;
-
-import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
-import de.lohl1kohl.vsaapp.holders.SpHolder;
-import de.lohl1kohl.vsaapp.fragments.sp.Subject;
-import de.lohl1kohl.vsaapp.holders.SubjectSymbolsHolder;
-import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
@@ -78,17 +75,38 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         super.onMessageReceived(remoteMessage);
         try {
             JSONObject jsonObject = new JSONObject(remoteMessage.getData().get("data"));
-            String weekday = jsonObject.getString("weekday");
-            JSONArray changes = jsonObject.getJSONArray("changes");
-            FirebaseMessagingService service = this;
-            SubjectSymbolsHolder.load(this);
-            SpHolder.load(getApplicationContext(), false, () -> {
-                try {
-                    service.onSp(changes, weekday);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            });
+            if (jsonObject.has("weekday")) {
+                String weekday = jsonObject.getString("weekday");
+                JSONArray changes = jsonObject.getJSONArray("changes");
+                FirebaseMessagingService service = this;
+                SubjectSymbolsHolder.load(this);
+                SpHolder.load(getApplicationContext(), false, () -> {
+                    try {
+                        service.onSp(changes, weekday);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } else {
+                Intent intent = new Intent(this, PinBoardActivity.class);
+                intent.putExtra("user", jsonObject.getString("user"));
+                intent.putExtra("notification", true);
+                Random generator = new Random();
+
+                PendingIntent i = PendingIntent.getActivity(getApplicationContext(), generator.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), String.valueOf(generator.nextInt()))
+                        .setSmallIcon(R.mipmap.logo_white)
+                        .setContentTitle(jsonObject.getString("user") + ": " + jsonObject.getString("title"))
+                        .setContentText(jsonObject.getString("message"))
+                        .setColor(getResources().getColor(R.color.colorPrimary))
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(jsonObject.getString("message")))
+                        .setVibrate(new long[]{250, 250, 250, 250})
+                        .setContentIntent(i);
+
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(10, builder.build());
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
