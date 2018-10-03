@@ -13,13 +13,16 @@ import de.lohl1kohl.vsaapp.fragments.BaseFragment;
 
 public class DatesCalendarFragment extends BaseFragment {
 
+    public DatesFragment parent;
+    DatesCalendarAdapter adapter;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dates_calendar, container, false);
         TextView monthName = root.findViewById(R.id.dates_calendar_month_year);
 
         ViewPager pager = root.findViewById(R.id.calendar_viewpager);
-        DatesCalendarAdapter adapter = new DatesCalendarAdapter(mActivity, getFragmentManager(), monthName);
+        adapter = new DatesCalendarAdapter(mActivity, parent, getFragmentManager(), monthName);
         pager.setAdapter(adapter);
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -40,5 +43,9 @@ public class DatesCalendarFragment extends BaseFragment {
         });
 
         return root;
+    }
+
+    public void update(){
+        adapter.update();
     }
 }

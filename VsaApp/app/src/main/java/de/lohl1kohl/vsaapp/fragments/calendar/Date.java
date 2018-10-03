@@ -46,8 +46,16 @@ public class Date {
         this.weekday = weekday;
     }
 
-    public int getTimestamp(Context c) {
-        return (year * 100000000) + (getMonth(c) * 1000000) + (day * 10000) + (hour * 100) + min;
+    public Date(int min, int hour, int day, int month, int year) {
+        this.min = min;
+        this.hour = hour;
+        this.day = day;
+        this.month = month;
+        this.year = year;
+    }
+
+    public long getTimestamp(Context c) {
+        return ((long) year * (long) 100000000) + (getMonth(c) * 1000000) + (day * 10000) + (hour * 100) + min;
     }
 
     public int getHour() {

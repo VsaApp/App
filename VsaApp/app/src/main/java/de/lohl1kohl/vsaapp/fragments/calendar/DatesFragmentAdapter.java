@@ -13,15 +13,23 @@ public class DatesFragmentAdapter extends FragmentStatePagerAdapter {
     private DatesCalendarFragment datesCalendarFragment = new DatesCalendarFragment();
     private Context context;
 
-    DatesFragmentAdapter(Context context, FragmentManager fm) {
+    DatesFragmentAdapter(DatesFragment parent, Context context, FragmentManager fm) {
         super(fm);
         this.context = context;
+        datesListFragment.parent = parent;
+        datesCalendarFragment.parent = parent;
     }
 
     @Override
     public Fragment getItem(int position) {
         if (position == 0) return datesListFragment;
         else return datesCalendarFragment;
+    }
+
+    public void update(DatesFragment parent){
+        datesListFragment.update();
+        datesCalendarFragment.update();
+        notifyDataSetChanged();
     }
 
     @Override

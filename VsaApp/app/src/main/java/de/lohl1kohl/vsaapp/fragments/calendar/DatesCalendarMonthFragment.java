@@ -31,9 +31,13 @@ public class DatesCalendarMonthFragment extends BaseFragment {
     int year;
     int columnSize;
     private List<Day> days;
+    public DatesFragment mFragment;
+    private LayoutInflater inflater;
+    private ViewGroup container;
+    private View root;
 
-    private static void showEvents(Context context, LayoutInflater inflater, List<Event> events) {
-        final Dialog eventsDialog = new Dialog(context);
+    private void showEvents(LayoutInflater inflater, List<Event> events, String day) {
+        final Dialog eventsDialog = new Dialog(mActivity);
         WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
         lWindowParams.copyFrom(eventsDialog.getWindow().getAttributes());
         lWindowParams.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -42,36 +46,32 @@ public class DatesCalendarMonthFragment extends BaseFragment {
         eventsDialog.setContentView(R.layout.dialog_events);
         eventsDialog.setCancelable(true);
         eventsDialog.setCanceledOnTouchOutside(true);
-        eventsDialog.setTitle(R.string.eventsDialog);
+        eventsDialog.setTitle(day);
 
         LinearLayout ll = eventsDialog.findViewById(R.id.dialog_events_list);
         Button back = eventsDialog.findViewById(R.id.dialog_events_back);
         back.setOnClickListener(view -> eventsDialog.cancel());
         for (Event event : events) {
-            View v = inflater.inflate(R.layout.dialog_events_item, null);
-            TextView nameView = v.findViewById(R.id.dialog_event_name);
-            TextView timeView = v.findViewById(R.id.dialog_event_time);
-            ImageButton button = v.findViewById(R.id.export_button);
+            View v = inflater.inflate(R.layout.dates_list_item_event, null);
+            View line = v.findViewById(R.id.list_item_line);
+            TextView nameView = v.findViewById(R.id.list_event_name);
+            TextView timeView = v.findViewById(R.id.list_event_time);
+
+            Color color = event.category.color;
+            line.setBackgroundColor(android.graphics.Color.rgb(color.r, color.g, color.b));
 
             nameView.setText(event.name);
 
             if (event.start != event.end)
                 if (event.start.getHour() != 0)
-                    timeView.setText(String.format(context.getResources().getString(R.string.clock), event.start.getHour(), event.end.getHour()));
+                    timeView.setText(String.format(mActivity.getResources().getString(R.string.clock), event.start.getHour(), event.end.getHour()));
                 else
-                    timeView.setText(String.format(context.getResources().getString(R.string.to_day), event.end.getDay(), event.end.getMonth(context), event.end.getYear()));
+                    timeView.setText(String.format(mActivity.getResources().getString(R.string.to_day), event.end.getDay(), event.end.getMonth(mActivity), event.end.getYear()));
             else
-                timeView.setText(context.getResources().getString(R.string.whole_day));
+                timeView.setText(mActivity.getResources().getString(R.string.whole_day));
 
-            button.setOnClickListener(view -> {
-                Intent intent = new Intent(Intent.ACTION_EDIT);
-                intent.setType("vnd.android.cursor.item/event");
-                intent.putExtra("beginTime", event.getStartTime(context));
-                intent.putExtra("allDay", event.start.getHour() == event.end.getHour());
-                intent.putExtra("endTime", event.getEndTime(context));
-                intent.putExtra("title", event.name);
-                intent.putExtra("description",  event.info);
-                context.startActivity(intent);
+            v.setOnClickListener(view -> {
+                mFragment.editEvent(event);
             });
 
             ll.addView(v);
@@ -85,16 +85,29 @@ public class DatesCalendarMonthFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dates_calendar_month, container, false);
 
-        initDaysArray(mActivity);
-        createHeader(inflater, root, container);
+        this.root = root;
+        this.inflater = inflater;
+        this.container = container;
+
+        new Thread(() -> {
+            initDaysArray(mActivity);
+            createHeader(inflater, root, container);
+        }).start();
 
         return root;
+    }
+
+    public void update() {
+        new Thread(() -> {
+            initDaysArray(mActivity);
+            createGrid(inflater, root, container);
+        }).start();
     }
 
     private void initDaysArray(Context context) {
 
         // Create days for this month...
-        List<Day> monthList = DatesHolder.getMonth(month, year);
+        List<Day> monthList = DatesHolder.getMonth(context, month, year);
         int firstWeekday = new Date(1, month + 1, year).getDayOfWeek(context);
         if (firstWeekday > 0) {
             int lastYear = year;
@@ -103,7 +116,7 @@ public class DatesCalendarMonthFragment extends BaseFragment {
                 lastMonthNumber = 11;
                 lastYear = year - 1;
             }
-            List<Day> lastMonth = DatesHolder.getMonth(lastMonthNumber, lastYear);
+            List<Day> lastMonth = DatesHolder.getMonth(context, lastMonthNumber, lastYear);
             for (int i = 1; i < firstWeekday + 1; i++)
                 monthList.add(0, lastMonth.get(lastMonth.size() - i));
         }
@@ -114,7 +127,7 @@ public class DatesCalendarMonthFragment extends BaseFragment {
                 nextMonthNumber = 0;
                 nextYear = year + 1;
             }
-            List<Day> nextMonth = DatesHolder.getMonth(nextMonthNumber, nextYear);
+            List<Day> nextMonth = DatesHolder.getMonth(context, nextMonthNumber, nextYear);
             for (int i = 0; i < 42; i++) {
                 if (monthList.size() < 42) monthList.add(nextMonth.get(i));
                 else break;
@@ -125,47 +138,44 @@ public class DatesCalendarMonthFragment extends BaseFragment {
 
     private void createHeader(LayoutInflater inflater, View root, ViewGroup container) {
 
-        new Thread(() -> {
-            LinearLayout header = root.findViewById(R.id.dates_calendar_grid_header);
+        LinearLayout header = root.findViewById(R.id.dates_calendar_grid_header);
 
-            for (int i = 0; i < 7; i++) {
-                View headerItem = inflater.inflate(R.layout.dates_calendar_header, null);
+        for (int i = 0; i < 7; i++) {
+            View headerItem = inflater.inflate(R.layout.dates_calendar_header, null);
 
-                ViewHolderHeader headerHolder = new ViewHolderHeader();
-                headerHolder.weekday = headerItem.findViewById(R.id.weekday_short);
-                headerItem.setTag(headerHolder);
+            ViewHolderHeader headerHolder = new ViewHolderHeader();
+            headerHolder.weekday = headerItem.findViewById(R.id.weekday_short);
+            headerItem.setTag(headerHolder);
 
-                headerHolder.weekday.setText(new ArrayList<>(Arrays.asList(headerItem.getResources().getStringArray(R.array.weekdays))).get(i).substring(0, 2));
+            headerHolder.weekday.setText(new ArrayList<>(Arrays.asList(headerItem.getResources().getStringArray(R.array.weekdays))).get(i).substring(0, 2));
 
-                LinearLayout ll = headerItem.findViewById(R.id.header_item);
-                columnSize = container.getMeasuredWidth() / 7 + 1;
-                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(columnSize, ViewGroup.LayoutParams.WRAP_CONTENT);
-                ll.setLayoutParams(params);
+            LinearLayout ll = headerItem.findViewById(R.id.header_item);
+            columnSize = container.getMeasuredWidth() / 7 + 1;
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(columnSize, ViewGroup.LayoutParams.WRAP_CONTENT);
+            ll.setLayoutParams(params);
 
-                mActivity.runOnUiThread(() -> header.addView(headerItem));
-            }
+            mActivity.runOnUiThread(() -> header.addView(headerItem));
+        }
 
-            // After creating the header create the grid...
-            createGrid(inflater, root, container);
-        }).start();
+        // After creating the header create the grid...
+        createGrid(inflater, root, container);
     }
 
     private void createGrid(LayoutInflater inflater, View root, ViewGroup container) {
-        new Thread(() -> {
-            LinearLayout grid = root.findViewById(R.id.dates_calendar_grid);
+        LinearLayout grid = root.findViewById(R.id.dates_calendar_grid);
+        mActivity.runOnUiThread(grid::removeAllViews);
 
-            for (int i = 0; i < 6; i++) {
-                View gridLine = inflater.inflate(R.layout.dates_calendar_grid_line, null);
-                LinearLayout ll = gridLine.findViewById(R.id.calendar_grid_line);
-                int height = grid.getMeasuredHeight() / 6 - 1;
-                for (int j = 0; j < 7; j++) {
-                    View calendarItem = createGridItem(i * 7 + j, inflater, container, height);
-                    mActivity.runOnUiThread(() -> ll.addView(calendarItem));
-                }
-
-                mActivity.runOnUiThread(() -> grid.addView(ll));
+        for (int i = 0; i < 6; i++) {
+            View gridLine = inflater.inflate(R.layout.dates_calendar_grid_line, null);
+            LinearLayout ll = gridLine.findViewById(R.id.calendar_grid_line);
+            int height = grid.getMeasuredHeight() / 6 - 1;
+            for (int j = 0; j < 7; j++) {
+                View calendarItem = createGridItem(i * 7 + j, inflater, container, height);
+                mActivity.runOnUiThread(() -> ll.addView(calendarItem));
             }
-        }).start();
+
+            mActivity.runOnUiThread(() -> grid.addView(ll));
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -194,6 +204,8 @@ public class DatesCalendarMonthFragment extends BaseFragment {
 
         Calendar today = Calendar.getInstance();
         today.setTime(new java.util.Date());
+        if (weekday == -1) weekday = 6;
+        String nameOfDay = String.format(mActivity.getString(R.string.name_of_day), Arrays.asList(mActivity.getResources().getStringArray(R.array.weekdays)).get(weekday), day.day, day.month + 1, day.year);
 
         List<Event> events = day.getEvents();
 
@@ -204,8 +216,9 @@ public class DatesCalendarMonthFragment extends BaseFragment {
         }
 
         if (events.size() > 0) {
-            rl.setBackgroundColor(mActivity.getResources().getColor(R.color.colorAccent));
-            convertView.setOnClickListener(view -> showEvents(mActivity, layoutinflater, events));
+            Category category = events.get(0).category;
+            rl.setBackgroundColor(android.graphics.Color.rgb(category.color.r, category.color.g, category.color.b));
+            convertView.setOnClickListener(view -> showEvents(layoutinflater, events, nameOfDay));
         } else if (month != day.month) {
             rl.setBackgroundColor(mActivity.getResources().getColor(R.color.calendarItemOtherMonth));
         } else {

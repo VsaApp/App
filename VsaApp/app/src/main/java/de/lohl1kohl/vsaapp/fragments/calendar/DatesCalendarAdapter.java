@@ -21,11 +21,13 @@ public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
     private List<DatesCalendarMonthFragment> monthsFragments = new ArrayList<>();
     private int currentItem = 0;
     private TextView monthName;
+    private DatesFragment mFragment;
 
-    DatesCalendarAdapter(Context context, FragmentManager fm, TextView monthName) {
+    DatesCalendarAdapter(Context context, DatesFragment mFragment, FragmentManager fm, TextView monthName) {
         super(fm);
         this.context = context;
         this.monthName = monthName;
+        this.mFragment = mFragment;
 
         java.util.Date date = new java.util.Date();
         Calendar cal = Calendar.getInstance();
@@ -37,12 +39,19 @@ public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
         setCurrentItem(-1);
     }
 
+    public void update(){
+        for (int i = 0; i < monthsFragments.size(); i++){
+            monthsFragments.get(i).update();
+        }
+    }
+
     public void setCurrentItem(int item) {
         if (currentItem != item) {
             currentItem = item;
 
             if (item == monthsFragments.size() - 1) {
                 DatesCalendarMonthFragment fragment = new DatesCalendarMonthFragment();
+                fragment.mFragment = mFragment;
                 fragment.month = monthsFragments.get(monthsFragments.size() - 1).month + 1;
                 fragment.year = monthsFragments.get(monthsFragments.size() - 1).year;
                 if (fragment.month > 11) {
@@ -59,11 +68,13 @@ public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
 
     private void setFragments() {
         DatesCalendarMonthFragment fragment = new DatesCalendarMonthFragment();
+        fragment.mFragment = mFragment;
         fragment.month = currentMonth;
         fragment.year = currentYear;
         monthsFragments.add(fragment);
 
         fragment = new DatesCalendarMonthFragment();
+        fragment.mFragment = mFragment;
         fragment.month = currentMonth + 1;
         fragment.year = currentYear;
         if (currentMonth + 1 > 11) {

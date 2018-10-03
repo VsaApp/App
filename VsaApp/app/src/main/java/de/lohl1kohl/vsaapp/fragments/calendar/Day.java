@@ -15,6 +15,10 @@ public class Day {
         this.year = year;
     }
 
+    public long getTimestemp(){
+        return ((long) year * (long) 100000000) + ((month + 1 ) * 1000000) + (day * 10000);
+    }
+
     public void addEvent(Event event) {
         events.add(event);
     }
@@ -26,4 +30,5 @@ public class Day {
     public Event getEvent(int index) {
         return events.get(index);
     }
+
 }

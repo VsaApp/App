@@ -104,6 +104,33 @@
     <string name="cafetoriaSaldo">Saldo: %1$,.2f€</string>
     <string name="convertingFailed">Fehler beim konvertieren vom %s</string>
     <string name="calendarExport">+</string>
+    <string name="pinboard">Pinnwand</string>
+    <string name="following">Abonniert</string>
+    <string name="follow">Abonnieren</string>
+    <string name="dates_new_event_title">Titel</string>
+    <string name="dates_new_event_info">Info</string>
+    <string name="dates_new_event_date">Datum</string>
+    <string name="dates_new_event_time">Zeit</string>
+    <string name="dates_new_event_whole_day">Ganztägig</string>
+    <string name="dates_new_event_dialog_title">Neuer Termin</string>
+    <string name="dates_edit_event_dialog_title">Termin bearbeiten</string>
+    <string name="dates_edit_event_dialog_export">Termin exportieren:</string>
+    <string name="holiday_category">Ferien</string>
+    <string name="other_category">Andere</string>
+    <string name="edit_categories">Kategorien verwalten</string>
+    <string name="pick_color">Farbe auswählen</string>
+    <string name="default_categories">#Ferien::false::61:224:245#Andere::true::91:198:56</string>
+    <string name="add">+</string>
+    <string name="add_category">Kategorie hinzufügen:</string>
+    <string name="del_category">Kategorie löschen:</string>
+    <string name="in_school_category">Schulfrei:</string>
+    <string name="del_event">Event löschen:</string>
+    <string name="name">Name:</string>
+    <string name="color">Farbe:</string>
+    <string name="category_select">Kategorie zum bearbeiten auswählen:</string>
+    <string name="event_time">%02d:%02d Uhr</string>
+    <string name="no_title">Es muss ein Titel angegeben sein!</string>
+    <string name="name_of_day">%s, den %02d.%02d.%04d</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>

@@ -83,38 +83,35 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
             }
         });
         Preference mutePhone = findPreference("pref_mutePhone");
-        mutePhone.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
-                if (sharedPreferences.getBoolean("pref_mutePhone", false)) {
-                    final AudioManager mode = (AudioManager) mActivity.getSystemService(Context.AUDIO_SERVICE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("in_school", false);
-                    editor.apply();
-                    mode.setRingerMode(sharedPreferences.getInt("ringer_mode", AudioManager.RINGER_MODE_VIBRATE));
-                    NotificationManager notificationManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.cancel(-1);
-                    JobManager.instance().cancel(sharedPreferences.getInt("startid", 0));
-                    JobManager.instance().cancel(sharedPreferences.getInt("endid", 0));
-                } else {
-                    new Thread(() -> {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        Intent mStartActivity = new Intent(mActivity, LoadingActivity.class);
-                        int mPendingIntentId = 123456;
-                        PendingIntent mPendingIntent = PendingIntent.getActivity(mActivity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                        AlarmManager mgr = (AlarmManager) mActivity.getSystemService(Context.ALARM_SERVICE);
-                        mgr.set(AlarmManager.RTC, 0, mPendingIntent);
-                        System.exit(0);
-                    }).start();
+        mutePhone.setOnPreferenceChangeListener((preference, o) -> {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
+            if (sharedPreferences.getBoolean("pref_mutePhone", false)) {
+                final AudioManager mode = (AudioManager) mActivity.getSystemService(Context.AUDIO_SERVICE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("in_school", false);
+                editor.apply();
+                mode.setRingerMode(sharedPreferences.getInt("ringer_mode", AudioManager.RINGER_MODE_VIBRATE));
+                NotificationManager notificationManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancel(-1);
+                JobManager.instance().cancel(sharedPreferences.getInt("startid", 0));
+                JobManager.instance().cancel(sharedPreferences.getInt("endid", 0));
+            } else {
+            new Thread(() -> {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                return true;
-            }
-        });
+                Intent mStartActivity = new Intent(mActivity, LoadingActivity.class);
+                int mPendingIntentId = 123456;
+                PendingIntent mPendingIntent = PendingIntent.getActivity(mActivity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager mgr = (AlarmManager) mActivity.getSystemService(Context.ALARM_SERVICE);
+                mgr.set(AlarmManager.RTC, 0, mPendingIntent);
+                System.exit(0);
+            }).start();
+        }
+        return true;
+    });
 
         Preference gradePref = findPreference("pref_grade");
         gradePref.setOnPreferenceClickListener(preference -> {

@@ -48,7 +48,7 @@ public class WebFragment extends BaseFragment {
     private View root;
     private LinearLayout list;
 
-    public static void pushChoices(Context context) throws JSONException {
+    public static void pushChoices(Activity context) throws JSONException {
         JSONArray jsonArray = new JSONArray();
         for (int weekday = 0; weekday < 5; weekday++) {
             int lessons = SpHolder.getNumberOfLessons(weekday);
@@ -68,7 +68,7 @@ public class WebFragment extends BaseFragment {
 
             @Override
             public void onConnectionFailed() {
-                ((LoadingActivity) context).runOnUiThread(() -> Toast.makeText(context, R.string.no_connection, Toast.LENGTH_LONG).show());
+                context.runOnUiThread(() -> Toast.makeText(context, R.string.no_connection, Toast.LENGTH_LONG).show());
             }
         };
         new Push().push(context, jsonArray, pushCallback);
