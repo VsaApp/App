@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
+
         <service
             android:name=".FirebaseMessagingService"
             tools:ignore="ExportedService">
@@ -37,6 +38,7 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".LoadingActivity"
             android:label="@string/app_name"
@@ -48,9 +50,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".fragments.pinboard.PinBoardActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

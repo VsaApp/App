@@ -23,7 +23,6 @@ import de.lohl1kohl.vsaapp.fragments.ags.AGsFragment;
 import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaFragment;
 import de.lohl1kohl.vsaapp.fragments.calendar.DatesFragment;
 import de.lohl1kohl.vsaapp.fragments.documents.DocumentsFragment;
-import de.lohl1kohl.vsaapp.fragments.pinboard.PinBoardFragment;
 import de.lohl1kohl.vsaapp.fragments.settings.SettingsFragment;
 import de.lohl1kohl.vsaapp.fragments.sp.SpFragment;
 import de.lohl1kohl.vsaapp.fragments.teachers.TeacherFragment;
@@ -141,33 +140,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 currentFragment = new DatesFragment();
                 title = getString(R.string.menu_dates);
                 break;
-            case R.id.nav_pinboard:
-                navigationView.getMenu().getItem(4).setChecked(true);
-                currentFragment = new PinBoardFragment();
-                title = getString(R.string.pinboard);
-                break;
             case R.id.nav_ags:
-                navigationView.getMenu().getItem(5).setChecked(true);
+                navigationView.getMenu().getItem(4).setChecked(true);
                 currentFragment = new AGsFragment();
                 title = getString(R.string.ags);
                 break;
             case R.id.nav_cafetoria:
-                navigationView.getMenu().getItem(6).setChecked(true);
+                navigationView.getMenu().getItem(5).setChecked(true);
                 currentFragment = new CafetoriaFragment();
                 title = getString(R.string.cafetoria);
                 break;
             case R.id.nav_documents:
-                navigationView.getMenu().getItem(7).setChecked(true);
+                navigationView.getMenu().getItem(6).setChecked(true);
                 currentFragment = new DocumentsFragment();
                 title = getString(R.string.documents);
                 break;
             case R.id.nav_web:
-                navigationView.getMenu().getItem(8).setChecked(true);
+                navigationView.getMenu().getItem(7).setChecked(true);
                 currentFragment = new WebFragment();
                 title = getString(R.string.web);
                 break;
             case R.id.nav_settings:
-                navigationView.getMenu().getItem(9).setChecked(true);
+                navigationView.getMenu().getItem(8).setChecked(true);
                 currentFragment.onDestroy();
                 settingsFragment = new SettingsFragment();
                 break;
