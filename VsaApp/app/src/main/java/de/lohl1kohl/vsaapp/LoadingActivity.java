@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import de.lohl1kohl.vsaapp.fragments.calendar.DatesCalendar;
+import de.lohl1kohl.vsaapp.fragments.calendar.Day;
 import de.lohl1kohl.vsaapp.holders.AGsHolder;
 import de.lohl1kohl.vsaapp.holders.DatesHolder;
 import de.lohl1kohl.vsaapp.holders.DocumentsHolder;
@@ -82,11 +84,11 @@ public class LoadingActivity extends AppCompatActivity {
         if (sharedPreferences.getBoolean("pref_mutePhone", true)) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             int s;
-            if (!isInSchool()) {
+            if (!isInSchool(context)) {
                 final AudioManager mode = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                 editor.putInt("ringer_mode", mode.getRingerMode());
                 editor.apply();
-                int start = secondsUntilStart(getNextStartTime()) * 1000;
+                long start = secondsUntilStart(getNextStartTime(context)) * 1000;
                 s = new JobRequest.Builder(StartJob.TAG)
                         .setExact(start)
                         .setUpdateCurrent(true)
@@ -103,7 +105,7 @@ public class LoadingActivity extends AppCompatActivity {
         }
     }
 
-    private static boolean isInSchool() {
+    private static boolean isInSchool(Context context) {
         Calendar now = Calendar.getInstance();
         now.setTime(new java.util.Date());
 
@@ -119,13 +121,20 @@ public class LoadingActivity extends AppCompatActivity {
         end.set(Calendar.MINUTE, 50);
         end.set(Calendar.SECOND, 0);
         if (end.get(Calendar.DAY_OF_WEEK) == 1 || end.get(Calendar.DAY_OF_WEEK) == 7) return false;
+
+        // Check if there are free days...
+        Day day = DatesHolder.getDay(context, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+        for (int i = 0; i < day.getEvents().size(); i++){
+            if (!day.getEvent(i).category.isSchool) return false;
+        }
+
         List<Lesson> lessons = SpHolder.getDay(end.get(Calendar.DAY_OF_WEEK) - 2);
         end.add(Calendar.MINUTE, LessonUtils.endTimes[lessons.size() - 1] + 20); // End time of last lesson + 10 minutes ( + 10 minutes for 7:50am to 8:00am)
 
         return now.after(start) && now.before(end);
     }
 
-    private static java.util.Date getNextStartTime() {
+    private static java.util.Date getNextStartTime(Context context) {
         java.util.Date now = new java.util.Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
@@ -135,17 +144,38 @@ public class LoadingActivity extends AppCompatActivity {
         if (now.after(cal.getTime())) {
             cal.add(Calendar.DAY_OF_YEAR, 1);
         }
-        if (cal.get(Calendar.DAY_OF_WEEK) == 1) cal.add(Calendar.DAY_OF_YEAR, 2);
-        else if (cal.get(Calendar.DAY_OF_WEEK) == 7) cal.add(Calendar.DAY_OF_YEAR, 1);
+
+        // Search next school day...
+        boolean foundDay = false;
+        while (!foundDay){
+            if (cal.get(Calendar.DAY_OF_WEEK) == 1) cal.add(Calendar.DAY_OF_YEAR, 2);
+            else if (cal.get(Calendar.DAY_OF_WEEK) == 7) cal.add(Calendar.DAY_OF_YEAR, 1);
+
+            Day day = DatesHolder.getDay(context, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            if  (day.getEvents().size() == 0) break;
+            for (int i = 0; i < day.getEvents().size(); i++){
+                if (day.getEvent(i).category.isSchool) {
+                    foundDay = true;
+                }
+                else{
+                    foundDay = false;
+                    cal.add(Calendar.DAY_OF_YEAR, 1);
+                    break;
+                }
+            }
+        }
+
+        Log.i("VsaApp/LoadingActivity", String.format("%02d:%02d Uhr %02d.%02d.%04d", cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+
         return cal.getTime();
     }
 
-    private static int secondsUntilStart(java.util.Date start) {
+    private static long secondsUntilStart(java.util.Date start) {
         final long millis = start.getTime() - System.currentTimeMillis();
         long hours = TimeUnit.MILLISECONDS.toHours(millis);
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis));
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis));
-        return (int) (hours * 3600 + minutes * 60 + seconds);
+        return (hours * (long) 3600 + minutes * (long) 60 + seconds);
     }
 
     @Override
@@ -365,7 +395,6 @@ public class LoadingActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void finishedLoading() {
         // Control if everything is loaded...
-
 
         createJob(this);
         Intent intent = new Intent(this, MainActivity.class);

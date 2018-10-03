@@ -240,8 +240,8 @@ public class DatesHolder {
     }
 
     public static boolean updateEvent(Context context, Event event, Event event2){
-        String eventString = String.format(Locale.GERMAN, "#%s:%s:%s:%d.%d.%d.%d.%d:%d.%d.%d.%d.%d", event.name, event.info, event.category.name, event.start.getMin(), event.start.getHour(), event.start.getDay(), event.start.getMonth(context), event.start.getYear(), event.end.getMin(), event.end.getHour(), event.end.getDay(), event.end.getMonth(context), event.end.getYear());
-        String newEventString = String.format(Locale.GERMAN, "#%s:%s:%s:%d.%d.%d.%d.%d:%d.%d.%d.%d.%d", event2.name, event2.info, event2.category.name, event2.start.getMin(), event2.start.getHour(), event2.start.getDay(), event2.start.getMonth(context), event2.start.getYear(), event2.end.getMin(), event.start.getHour(), event2.end.getDay(), event2.end.getMonth(context), event2.end.getYear());
+        String eventString = String.format(Locale.GERMAN, "%s:%s:%s:%d.%d.%d.%d.%d:%d.%d.%d.%d.%d", event.name, event.info, event.category.name, event.start.getMin(), event.start.getHour(), event.start.getDay(), event.start.getMonth(context), event.start.getYear(), event.end.getMin(), event.end.getHour(), event.end.getDay(), event.end.getMonth(context), event.end.getYear());
+        String newEventString = String.format(Locale.GERMAN, "%s:%s:%s:%d.%d.%d.%d.%d:%d.%d.%d.%d.%d", event2.name, event2.info, event2.category.name, event2.start.getMin(), event2.start.getHour(), event2.start.getDay(), event2.start.getMonth(context), event2.start.getYear(), event2.end.getMin(), event.start.getHour(), event2.end.getDay(), event2.end.getMonth(context), event2.end.getYear());
 
         if (eventString.equals(newEventString)) return false;
 
@@ -357,6 +357,10 @@ public class DatesHolder {
 
     public static List<Day> getCalendar() {
         return calendar;
+    }
+
+    public static Day getDay(Context context, int year, int month, int day){
+        return getMonth(context, month, year).get(day - 1);
     }
 
     public static List<Day> getMonth(Context c, int month, int year) {
