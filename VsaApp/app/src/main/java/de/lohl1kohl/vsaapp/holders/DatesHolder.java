@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -23,6 +24,7 @@ import de.lohl1kohl.vsaapp.fragments.calendar.Date;
 import de.lohl1kohl.vsaapp.fragments.calendar.Dates;
 import de.lohl1kohl.vsaapp.fragments.calendar.Day;
 import de.lohl1kohl.vsaapp.fragments.calendar.Event;
+import de.lohl1kohl.vsaapp.fragments.calendar.Holidays;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class DatesHolder {
@@ -45,18 +47,26 @@ public class DatesHolder {
             Callbacks.baseCallback datesCallback = new Callbacks.baseCallback() {
 
                 public void onReceived(String output) {
-                    convertJson(context, output);
+                    HolidayHolder.load(context, () -> {
+                        convertJson(context, output);
+                        events.addAll(HolidayHolder.getHolidays());
+                        sortEvents(context);
+                        createCalendar(context);
 
-                    // Save the current sp in the settings...
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("pref_dates", output);
-                    editor.apply();
+                        // Save the current sp in the settings...
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("pref_dates", output);
+                        editor.apply();
 
-                    if (datesLoadedCallback != null) datesLoadedCallback.onLoaded();
+                        if (datesLoadedCallback != null) datesLoadedCallback.onLoaded();
+                    });
                 }
 
                 public void onConnectionFailed() {
                     readSavedDates(context);
+                    events.addAll(HolidayHolder.getHolidays());
+                    sortEvents(context);
+                    createCalendar(context);
                     if (datesLoadedCallback != null) datesLoadedCallback.onLoaded();
                 }
             };
@@ -64,14 +74,21 @@ public class DatesHolder {
             // Send request to server...
             new Dates().updateDates(datesCallback);
         } else {
-            // If the dates are already loaded stop process...
-            if (events == null) readSavedDates(context);
-            if (datesLoadedCallback != null) datesLoadedCallback.onLoaded();
+            HolidayHolder.load(context, () -> {
+                // If the dates are already loaded stop process...
+                if (events == null) {
+                    readSavedDates(context);
+                    events.addAll(HolidayHolder.getHolidays());
+                    sortEvents(context);
+                    createCalendar(context);
+                }
+                if (datesLoadedCallback != null) datesLoadedCallback.onLoaded();
+            });
         }
     }
 
     public static boolean isLoaded(){
-        return events != null || calendar != null;
+        return events != null && calendar != null && HolidayHolder.getHolidays().size() > 0;
     }
 
     public static void setCategories(Context context, List<Category> categories){
@@ -104,6 +121,9 @@ public class DatesHolder {
             Color color = new Color(Integer.parseInt(fragments[i].split("::")[2].split(":")[0]), Integer.parseInt(fragments[i].split("::")[2].split(":")[1]), Integer.parseInt(fragments[i].split("::")[2].split(":")[2]));
             categories.add(new Category(fragments[i].split("::")[0], color, fragments[i].split("::")[1].equals("true")));
         }
+
+        // TODO: This line is only for old version to add the category first time in the preferences... (Later this line can be deleted!)
+        if (getCategory(context.getString(R.string.holiday_category)) == null) categories.add(new Category(context.getString(R.string.holiday_category), new Color(96, 73, 43), false));
     }
 
     public static List<Category> getCategories(){
@@ -142,7 +162,7 @@ public class DatesHolder {
 
             events = new ArrayList<>();
 
-            Category holidays = getCategory(context.getString(R.string.holiday_category));
+            Category holidays = getCategory(context.getString(R.string.holidays_category));
             Category other = getCategory(context.getString(R.string.other_category));
 
             // Convert open door day...
@@ -207,8 +227,6 @@ public class DatesHolder {
             }
 
             loadCustomEvents(context);
-            sortEvents(context);
-            createCalendar(context);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -336,7 +354,7 @@ public class DatesHolder {
         }
     }
 
-    public static List<Event> getEvents() {
+    private static List<Event> getEvents() {
         return events;
     }
 

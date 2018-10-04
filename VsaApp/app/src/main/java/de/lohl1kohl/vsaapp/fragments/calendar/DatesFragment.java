@@ -388,8 +388,8 @@ public class DatesFragment extends BaseFragment {
         categoriesList.setAdapter(spinnerArrayAdapter);
 
         isSchool.setChecked(!categories.get(categoriesList.getSelectedItemPosition()).isSchool);
-        name.setEnabled(!(categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.other_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holiday_category))));
-        del.setEnabled(!(categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.other_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holiday_category))));
+        name.setEnabled(!(categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.other_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holiday_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holidays_category))));
+        del.setEnabled(!(categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.other_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holiday_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holidays_category))));
 
 
         categoriesList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -397,8 +397,8 @@ public class DatesFragment extends BaseFragment {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 name.setText(categories.get(position).name);
                 color.setBackgroundColor(Color.rgb(categories.get(position).color.r, categories.get(position).color.g, categories.get(position).color.b));
-                name.setEnabled(!(categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.other_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holiday_category))));
-                del.setEnabled(!(categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.other_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holiday_category))));
+                name.setEnabled(!(categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.other_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holiday_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holidays_category))));
+                del.setEnabled(!(categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.other_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holiday_category))  || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holidays_category))));
                 isSchool.setChecked(!categories.get(categoriesList.getSelectedItemPosition()).isSchool);
             }
 

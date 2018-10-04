@@ -115,11 +115,12 @@
     <string name="dates_new_event_dialog_title">Neuer Termin</string>
     <string name="dates_edit_event_dialog_title">Termin bearbeiten</string>
     <string name="dates_edit_event_dialog_export">Termin exportieren:</string>
-    <string name="holiday_category">Ferien</string>
+    <string name="holidays_category">Ferien</string>
     <string name="other_category">Andere</string>
+    <string name="holiday_category">Feiertag</string>
     <string name="edit_categories">Kategorien verwalten</string>
     <string name="pick_color">Farbe auswählen</string>
-    <string name="default_categories">#Ferien::false::61:224:245#Andere::true::91:198:56</string>
+    <string name="default_categories">#Ferien::false::61:224:245#Andere::true::91:198:56:#Feiertag::false::96:73:43</string>
     <string name="add">+</string>
     <string name="add_category">Kategorie hinzufügen:</string>
     <string name="del_category">Kategorie löschen:</string>
@@ -131,6 +132,7 @@
     <string name="event_time">%02d:%02d Uhr</string>
     <string name="no_title">Es muss ein Titel angegeben sein!</string>
     <string name="name_of_day">%s, den %02d.%02d.%04d</string>
+    <string name="exam">Klausur</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>
