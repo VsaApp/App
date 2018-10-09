@@ -30,17 +30,17 @@
     <string name="no_class">Keine Klasse gesetzt</string>
     <string name="choose_grade">Klasse auswählen</string>
     <string name="search_teacher">Lehrer mit Namen, Kürzel oder Fach suchen</string>
-    <string name="for_s_the_s_from_s">Für %s den %s (Von: %s)</string>
+    <string name="for_s_the_s_from_s" formatted="false">Für %s den %s (Von: %s)</string>
     <string name="mister">Herr</string>
     <string name="mister_gen">Herrn</string>
     <string name="misses">Frau</string>
-    <string name="s_in_room_s">%s in Raum %s</string>
+    <string name="s_in_room_s" formatted="false">%s in Raum %s</string>
     <string name="dot_unit">. Stunde</string>
-    <string name="with_s_s_in_room_s">Mit %s %s in Raum %s</string>
-    <string name="now_with_s_s">Jetzt mit %s: %s</string>
-    <string name="now_s">Jetzt %s</string>
-    <string name="in_room_s">\ in Raum %s</string>
-    <string name="with_s">mit %s</string>
+    <string name="with_s_s_in_room_s" formatted="false">Mit %s %s in Raum %s</string>
+    <string name="now_with_s_s" formatted="false">Jetzt mit %s: %s</string>
+    <string name="now_s" formatted="false">Jetzt %s</string>
+    <string name="in_room_s" formatted="false">\ in Raum %s</string>
+    <string name="with_s" formatted="false">mit %s</string>
     <string name="no_unit_in_this_lesson">-</string>
     <string name="lesson_pause">Mittagspause</string>
     <string name="lesson_free">Freistunde</string>
@@ -63,15 +63,15 @@
     <string name="menu_dates">Kalender</string>
     <string name="dates_calendar">Kalender</string>
     <string name="dates_list">Liste</string>
-    <string name="clock">%d - %d Uhr</string>
+    <string name="clock" formatted="false">%d - %d Uhr</string>
     <string name="whole_day">Ganztägig</string>
-    <string name="to_day">bis %d.%d.%d</string>
+    <string name="to_day" formatted="false">bis %d.%d.%d</string>
     <string name="web">Web</string>
     <string name="scan">Scannen</string>
     <string name="scan_instruction">Öffne https://vsa.lohl1kohl.de in einem Browser und scanne den QR-Code</string>
     <string name="ags">AGs</string>
-    <string name="ag_room">In Raum: %s</string>
-    <string name="ag_grade">Für Klassen: %s</string>
+    <string name="ag_room" formatted="false">In Raum: %s</string>
+    <string name="ag_grade" formatted="false">Für Klassen: %s</string>
     <string name="write_email">Eine Email schreiben</string>
     <string name="shortName">Kürzel:</string>
     <string name="subjects">Fächer:</string>
@@ -99,10 +99,10 @@
     <string name="cafetoriaExtra">Extras</string>
     <string name="cafetoriaMenus">Menüs</string>
     <string name="cafetoriaSnacks">Snacks</string>
-    <string name="cafetoriaTime">%s - %s Uhr</string>
-    <string name="cafetoriaStartTime">%s Uhr</string>
+    <string name="cafetoriaTime" formatted="false">%s - %s Uhr</string>
+    <string name="cafetoriaStartTime" formatted="false">%s Uhr</string>
     <string name="cafetoriaSaldo">Saldo: %1$,.2f€</string>
-    <string name="convertingFailed">Fehler beim konvertieren vom %s</string>
+    <string name="convertingFailed" formatted="false">Fehler beim konvertieren vom %s</string>
     <string name="calendarExport">+</string>
     <string name="pinboard">Pinnwand</string>
     <string name="following">Abonniert</string>
@@ -129,9 +129,9 @@
     <string name="name">Name:</string>
     <string name="color">Farbe:</string>
     <string name="category_select">Kategorie zum bearbeiten auswählen:</string>
-    <string name="event_time">%02d:%02d Uhr</string>
+    <string name="event_time" formatted="false">%02d:%02d Uhr</string>
     <string name="no_title">Es muss ein Titel angegeben sein!</string>
-    <string name="name_of_day">%s, den %02d.%02d.%04d</string>
+    <string name="name_of_day" formatted="false">%s, den %02d.%02d.%04d</string>
     <string name="exam">Klausur</string>
 
     <string-array name="nameOfGrades">

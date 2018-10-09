@@ -16,68 +16,34 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
-
-import org.json.JSONException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import de.lohl1kohl.vsaapp.fragments.calendar.DatesCalendar;
 import de.lohl1kohl.vsaapp.fragments.calendar.Day;
-import de.lohl1kohl.vsaapp.holders.AGsHolder;
-import de.lohl1kohl.vsaapp.holders.DatesHolder;
-import de.lohl1kohl.vsaapp.holders.DocumentsHolder;
-import de.lohl1kohl.vsaapp.holders.SubjectSymbolsHolder;
-import de.lohl1kohl.vsaapp.holders.VpHolder;
-import de.lohl1kohl.vsaapp.holders.SpHolder;
-import de.lohl1kohl.vsaapp.holders.TeacherHolder;
-
 import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
 import de.lohl1kohl.vsaapp.fragments.sp.LessonUtils;
 import de.lohl1kohl.vsaapp.fragments.vp.VpFragment;
-
+import de.lohl1kohl.vsaapp.holders.*;
 import de.lohl1kohl.vsaapp.jobs.JobCreator;
 import de.lohl1kohl.vsaapp.jobs.StartJob;
-
 import de.lohl1kohl.vsaapp.loader.Callbacks;
-import de.lohl1kohl.vsaapp.holders.SumsHolder;
+import org.json.JSONException;
+
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static de.lohl1kohl.vsaapp.fragments.web.WebFragment.pushChoices;
 
 public class LoadingActivity extends AppCompatActivity {
 
+    public static String username = "";
+    public static String password = "";
     private int holders = 8;
     private int loaded = 0;
     private Map<String, Boolean> sums;
     private boolean visible = true;
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        visible = true;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        visible = false;
-    }
 
     public static void createJob(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -124,7 +90,7 @@ public class LoadingActivity extends AppCompatActivity {
 
         // Check if there are free days...
         Day day = DatesHolder.getDay(context, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
-        for (int i = 0; i < day.getEvents().size(); i++){
+        for (int i = 0; i < day.getEvents().size(); i++) {
             if (!day.getEvent(i).category.isSchool) return false;
         }
 
@@ -147,17 +113,16 @@ public class LoadingActivity extends AppCompatActivity {
 
         // Search next school day...
         boolean foundDay = false;
-        while (!foundDay){
+        while (!foundDay) {
             if (cal.get(Calendar.DAY_OF_WEEK) == 1) cal.add(Calendar.DAY_OF_YEAR, 2);
             else if (cal.get(Calendar.DAY_OF_WEEK) == 7) cal.add(Calendar.DAY_OF_YEAR, 1);
 
             Day day = DatesHolder.getDay(context, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-            if  (day.getEvents().size() == 0) break;
-            for (int i = 0; i < day.getEvents().size(); i++){
+            if (day.getEvents().size() == 0) break;
+            for (int i = 0; i < day.getEvents().size(); i++) {
                 if (day.getEvent(i).category.isSchool) {
                     foundDay = true;
-                }
-                else{
+                } else {
                     foundDay = false;
                     cal.add(Calendar.DAY_OF_YEAR, 1);
                     break;
@@ -179,6 +144,18 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        visible = true;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        visible = false;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
@@ -188,7 +165,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     }
 
-    private void startLoading(){
+    private void startLoading() {
         /*
             Structure:
             - test login
@@ -200,8 +177,8 @@ public class LoadingActivity extends AppCompatActivity {
         new Thread(() -> {
             // Check the login data...
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-            String username = sharedPref.getString("pref_username", "-1");
-            String password = sharedPref.getString("pref_password", "-1");
+            username = sharedPref.getString("pref_username", "-1");
+            password = sharedPref.getString("pref_password", "-1");
             if (username.equals("-1") || password.equals("-1")) {
                 runOnUiThread(this::showLoginScreen);
             } else {
@@ -232,7 +209,7 @@ public class LoadingActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void noConnection(){
+    private void noConnection() {
         runOnUiThread(() -> Toast.makeText(LoadingActivity.this, R.string.need_connection, Toast.LENGTH_LONG).show());
 
         // Get all views...
@@ -248,7 +225,7 @@ public class LoadingActivity extends AppCompatActivity {
         runOnUiThread(() -> text2.setVisibility(View.VISIBLE));
 
         new Thread(() -> {
-            while (true){
+            while (true) {
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
@@ -293,7 +270,10 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void checkChangedSums(Map<String, Boolean> sums) {
-        if (!SumsHolder.isLoaded()) {noConnection(); return;}
+        if (!SumsHolder.isLoaded()) {
+            noConnection();
+            return;
+        }
         updateStatus();
         this.sums = sums;
 
@@ -313,18 +293,24 @@ public class LoadingActivity extends AppCompatActivity {
         loadSp(sums.get("sp"));
     }
 
-    private void loadSp(boolean update){
+    private void loadSp(boolean update) {
         SpHolder.load(this, update, () -> {
-            if (!SpHolder.isLoaded()) {noConnection(); return;}
+            if (!SpHolder.isLoaded()) {
+                noConnection();
+                return;
+            }
             Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
             updateStatus();
             loadVp(sums.get("vp/today") || sums.get("vp/tomorrow"));
         });
     }
 
-    private void loadVp(boolean update){
+    private void loadVp(boolean update) {
         VpHolder.load(this, update, () -> {
-            if (!VpHolder.isLoaded()) {noConnection(); return;}
+            if (!VpHolder.isLoaded()) {
+                noConnection();
+                return;
+            }
             if (this.getIntent().getStringExtra("day") != null) {
                 VpFragment.selectDay(LoadingActivity.this.getIntent().getStringExtra("day"));
             }
@@ -339,27 +325,36 @@ public class LoadingActivity extends AppCompatActivity {
         });
     }
 
-    private void loadDates(boolean update){
+    private void loadDates(boolean update) {
         DatesHolder.load(this, update, () -> {
-            if (!DatesHolder.isLoaded()) {noConnection(); return;}
+            if (!DatesHolder.isLoaded()) {
+                noConnection();
+                return;
+            }
             Log.d("VsaApp/LoadingActivity", "DatesHolder loaded");
             updateStatus();
             loadAGs(sums.get("ags"));
         });
     }
 
-    private void loadAGs(boolean update){
+    private void loadAGs(boolean update) {
         AGsHolder.load(this, update, () -> {
-            if (!AGsHolder.isLoaded()) {noConnection(); return;}
+            if (!AGsHolder.isLoaded()) {
+                noConnection();
+                return;
+            }
             Log.d("VsaApp/LoadingActivity", "AGsHolder loaded");
             updateStatus();
             loadDocs(sums.get("documents"));
         });
     }
 
-    private void loadDocs(boolean update){
+    private void loadDocs(boolean update) {
         DocumentsHolder.load(this, update, () -> {
-            if (!DocumentsHolder.isLoaded()) {noConnection(); return;}
+            if (!DocumentsHolder.isLoaded()) {
+                noConnection();
+                return;
+            }
             Log.d("VsaApp/LoadingActivity", "DocumentsHolder loaded");
             updateStatus();
             loadTeachers(sums.get("teachers"));
@@ -367,9 +362,12 @@ public class LoadingActivity extends AppCompatActivity {
 
     }
 
-    private void loadTeachers(boolean update){
+    private void loadTeachers(boolean update) {
         TeacherHolder.load(this, update, () -> {
-            if (!TeacherHolder.isLoaded()) {noConnection(); return;}
+            if (!TeacherHolder.isLoaded()) {
+                noConnection();
+                return;
+            }
             Log.d("VsaApp/LoadingActivity", "TeacherHolder loaded");
             updateStatus();
             finishedLoading();
@@ -377,14 +375,14 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void updateStatus(){
-        Log.d("VsaApp/LoadingActivity", "Check finish: " + Integer.toString(loaded + 1));
+    private void updateStatus() {
+        Log.d("VsaApp/LoadingActivity", "Check finish: " + (loaded + 1));
         loaded++;
 
         TextView progressText = findViewById(R.id.progressText);
         ProgressBar progressBar = findViewById(R.id.progressBar);
         runOnUiThread(() -> {
-            progressText.setText(Integer.toString((int) Math.round(((double) loaded / (double) holders) * 100)) + " %");
+            progressText.setText((int) Math.round(((double) loaded / (double) holders) * 100) + " %");
             ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", (int) Math.round(((double) loaded / (double) holders) * 100) - 1 / holders, (int) Math.round(((double) loaded / (double) holders) * 100));
             progressAnimator.setDuration(1000);
             progressAnimator.setInterpolator(new LinearInterpolator());
