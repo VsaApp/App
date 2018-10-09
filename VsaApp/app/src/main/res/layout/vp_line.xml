@@ -16,16 +16,16 @@
         android:textStyle="bold" />
 
     <LinearLayout
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="start"
+        android:gravity="center"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/vp_normal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
+            android:gravity="center"
             android:padding="5dp"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
@@ -34,7 +34,7 @@
             android:id="@+id/vp_changes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
+            android:gravity="center"
             android:padding="5dp"
             android:textColor="@android:color/black"
             android:textSize="20sp"

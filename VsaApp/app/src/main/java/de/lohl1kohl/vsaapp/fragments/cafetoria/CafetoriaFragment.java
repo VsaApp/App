@@ -37,6 +37,13 @@ import de.lohl1kohl.vsaapp.loader.Callbacks;
 public class CafetoriaFragment extends BaseFragment {
 
     View cafetoriaView;
+    private boolean isInFront = true;
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isInFront = false;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +60,7 @@ public class CafetoriaFragment extends BaseFragment {
 
     void displayMenues() {
         Log.i("cafetoria", String.valueOf(CafetoriaHolder.days));
+        if (!isInFront) return;
 
         RelativeLayout progressView = cafetoriaView.findViewById(R.id.cafetoria_loading_widget);
         ProgressBar progressBar = cafetoriaView.findViewById(R.id.cafetoria_loading_progress);
