@@ -92,19 +92,17 @@ public class VpDayFragment extends BaseFragment {
                     listViewHolder.lessonInListView.setTextColor(getResources().getColor(R.color.vpUnfiltered));
                 }
 
-                int finalPosition = position;
                 convertView.setOnClickListener(view -> {
-                    Subject clickedLesson = VpHolder.getSubject(today, finalPosition);
-                    VpFragment.showVpInfoDialog(mActivity, clickedLesson);
+                    VpFragment.showVpInfoDialog(mActivity, nSubject);
                 });
                 mActivity.runOnUiThread(() -> ll.addView(convertView));
             }
 
             TextView textView = root.findViewById(R.id.vpStand);
             if (today)
-                mActivity.runOnUiThread(() -> textView.setText(String.format(getString(R.string.for_s_the_s_from_s), VpHolder.weekdayToday, VpHolder.dateToday, VpHolder.timeToday)));
+                mActivity.runOnUiThread(() -> textView.setText(String.format(getString(R.string.for_s_the_s_from_s), VpHolder.weekdayToday, VpHolder.dateToday, VpHolder.updateToday, VpHolder.timeToday)));
             else
-                mActivity.runOnUiThread(() -> textView.setText(String.format(getString(R.string.for_s_the_s_from_s), VpHolder.weekdayTomorrow, VpHolder.dateTomorrow, VpHolder.timeTomorrow)));
+                mActivity.runOnUiThread(() -> textView.setText(String.format(getString(R.string.for_s_the_s_from_s), VpHolder.weekdayTomorrow, VpHolder.dateTomorrow, VpHolder.updateTomorrow, VpHolder.timeTomorrow)));
 
         }).start();
 

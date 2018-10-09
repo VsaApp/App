@@ -9,6 +9,7 @@
         android:id="@+id/vpStand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/vpStand"
         android:textColor="@android:color/black" />
 

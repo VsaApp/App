@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Random;
 
 import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
@@ -84,7 +85,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             SubjectSymbolsHolder.load(this);
             SpHolder.load(getApplicationContext(), false, () -> {
                 try {
-                    service.onSp(changes, weekday);
+                    service.onSp(jsonObject.getString("lesson"), jsonObject.getString("teacher"), changes, weekday);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -94,7 +95,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         }
     }
 
-    public void onSp(JSONArray changes, String weekday) throws JSONException {
+    public void onSp(String normaLesson, String teacher, JSONArray changes, String weekday) throws JSONException {
         Log.i("changes", changes.toString());
         StringBuilder text = new StringBuilder();
         for (int i = 0; i < changes.length(); i++) {
@@ -122,7 +123,24 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 Subject subject = lesson.getSubject();
                 String normal = subject.name;
                 String changed = change.getString("lesson").split(" ")[0];
-                if (normal.equals(changed) || (normal.equals(getString(R.string.lesson_tandem)) && (changed.equals(getString(R.string.lesson_french)) || changed.equals(getString(R.string.lesson_latin))))) {
+                if (change.getString("info").contains("Klausur")){
+                    boolean isMyExam = false;
+                    for (int j = 0; i < 5; i++){
+                        List<Lesson> d = SpHolder.getDay(j);
+                        for (int k = 0; k < d.size(); k++){
+                            Lesson l = d.get(k);
+                            if (l.numberOfSubjects() > 0) {
+                                Subject s = lesson.getSubject();
+                                if (teacher.equals(s.teacher) && normaLesson.equals(s.getName()))
+                                    isMyExam = true;
+                            }
+                        }
+                    }
+                    if (isMyExam) text.append(change.getString("unit")).append(". Stunde ").append(change.getJSONObject("changed").getString("teacher")).append(" ").append(change.getJSONObject("changed").getString("info")).append(" ").append(change.getJSONObject("changed").getString("room")).append("\n");
+
+
+                }
+                else if (normal.equals(changed) || (normal.equals(getString(R.string.lesson_tandem)) && (changed.equals(getString(R.string.lesson_french)) || changed.equals(getString(R.string.lesson_latin))))) {
                     text.append(change.getString("unit")).append(". Stunde ").append(change.getJSONObject("changed").getString("teacher")).append(" ").append(change.getJSONObject("changed").getString("info")).append(" ").append(change.getJSONObject("changed").getString("room")).append("\n");
                 }
             } catch (IndexOutOfBoundsException ignored) {

@@ -16,14 +16,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.lohl1kohl.vsaapp.R;
+import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
 import de.lohl1kohl.vsaapp.fragments.vp.Today;
 import de.lohl1kohl.vsaapp.fragments.vp.Tomorrow;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class VpHolder {
-    public static String weekdayToday, dateToday, timeToday;
-    public static String weekdayTomorrow, dateTomorrow, timeTomorrow;
+    public static String weekdayToday, dateToday, timeToday, updateToday;
+    public static String weekdayTomorrow, dateTomorrow, timeTomorrow, updateTomorrow;
     private static List<List<Subject>> vp;
     private static int countDownloadedVps = 0;
 
@@ -133,17 +134,18 @@ public class VpHolder {
     @Nullable
     private static List<Subject> convertJsonToArray(Context context, String array, boolean today) {
         List<Subject> subjects = new ArrayList<>();
-        List<Subject> unfilteredSubjects = new ArrayList<>();
         try {
             JSONObject header = new JSONObject(array);
             String date = header.getString("date");
             String weekday = header.getString("weekday");
             String time = header.getString("time");
+            String update = header.getString("update");
             JSONArray jsonarray = new JSONArray(header.getString("changes"));
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject entry = jsonarray.getJSONObject(i);
                 int unit = Integer.valueOf(entry.getString("unit")) - 1;
                 String normalLesson = entry.getString("lesson");
+                String normalTeacher = entry.getString("teacher");
                 JSONObject changed = new JSONObject(entry.getString("changed"));
 
                 String info = changed.getString("info");
@@ -154,10 +156,26 @@ public class VpHolder {
                     info = info.replace(info.split(" ")[0], SubjectSymbolsHolder.get(info.split(" ")[0].toUpperCase()));
                 }
                 try {
-                    Subject subject = SpHolder.getSubject(context, weekday, unit, normalLesson.split(" ")[0]);
-                    if (subject == null)
+                    Subject subject;
+                    if (info.contains(context.getString(R.string.exam))){
                         subject = new Subject(weekday, unit, normalLesson, "?", "");
-                    subject.changes = new Subject(weekday, unit, info, room, teacher);
+                        subject.changes = new Subject(weekday, unit, normalLesson, room, normalTeacher);
+                        try {
+                            teacher = TeacherHolder.searchTeacher(teacher).getGenderizedGenitiveName();
+                        } catch (Exception ignored) {
+
+                        }
+                        subject.changes.name = String.format(context.getString(R.string.exam_info), subject.changes.getName(), info, teacher);
+                        if (info.equals(context.getString(R.string.exam)) && compaireSubjects(context, subject, null)) {
+                            SpHolder.getDay(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday)).get(unit).getSubject().changes = new Subject(subject.changes.day, subject.changes.unit, subject.changes.name.split(" ")[0] + " " + subject.changes.name.split(" ")[1], subject.changes.room, subject.changes.teacher);
+                        }
+                    }
+                    else {
+                        subject = SpHolder.getSubject(context, weekday, unit, normalLesson.split(" ")[0]);
+                        if (subject == null)
+                            subject = new Subject(weekday, unit, normalLesson, "?", "");
+                        if (subject.changes == null) subject.changes = new Subject(weekday, unit, info, room, teacher);
+                    }
                     if (!isShowOnlySelectedSubjects(context) || compaireSubjects(context, subject, SpHolder.getLesson(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday), unit).getSubject())) {
                         subjects.add(subject);
                     }
@@ -171,10 +189,12 @@ public class VpHolder {
                 weekdayToday = weekday;
                 dateToday = date;
                 timeToday = time;
+                updateToday = update;
             } else {
                 weekdayTomorrow = weekday;
                 dateTomorrow = date;
                 timeTomorrow = time;
+                updateTomorrow = update;
             }
 
         } catch (JSONException e) {
@@ -186,6 +206,22 @@ public class VpHolder {
     }
 
     public static boolean compaireSubjects(Context context, Subject s1, Subject s2){
+        if (s1.changes.name.contains(context.getString(R.string.make_up_exam))) return true;
+        else if (s1.changes.name.contains(context.getString(R.string.exam))) {
+            for (int i = 0; i < 5; i++){
+                List<Lesson> day = SpHolder.getDay(i);
+                for (int j = 0; j < day.size(); j++){
+                    Lesson lesson = day.get(j);
+                    if (lesson.numberOfSubjects() > 0) {
+                        Subject subject = lesson.getSubject();
+                        if (s1.changes.teacher.equals(subject.teacher) && s1.changes.name.split(" ")[0].equals(subject.getName()))
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         if (s1 == s2) return true;
         return s2.getName().equals(context.getString(R.string.lesson_tandem)) && (s1.getName().equals(context.getString(R.string.lesson_french)) || s1.getName().equals(context.getString(R.string.lesson_latin)));
     }

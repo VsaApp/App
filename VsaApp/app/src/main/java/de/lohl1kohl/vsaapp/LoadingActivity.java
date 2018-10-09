@@ -279,18 +279,30 @@ public class LoadingActivity extends AppCompatActivity {
 
         /*
             Load structure:
+            - load teachers
             - load sp
             - load vp
             - load dates
             - load ags
             - load documents
-            - load teachers
             - finishedLoading
                 - start jobs
          */
 
         // Start with the sp...
-        loadSp(sums.get("sp"));
+        loadTeachers(sums.get("teachers"));
+    }
+
+    private void loadTeachers(boolean update) {
+        TeacherHolder.load(this, update, () -> {
+            if (!TeacherHolder.isLoaded()) {
+                noConnection();
+                return;
+            }
+            Log.d("VsaApp/LoadingActivity", "TeacherHolder loaded");
+            updateStatus();
+            loadSp(sums.get("sp"));
+        });
     }
 
     private void loadSp(boolean update) {
@@ -357,21 +369,9 @@ public class LoadingActivity extends AppCompatActivity {
             }
             Log.d("VsaApp/LoadingActivity", "DocumentsHolder loaded");
             updateStatus();
-            loadTeachers(sums.get("teachers"));
-        });
-
-    }
-
-    private void loadTeachers(boolean update) {
-        TeacherHolder.load(this, update, () -> {
-            if (!TeacherHolder.isLoaded()) {
-                noConnection();
-                return;
-            }
-            Log.d("VsaApp/LoadingActivity", "TeacherHolder loaded");
-            updateStatus();
             finishedLoading();
         });
+
     }
 
     @SuppressLint("SetTextI18n")

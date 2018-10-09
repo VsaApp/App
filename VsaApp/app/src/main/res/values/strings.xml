@@ -30,7 +30,7 @@
     <string name="no_class">Keine Klasse gesetzt</string>
     <string name="choose_grade">Klasse auswählen</string>
     <string name="search_teacher">Lehrer mit Namen, Kürzel oder Fach suchen</string>
-    <string name="for_s_the_s_from_s" formatted="false">Für %s den %s (Von: %s)</string>
+    <string name="for_s_the_s_from_s" formatted="false">Für %s den %s\n (Stand: %s, %s Uhr)</string>
     <string name="mister">Herr</string>
     <string name="mister_gen">Herrn</string>
     <string name="misses">Frau</string>
@@ -133,6 +133,8 @@
     <string name="no_title">Es muss ein Titel angegeben sein!</string>
     <string name="name_of_day" formatted="false">%s, den %02d.%02d.%04d</string>
     <string name="exam">Klausur</string>
+    <string name="exam_info">%s %s mit Aufsicht von %s</string>
+    <string name="make_up_exam">Nachschreiber</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>
