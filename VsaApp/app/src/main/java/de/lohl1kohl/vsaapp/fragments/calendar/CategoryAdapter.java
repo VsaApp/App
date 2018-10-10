@@ -1,6 +1,5 @@
 package de.lohl1kohl.vsaapp.fragments.calendar;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -13,18 +12,15 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.holders.DatesHolder;
-import de.lohl1kohl.vsaapp.holders.SpHolder;
 
 public class CategoryAdapter extends ArrayAdapter<Category> {
+    public List<Category> data;
     private boolean addEditEntry;
     private LayoutInflater mInflater;
     private Context mActivity;
-    public List<Category> data;
     private DatesFragment parent;
 
-    public CategoryAdapter(DatesFragment parent, Context c, int textViewResourceId, List<Category> data, boolean addEditEntry)
-    {
+    public CategoryAdapter(DatesFragment parent, Context c, int textViewResourceId, List<Category> data, boolean addEditEntry) {
         super(c, textViewResourceId);
 
         this.parent = parent;
@@ -45,7 +41,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
     }
 
     @Override
-    public int getCount(){
+    public int getCount() {
         return data.size() + (addEditEntry ? 1 : 0);
     }
 

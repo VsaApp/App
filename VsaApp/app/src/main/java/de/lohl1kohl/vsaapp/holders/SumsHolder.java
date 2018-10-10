@@ -46,7 +46,7 @@ public class SumsHolder {
         new Sums().getSums(sumsCallback);
     }
 
-    public static boolean isLoaded(){
+    public static boolean isLoaded() {
         return sums.size() > 0;
     }
 

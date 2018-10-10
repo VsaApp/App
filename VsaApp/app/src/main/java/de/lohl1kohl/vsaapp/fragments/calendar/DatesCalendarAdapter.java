@@ -39,8 +39,8 @@ public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
         setCurrentItem(-1);
     }
 
-    public void update(){
-        for (int i = 0; i < monthsFragments.size(); i++){
+    public void update() {
+        for (int i = 0; i < monthsFragments.size(); i++) {
             monthsFragments.get(i).update();
         }
     }

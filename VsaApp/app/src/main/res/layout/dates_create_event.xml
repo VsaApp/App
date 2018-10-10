@@ -65,17 +65,17 @@
     </LinearLayout>
 
     <Switch
-        android:padding="10dp"
         android:id="@+id/event_whole_day"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:text="@string/dates_new_event_whole_day" />
 
     <Spinner
         android:id="@+id/event_category"
-        android:padding="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -84,15 +84,15 @@
 
         <Button
             android:id="@+id/event_btn_cancel"
-            android:text="@string/cancel"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/event_btn_ok"
-            android:text="@string/ok"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/ok" />
 
     </LinearLayout>
 

@@ -18,21 +18,39 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
+
+import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import de.lohl1kohl.vsaapp.fragments.calendar.Day;
 import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
 import de.lohl1kohl.vsaapp.fragments.sp.LessonUtils;
 import de.lohl1kohl.vsaapp.fragments.vp.VpFragment;
-import de.lohl1kohl.vsaapp.holders.*;
+import de.lohl1kohl.vsaapp.holders.AGsHolder;
+import de.lohl1kohl.vsaapp.holders.DatesHolder;
+import de.lohl1kohl.vsaapp.holders.DocumentsHolder;
+import de.lohl1kohl.vsaapp.holders.SpHolder;
+import de.lohl1kohl.vsaapp.holders.SubjectSymbolsHolder;
+import de.lohl1kohl.vsaapp.holders.SumsHolder;
+import de.lohl1kohl.vsaapp.holders.TeacherHolder;
+import de.lohl1kohl.vsaapp.holders.VpHolder;
 import de.lohl1kohl.vsaapp.jobs.JobCreator;
 import de.lohl1kohl.vsaapp.jobs.StartJob;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
-import org.json.JSONException;
-
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static de.lohl1kohl.vsaapp.fragments.web.WebFragment.pushChoices;
 

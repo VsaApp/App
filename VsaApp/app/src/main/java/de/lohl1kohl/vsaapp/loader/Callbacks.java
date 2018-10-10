@@ -4,7 +4,7 @@ public class Callbacks {
 
     public interface baseLoadedCallback {
         void onLoaded();
-        }
+    }
 
     public interface baseCallback {
         void onReceived(String output);

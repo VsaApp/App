@@ -7,52 +7,54 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
-            android:padding="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/del_event"/>
+            android:padding="20dp"
+            android:text="@string/del_event" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right">
+
             <ImageButton
                 android:id="@+id/event_del"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_delete"
                 android:contentDescription="@string/add"
-                style="?android:attr/borderlessButtonStyle"/>
+                android:src="@drawable/ic_delete" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
-            android:padding="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/dates_edit_event_dialog_export"/>
+            android:padding="20dp"
+            android:text="@string/dates_edit_event_dialog_export" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right">
+
             <ImageButton
                 android:id="@+id/export_button"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/calendarExport"
-                android:src="@drawable/ic_export"
-                style="?android:attr/borderlessButtonStyle"/>
+                android:src="@drawable/ic_export" />
         </LinearLayout>
     </LinearLayout>
 
@@ -117,17 +119,17 @@
     </LinearLayout>
 
     <Switch
-        android:padding="10dp"
         android:id="@+id/event_edit_whole_day"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:text="@string/dates_new_event_whole_day" />
 
     <Spinner
         android:id="@+id/event_edit_category"
-        android:padding="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -136,15 +138,15 @@
 
         <Button
             android:id="@+id/event_cancel"
-            android:text="@string/cancel"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/event_ok"
-            android:text="@string/ok"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/ok" />
 
     </LinearLayout>
 

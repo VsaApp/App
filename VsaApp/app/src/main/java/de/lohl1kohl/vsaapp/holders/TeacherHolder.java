@@ -46,13 +46,12 @@ public class TeacherHolder {
                 }
             };
             new Teachers().updateSp(teachersCallback);
-        }
-        else {
+        } else {
             if (teachersLoadedCallback != null) teachersLoadedCallback.onLoaded();
         }
     }
 
-    public static boolean isLoaded(){
+    public static boolean isLoaded() {
         return teachers.size() > 0;
     }
 

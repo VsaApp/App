@@ -62,8 +62,7 @@ public class VpHolder {
 
                             if (vpLoadedCallback != null && countDownloadedVps == 2)
                                 vpLoadedCallback.onLoaded();
-                        }
-                        else {
+                        } else {
                             Log.e("Vsa/Vp", "Size of vp == 0");
                             Toast.makeText(context, String.format(context.getString(R.string.convertingFailed), "VP"), Toast.LENGTH_SHORT).show();
                             if (vpLoadedCallback != null && countDownloadedVps == 2)
@@ -102,7 +101,7 @@ public class VpHolder {
         }
     }
 
-    public static boolean isLoaded(){
+    public static boolean isLoaded() {
         return vp.size() > 0;
     }
 
@@ -157,7 +156,7 @@ public class VpHolder {
                 }
                 try {
                     Subject subject;
-                    if (info.contains(context.getString(R.string.exam))){
+                    if (info.contains(context.getString(R.string.exam))) {
                         subject = new Subject(weekday, unit, normalLesson, "?", "");
                         subject.changes = new Subject(weekday, unit, normalLesson, room, normalTeacher);
                         try {
@@ -169,12 +168,12 @@ public class VpHolder {
                         if (info.equals(context.getString(R.string.exam)) && compaireSubjects(context, subject, null)) {
                             SpHolder.getDay(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday)).get(unit).getSubject().changes = new Subject(subject.changes.day, subject.changes.unit, subject.changes.name.split(" ")[0] + " " + subject.changes.name.split(" ")[1], subject.changes.room, subject.changes.teacher);
                         }
-                    }
-                    else {
+                    } else {
                         subject = SpHolder.getSubject(context, weekday, unit, normalLesson.split(" ")[0]);
                         if (subject == null)
                             subject = new Subject(weekday, unit, normalLesson, "?", "");
-                        if (subject.changes == null) subject.changes = new Subject(weekday, unit, info, room, teacher);
+                        if (subject.changes == null)
+                            subject.changes = new Subject(weekday, unit, info, room, teacher);
                     }
                     if (!isShowOnlySelectedSubjects(context) || compaireSubjects(context, subject, SpHolder.getLesson(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday), unit).getSubject())) {
                         subjects.add(subject);
@@ -205,12 +204,12 @@ public class VpHolder {
         return subjects;
     }
 
-    public static boolean compaireSubjects(Context context, Subject s1, Subject s2){
+    public static boolean compaireSubjects(Context context, Subject s1, Subject s2) {
         if (s1.changes.name.contains(context.getString(R.string.make_up_exam))) return true;
         else if (s1.changes.name.contains(context.getString(R.string.exam))) {
-            for (int i = 0; i < 5; i++){
+            for (int i = 0; i < 5; i++) {
                 List<Lesson> day = SpHolder.getDay(i);
-                for (int j = 0; j < day.size(); j++){
+                for (int j = 0; j < day.size(); j++) {
                     Lesson lesson = day.get(j);
                     if (lesson.numberOfSubjects() > 0) {
                         Subject subject = lesson.getSubject();

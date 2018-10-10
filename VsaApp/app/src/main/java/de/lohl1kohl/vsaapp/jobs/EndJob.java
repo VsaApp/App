@@ -11,7 +11,6 @@ import com.evernote.android.job.Job;
 
 import de.lohl1kohl.vsaapp.LoadingActivity;
 import de.lohl1kohl.vsaapp.holders.SpHolder;
-import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class EndJob extends Job {
 

@@ -61,7 +61,7 @@ public class AGsHolder {
         }
     }
 
-    public static boolean isLoaded(){
+    public static boolean isLoaded() {
         return ags.size() > 0;
     }
 
@@ -96,17 +96,17 @@ public class AGsHolder {
         return ags;
     }
 
-    private static void fillDays(Context context){
+    private static void fillDays(Context context) {
         ArrayList weekdays = new ArrayList<>(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)));
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++) {
             days.add(new ArrayList<>());
         }
-        for (int i = 0; i < ags.size(); i++){
+        for (int i = 0; i < ags.size(); i++) {
             days.get(weekdays.indexOf(ags.get(i).weekday)).add(ags.get(i));
         }
     }
 
-    public static ArrayList<AG> getDay(int day){
+    public static ArrayList<AG> getDay(int day) {
         return days.get(day);
     }
 

@@ -17,10 +17,9 @@ import java.util.List;
 import java.util.Random;
 
 import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
-import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
+import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.holders.SubjectSymbolsHolder;
-import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
@@ -123,11 +122,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 Subject subject = lesson.getSubject();
                 String normal = subject.name;
                 String changed = change.getString("lesson").split(" ")[0];
-                if (change.getString("info").contains("Klausur")){
+                if (change.getString("info").contains("Klausur")) {
                     boolean isMyExam = false;
-                    for (int j = 0; i < 5; i++){
+                    for (int j = 0; i < 5; i++) {
                         List<Lesson> d = SpHolder.getDay(j);
-                        for (int k = 0; k < d.size(); k++){
+                        for (int k = 0; k < d.size(); k++) {
                             Lesson l = d.get(k);
                             if (l.numberOfSubjects() > 0) {
                                 Subject s = lesson.getSubject();
@@ -136,11 +135,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                             }
                         }
                     }
-                    if (isMyExam) text.append(change.getString("unit")).append(". Stunde ").append(change.getJSONObject("changed").getString("teacher")).append(" ").append(change.getJSONObject("changed").getString("info")).append(" ").append(change.getJSONObject("changed").getString("room")).append("\n");
+                    if (isMyExam)
+                        text.append(change.getString("unit")).append(". Stunde ").append(change.getJSONObject("changed").getString("teacher")).append(" ").append(change.getJSONObject("changed").getString("info")).append(" ").append(change.getJSONObject("changed").getString("room")).append("\n");
 
 
-                }
-                else if (normal.equals(changed) || (normal.equals(getString(R.string.lesson_tandem)) && (changed.equals(getString(R.string.lesson_french)) || changed.equals(getString(R.string.lesson_latin))))) {
+                } else if (normal.equals(changed) || (normal.equals(getString(R.string.lesson_tandem)) && (changed.equals(getString(R.string.lesson_french)) || changed.equals(getString(R.string.lesson_latin))))) {
                     text.append(change.getString("unit")).append(". Stunde ").append(change.getJSONObject("changed").getString("teacher")).append(" ").append(change.getJSONObject("changed").getString("info")).append(" ").append(change.getJSONObject("changed").getString("room")).append("\n");
                 }
             } catch (IndexOutOfBoundsException ignored) {

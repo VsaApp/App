@@ -21,12 +21,12 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:id="@+id/progress">
+        android:orientation="vertical">
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -39,7 +39,7 @@
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -47,18 +47,18 @@
         android:id="@+id/progressText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/progress"
         android:layout_alignEnd="@+id/progress"
+        android:layout_alignRight="@+id/progress"
         android:layout_below="@id/progress"
         android:text="@string/loadingScreenPercentValue" />
 
     <TextView
         android:id="@+id/waitingText"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/progress"
+        android:layout_centerHorizontal="true"
         android:text="@string/wait_for_connection"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

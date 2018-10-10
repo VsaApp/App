@@ -2,10 +2,8 @@ package de.lohl1kohl.vsaapp.fragments.vp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +37,7 @@ public class VpDayFragment extends BaseFragment {
             List<Subject> myVp = new ArrayList<>();
             List<Subject> otherVp = new ArrayList<>();
 
-            for (int position = 0; position < VpHolder.getVp(today).size(); position++){
+            for (int position = 0; position < VpHolder.getVp(today).size(); position++) {
                 Subject subject = VpHolder.getSubject(today, position);
                 boolean isMySubject = VpHolder.compaireSubjects(mActivity, subject, SpHolder.getLesson(Arrays.asList(getResources().getStringArray(R.array.weekdays)).indexOf(subject.day), subject.unit).getSubject());
                 if (isMySubject) myVp.add(subject);

@@ -3,7 +3,6 @@ package de.lohl1kohl.vsaapp.holders;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -55,8 +54,7 @@ public class SpHolder {
                         editor.apply();
 
                         if (baseLoadedCallback != null) baseLoadedCallback.onLoaded();
-                    }
-                    else {
+                    } else {
                         Toast.makeText(context, String.format(context.getString(R.string.convertingFailed), "SP"), Toast.LENGTH_SHORT).show();
                         if (baseLoadedCallback != null) baseLoadedCallback.onLoaded();
                     }
@@ -99,11 +97,11 @@ public class SpHolder {
         }
     }
 
-    public static boolean isLoaded(){
+    public static boolean isLoaded() {
         return sp.size() > 0;
     }
 
-    private static void addSpecialLessons(Context context){
+    private static void addSpecialLessons(Context context) {
         // Get preferences...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String grade = sharedPref.getString("pref_grade", "-1").toUpperCase();
@@ -143,7 +141,7 @@ public class SpHolder {
         }
     }
 
-    private static void ignoreLastFreeLessons(Context context){
+    private static void ignoreLastFreeLessons(Context context) {
         // Get preferences...
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String grade = sharedPref.getString("pref_grade", "-1").toUpperCase();
@@ -152,9 +150,11 @@ public class SpHolder {
             List<Lesson> spDay = sp.get(i);
             // Ignore the last free lessons...
             for (int j = spDay.size() - 1; j >= 0; j--) {
-                if (spDay.get(j).numberOfSubjects() > 0 && !spDay.get(j).getSubject().name.equals(context.getString(R.string.lesson_free))) break;
+                if (spDay.get(j).numberOfSubjects() > 0 && !spDay.get(j).getSubject().name.equals(context.getString(R.string.lesson_free)))
+                    break;
                 else if (spDay.get(j).numberOfSubjects() == 0) spDay.remove(j);
-                else if (spDay.get(j).getSubject().name.equals(context.getString(R.string.lesson_free))) spDay.remove(j);
+                else if (spDay.get(j).getSubject().name.equals(context.getString(R.string.lesson_free)))
+                    spDay.remove(j);
             }
         }
     }
@@ -224,7 +224,7 @@ public class SpHolder {
         return sp.get(day);
     }
 
-    public static List<Lesson> getUntrimmedDay(int day){
+    public static List<Lesson> getUntrimmedDay(int day) {
         return untrimmedSp.get(day);
     }
 

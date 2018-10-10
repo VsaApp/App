@@ -1,19 +1,15 @@
 package de.lohl1kohl.vsaapp.fragments.calendar;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.TimeZone;
-import java.util.zip.Inflater;
 
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
@@ -21,8 +17,8 @@ import de.lohl1kohl.vsaapp.holders.DatesHolder;
 
 public class DatesListFragment extends BaseFragment {
 
-    private View view;
     public DatesFragment parent;
+    private View view;
     private LayoutInflater infalter;
 
     @SuppressLint("InflateParams")
@@ -38,11 +34,11 @@ public class DatesListFragment extends BaseFragment {
         return root;
     }
 
-    public void update(){
+    public void update() {
         createView(view, infalter);
     }
 
-    public void createView(View root, LayoutInflater inflater){
+    public void createView(View root, LayoutInflater inflater) {
         new Thread(() -> {
             List<Day> calendar = DatesHolder.getFilteredCalendar(mActivity);
             LinearLayout ll = root.findViewById(R.id.datesList);

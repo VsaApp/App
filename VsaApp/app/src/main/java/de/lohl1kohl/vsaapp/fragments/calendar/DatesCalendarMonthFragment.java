@@ -3,7 +3,6 @@ package de.lohl1kohl.vsaapp.fragments.calendar;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,11 +25,11 @@ import de.lohl1kohl.vsaapp.holders.DatesHolder;
 
 public class DatesCalendarMonthFragment extends BaseFragment {
 
+    public DatesFragment mFragment;
     int month;
     int year;
     int columnSize;
     private List<Day> days;
-    public DatesFragment mFragment;
     private LayoutInflater inflater;
     private ViewGroup container;
     private View root;

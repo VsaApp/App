@@ -19,26 +19,27 @@
         app:tabTextColor="#FFF" />
 
     <RelativeLayout
+        android:id="@+id/cafetoria_loading_widget"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/cafetoria_loading_widget">
+        android:layout_height="match_parent">
+
         <ProgressBar
             android:id="@+id/cafetoria_loading_progress"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/cafetoria_saldo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
         android:paddingBottom="5dp"
-        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
         android:paddingStart="5dp"
-        android:paddingLeft="5dp"/>
+        android:paddingTop="5dp"
+        android:textColor="@android:color/black" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/cafetoria_viewpager"

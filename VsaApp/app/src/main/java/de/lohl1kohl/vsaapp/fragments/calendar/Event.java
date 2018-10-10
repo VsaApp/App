@@ -2,8 +2,6 @@ package de.lohl1kohl.vsaapp.fragments.calendar;
 
 import android.content.Context;
 
-import java.util.Calendar;
-
 public class Event {
     public String name;
     public String info;
@@ -27,11 +25,11 @@ public class Event {
         this.category = category;
     }
 
-    public long getStartTime(Context c){
+    public long getStartTime(Context c) {
         return start.getTimeInMillis(c);
     }
 
-    public long getEndTime(Context c){
+    public long getEndTime(Context c) {
         return end.getTimeInMillis(c);
     }
 }

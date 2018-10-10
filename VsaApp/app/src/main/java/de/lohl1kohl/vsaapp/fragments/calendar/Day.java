@@ -15,8 +15,8 @@ public class Day {
         this.year = year;
     }
 
-    public long getTimestemp(){
-        return ((long) year * (long) 100000000) + ((month + 1 ) * 1000000) + (day * 10000);
+    public long getTimestemp() {
+        return ((long) year * (long) 100000000) + ((month + 1) * 1000000) + (day * 10000);
     }
 
     public void addEvent(Event event) {

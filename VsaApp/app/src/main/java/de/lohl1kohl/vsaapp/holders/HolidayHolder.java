@@ -25,13 +25,13 @@ public class HolidayHolder {
     private static List<Event> holidays;
     private static int loadedYears;
 
-    public static void load(Context context, Callbacks.baseLoadedCallback holidaysLoadedCallback){
+    public static void load(Context context, Callbacks.baseLoadedCallback holidaysLoadedCallback) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         Calendar now = Calendar.getInstance();
         now.setTime(new java.util.Date());
         loadedYears = 0;
 
-        for (int i = 0; i < 2; i++){
+        for (int i = 0; i < 2; i++) {
             int year = now.get(Calendar.YEAR) + i;
             if (sharedPref.getString(String.format(Locale.GERMAN, "holidays_%d", now.get(Calendar.YEAR) + i), "-1").equals("-1")) {
                 Callbacks.baseCallback hoidaysCallback = new Callbacks.baseCallback() {
@@ -47,23 +47,25 @@ public class HolidayHolder {
 
                         loadedYears++;
 
-                        if (holidaysLoadedCallback != null && loadedYears == 2) holidaysLoadedCallback.onLoaded();
+                        if (holidaysLoadedCallback != null && loadedYears == 2)
+                            holidaysLoadedCallback.onLoaded();
                     }
 
                     public void onConnectionFailed() {
                         loadSavedHolidaysForYear(context, year);
                         loadedYears++;
-                        if (holidaysLoadedCallback != null && loadedYears == 2) holidaysLoadedCallback.onLoaded();
+                        if (holidaysLoadedCallback != null && loadedYears == 2)
+                            holidaysLoadedCallback.onLoaded();
                     }
                 };
 
                 // Send request to server...
                 new Holidays().updateDates(hoidaysCallback, year);
-            }
-            else  {
+            } else {
                 loadSavedHolidaysForYear(context, year);
                 loadedYears++;
-                if (holidaysLoadedCallback != null && loadedYears == 2) holidaysLoadedCallback.onLoaded();
+                if (holidaysLoadedCallback != null && loadedYears == 2)
+                    holidaysLoadedCallback.onLoaded();
             }
         }
     }
@@ -73,7 +75,7 @@ public class HolidayHolder {
         try {
             JSONObject jsonObject = new JSONObject(array);
             Iterator allKeys = jsonObject.keys();
-            while(allKeys.hasNext()) {
+            while (allKeys.hasNext()) {
                 String name = (String) allKeys.next();
                 JSONObject holiday = jsonObject.getJSONObject(name);
                 String date = holiday.getString("datum");
@@ -89,14 +91,14 @@ public class HolidayHolder {
         }
     }
 
-    private static void loadSavedHolidaysForYear(Context context, int year){
+    private static void loadSavedHolidaysForYear(Context context, int year) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String output = sharedPref.getString(String.format(Locale.GERMAN, "holidays_%d", year), "");
 
         convertHolidaysJson(context, output);
     }
 
-    public static List<Event> getHolidays(){
+    public static List<Event> getHolidays() {
         return holidays;
     }
 

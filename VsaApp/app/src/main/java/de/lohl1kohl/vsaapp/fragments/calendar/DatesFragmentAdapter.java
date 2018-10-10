@@ -26,7 +26,7 @@ public class DatesFragmentAdapter extends FragmentStatePagerAdapter {
         else return datesCalendarFragment;
     }
 
-    public void update(DatesFragment parent){
+    public void update(DatesFragment parent) {
         datesListFragment.update();
         datesCalendarFragment.update();
         notifyDataSetChanged();

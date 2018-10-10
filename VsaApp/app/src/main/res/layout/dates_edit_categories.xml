@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,129 +11,132 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
-                android:padding="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_category"/>
+                android:padding="20dp"
+                android:text="@string/add_category" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right">
+
                 <ImageButton
                     android:id="@+id/category_add"
+                    style="?android:attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_add"
                     android:contentDescription="@string/add"
-                    style="?android:attr/borderlessButtonStyle"/>
+                    android:src="@drawable/ic_add" />
             </LinearLayout>
 
         </LinearLayout>
 
 
         <TextView
-            android:padding="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/category_select"/>
+            android:padding="20dp"
+            android:text="@string/category_select" />
 
         <Spinner
             android:id="@+id/categories_list"
-            android:padding="10dp"
-            android:paddingRight="20dp"
-            android:paddingEnd="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:paddingEnd="20dp"
+            android:paddingRight="20dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
-                android:padding="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/del_category"/>
+                android:padding="20dp"
+                android:text="@string/del_category" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right">
+
                 <ImageButton
                     android:id="@+id/category_del"
+                    style="?android:attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_delete"
                     android:contentDescription="@string/add"
-                    style="?android:attr/borderlessButtonStyle"/>
+                    android:src="@drawable/ic_delete" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
-                android:padding="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/in_school_category"/>
+                android:padding="20dp"
+                android:text="@string/in_school_category" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right">
+
                 <Switch
                     android:id="@+id/category_is_school"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="20dp"/>
+                    android:padding="20dp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
-                android:padding="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/name"/>
+                android:padding="20dp"
+                android:text="@string/name" />
 
             <EditText
                 android:id="@+id/category_new_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/name"
                 android:inputType="text|textAutoCorrect"
-                android:paddingRight="20dp"
                 android:paddingEnd="20dp"
-                android:hint="@string/name"/>
+                android:paddingRight="20dp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/category_change_color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
-                android:padding="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/color"/>
+                android:padding="20dp"
+                android:text="@string/color" />
 
             <View
                 android:id="@+id/category_new_color"
@@ -152,9 +154,9 @@
 
             <Button
                 android:id="@+id/category_btn_ok"
-                android:text="@string/ok"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/ok" />
 
         </LinearLayout>
 

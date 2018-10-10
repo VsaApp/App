@@ -45,7 +45,7 @@ public class DatesCalendarFragment extends BaseFragment {
         return root;
     }
 
-    public void update(){
+    public void update() {
         adapter.update();
     }
 }

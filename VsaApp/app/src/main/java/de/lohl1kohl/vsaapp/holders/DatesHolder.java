@@ -11,20 +11,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.fragments.cafetoria.Cafetoria;
 import de.lohl1kohl.vsaapp.fragments.calendar.Category;
 import de.lohl1kohl.vsaapp.fragments.calendar.Color;
 import de.lohl1kohl.vsaapp.fragments.calendar.Date;
 import de.lohl1kohl.vsaapp.fragments.calendar.Dates;
 import de.lohl1kohl.vsaapp.fragments.calendar.Day;
 import de.lohl1kohl.vsaapp.fragments.calendar.Event;
-import de.lohl1kohl.vsaapp.fragments.calendar.Holidays;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class DatesHolder {
@@ -87,16 +83,16 @@ public class DatesHolder {
         }
     }
 
-    public static boolean isLoaded(){
+    public static boolean isLoaded() {
         return events != null && calendar != null && HolidayHolder.getHolidays().size() > 0;
     }
 
-    public static void setCategories(Context context, List<Category> categories){
+    public static void setCategories(Context context, List<Category> categories) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
         String prefString = "";
 
-        for (int i = 0; i < categories.size(); i++){
+        for (int i = 0; i < categories.size(); i++) {
             Category category = categories.get(i);
             String categoryString = String.format(Locale.GERMAN, "%s::%s::%d:%d:%d", category.name, category.isSchool ? "true" : "false", category.color.r, category.color.g, category.color.b);
             prefString = String.format("%s#%s", prefString, categoryString);
@@ -109,37 +105,38 @@ public class DatesHolder {
         DatesHolder.categories = categories;
     }
 
-    private static void loadCategories(Context context){
+    private static void loadCategories(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String savedCategories = sharedPref.getString("saved_categories", context.getString(R.string.default_categories));
 
         categories = new ArrayList<>();
 
         String[] fragments = savedCategories.split("#");
-        for (int i = 1; i < fragments.length; i++){
+        for (int i = 1; i < fragments.length; i++) {
             // Example string: holidays::false::0:0:255
             Color color = new Color(Integer.parseInt(fragments[i].split("::")[2].split(":")[0]), Integer.parseInt(fragments[i].split("::")[2].split(":")[1]), Integer.parseInt(fragments[i].split("::")[2].split(":")[2]));
             categories.add(new Category(fragments[i].split("::")[0], color, fragments[i].split("::")[1].equals("true")));
         }
 
         // TODO: This line is only for old version to add the category first time in the preferences... (Later this line can be deleted!)
-        if (getCategory(context.getString(R.string.holiday_category)) == null) categories.add(new Category(context.getString(R.string.holiday_category), new Color(96, 73, 43), false));
+        if (getCategory(context.getString(R.string.holiday_category)) == null)
+            categories.add(new Category(context.getString(R.string.holiday_category), new Color(96, 73, 43), false));
     }
 
-    public static List<Category> getCategories(){
+    public static List<Category> getCategories() {
         return categories;
     }
 
-    public static Category getCategory(String name){
-        for (int i = 0; i < categories.size(); i++){
+    public static Category getCategory(String name) {
+        for (int i = 0; i < categories.size(); i++) {
             if (categories.get(i).name.equals(name)) return categories.get(i);
         }
 
         return null;
     }
 
-    public static Category getCategory(int index){
-        return  categories.get(index);
+    public static Category getCategory(int index) {
+        return categories.get(index);
     }
 
     private static void readSavedDates(Context context) {
@@ -234,7 +231,7 @@ public class DatesHolder {
         }
     }
 
-    private static void loadCustomEvents(Context context){
+    private static void loadCustomEvents(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String[] events = sharedPref.getString("custom_events", "").split("#");
 
@@ -242,7 +239,7 @@ public class DatesHolder {
 
         customEvents = new ArrayList<>();
 
-        for (int i = 1; i < events.length; i++){
+        for (int i = 1; i < events.length; i++) {
             String[] prefs = events[i].split(":");
             String[] dateStart = prefs[3].split("\\.");
             String[] dateEnd = prefs[4].split("\\.");
@@ -253,11 +250,11 @@ public class DatesHolder {
         DatesHolder.events.addAll(customEvents);
     }
 
-    public static boolean isCustomEvent(Event event){
+    public static boolean isCustomEvent(Event event) {
         return customEvents.contains(event);
     }
 
-    public static boolean updateEvent(Context context, Event event, Event event2){
+    public static boolean updateEvent(Context context, Event event, Event event2) {
         String eventString = String.format(Locale.GERMAN, "%s:%s:%s:%d.%d.%d.%d.%d:%d.%d.%d.%d.%d", event.name, event.info, event.category.name, event.start.getMin(), event.start.getHour(), event.start.getDay(), event.start.getMonth(context), event.start.getYear(), event.end.getMin(), event.end.getHour(), event.end.getDay(), event.end.getMonth(context), event.end.getYear());
         String newEventString = String.format(Locale.GERMAN, "%s:%s:%s:%d.%d.%d.%d.%d:%d.%d.%d.%d.%d", event2.name, event2.info, event2.category.name, event2.start.getMin(), event2.start.getHour(), event2.start.getDay(), event2.start.getMonth(context), event2.start.getYear(), event2.end.getMin(), event.start.getHour(), event2.end.getDay(), event2.end.getMonth(context), event2.end.getYear());
 
@@ -273,8 +270,9 @@ public class DatesHolder {
         String[] events = sharedPref.getString("custom_events", "").split("#");
 
         String newPref = "";
-        for (int i = 1; i < events.length; i++){
-            if (!events[i].equals(eventString)) newPref = String.format("%s#%s", newPref, events[i]);
+        for (int i = 1; i < events.length; i++) {
+            if (!events[i].equals(eventString))
+                newPref = String.format("%s#%s", newPref, events[i]);
             else newPref = String.format("%s#%s", newPref, newEventString);
         }
 
@@ -286,7 +284,7 @@ public class DatesHolder {
         return true;
     }
 
-    public static void addEvent(Context context, Event event){
+    public static void addEvent(Context context, Event event) {
         customEvents.add(event);
         events.add(event);
         sortEvents(context);
@@ -300,14 +298,15 @@ public class DatesHolder {
         editor.apply();
     }
 
-    public static void delEvent(Context context, Event event){
+    public static void delEvent(Context context, Event event) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String[] events = sharedPref.getString("custom_events", "").split("#");
         String eventString = String.format(Locale.GERMAN, "%s:%s:%s:%d.%d.%d.%d.%d:%d.%d.%d.%d.%d", event.name, event.info, event.category.name, event.start.getMin(), event.start.getHour(), event.start.getDay(), event.start.getMonth(context), event.start.getYear(), event.end.getMin(), event.end.getHour(), event.end.getDay(), event.end.getMonth(context), event.end.getYear());
 
         String newPref = "";
-        for (int i = 1; i < events.length; i++){
-            if (!events[i].equals(eventString)) newPref = String.format("%s#%s", newPref, events[i]);
+        for (int i = 1; i < events.length; i++) {
+            if (!events[i].equals(eventString))
+                newPref = String.format("%s#%s", newPref, events[i]);
         }
 
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -377,7 +376,7 @@ public class DatesHolder {
         return calendar;
     }
 
-    public static Day getDay(Context context, int year, int month, int day){
+    public static Day getDay(Context context, int year, int month, int day) {
         return getMonth(context, month, year).get(day - 1);
     }
 
@@ -395,15 +394,15 @@ public class DatesHolder {
 
         for (int i = 0; i < calendar.size(); i++) {
             Day day = calendar.get(i);
-            for (int j = 0; j < day.getEvents().size(); j++){
+            for (int j = 0; j < day.getEvents().size(); j++) {
                 Event event = day.getEvent(j);
-                if (event.start.getYear() <= year && event.end.getYear() >= year){
+                if (event.start.getYear() <= year && event.end.getYear() >= year) {
                     int firstMonthInYear = (event.start.getYear() < year) ? 1 - event.start.getMonth(c) : event.start.getMonth(c);
                     int lastMonthInYear = (event.end.getYear() > year) ? 12 + event.end.getMonth(c) : event.end.getMonth(c);
-                    if (firstMonthInYear <= month && lastMonthInYear >= month){
+                    if (firstMonthInYear <= month && lastMonthInYear >= month) {
                         int firstDayInMonth = (firstMonthInYear < month) ? 0 : event.start.getDay() - 1;
                         int lastDayInMonth = (lastMonthInYear > month) ? numDays - 1 : event.end.getDay() - 1;
-                        for (int k = firstDayInMonth; k <= lastDayInMonth; k++){
+                        for (int k = firstDayInMonth; k <= lastDayInMonth; k++) {
                             monthList.get(k).addEvent(event);
                         }
                     }

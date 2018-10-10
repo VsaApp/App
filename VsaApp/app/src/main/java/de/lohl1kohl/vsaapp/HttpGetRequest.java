@@ -1,7 +1,7 @@
 package de.lohl1kohl.vsaapp;
 
 import android.os.AsyncTask;
-import de.lohl1kohl.vsaapp.loader.AsyncResponse;
+
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.BufferedReader;
@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import de.lohl1kohl.vsaapp.loader.AsyncResponse;
 
 public class HttpGetRequest extends AsyncTask<String, Void, String> {
     private static final String REQUEST_METHOD = "GET";

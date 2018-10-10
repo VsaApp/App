@@ -4,28 +4,21 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -34,21 +27,16 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.skydoves.colorpickerpreference.ColorEnvelope;
-import com.skydoves.colorpickerpreference.ColorListener;
 import com.skydoves.colorpickerpreference.ColorPickerDialog;
-import com.skydoves.colorpickerpreference.ColorPickerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
 import de.lohl1kohl.vsaapp.holders.DatesHolder;
-import de.lohl1kohl.vsaapp.holders.TeacherHolder;
 
 public class DatesFragment extends BaseFragment {
 
@@ -67,7 +55,7 @@ public class DatesFragment extends BaseFragment {
         return root;
     }
 
-    private void createEvent(){
+    private void createEvent() {
         final Dialog dialog = new Dialog(mActivity);
         WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
         lWindowParams.copyFrom(dialog.getWindow().getAttributes());
@@ -96,7 +84,7 @@ public class DatesFragment extends BaseFragment {
         timeStart.setText(String.format(Locale.GERMAN, mActivity.getString(R.string.event_time), now.get(Calendar.HOUR_OF_DAY) + 1, 0));
         timeEnd.setText(String.format(Locale.GERMAN, mActivity.getString(R.string.event_time), now.get(Calendar.HOUR_OF_DAY) + 2, 0));
 
-        CategoryAdapter spinnerArrayAdapter = new CategoryAdapter(this, mActivity, R.layout.dates_category, DatesHolder.getCategories(),true);
+        CategoryAdapter spinnerArrayAdapter = new CategoryAdapter(this, mActivity, R.layout.dates_category, DatesHolder.getCategories(), true);
         category.setAdapter(spinnerArrayAdapter);
 
         dateStart.setOnClickListener(view -> {
@@ -104,7 +92,7 @@ public class DatesFragment extends BaseFragment {
                 month++; // Months from 1 to 12
                 dateStart.setText(String.format(Locale.GERMAN, "%02d.%02d.%04d", day, month, year));
                 String[] date = dateEnd.getText().toString().split("\\.");
-                if (Integer.parseInt(date[2]) < year || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) < month) || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) == month && Integer.parseInt(date[0]) < day)){
+                if (Integer.parseInt(date[2]) < year || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) < month) || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) == month && Integer.parseInt(date[0]) < day)) {
                     dateEnd.setText(String.format(Locale.GERMAN, "%02d.%02d.%04d", day, month, year));
                 }
             };
@@ -119,7 +107,7 @@ public class DatesFragment extends BaseFragment {
             TimePickerDialog.OnTimeSetListener listener = (timePicker, hour, min) -> {
                 timeStart.setText(String.format(Locale.GERMAN, mActivity.getString(R.string.event_time), hour, min));
                 String[] time = timeEnd.getText().toString().substring(0, 5).split(":");
-                if (Integer.parseInt(time[0]) < hour || (Integer.parseInt(time[0]) == hour && Integer.parseInt(time[1]) < min)){
+                if (Integer.parseInt(time[0]) < hour || (Integer.parseInt(time[0]) == hour && Integer.parseInt(time[1]) < min)) {
                     timeEnd.setText(String.format(Locale.GERMAN, mActivity.getString(R.string.event_time), hour, min));
                 }
             };
@@ -135,7 +123,7 @@ public class DatesFragment extends BaseFragment {
                 month++; // Months from 1 to 12
                 dateEnd.setText(String.format(Locale.GERMAN, "%02d.%02d.%04d", day, month, year));
                 String[] date = dateStart.getText().toString().split("\\.");
-                if (Integer.parseInt(date[2]) > year || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) > month) || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) == month && Integer.parseInt(date[0]) > day)){
+                if (Integer.parseInt(date[2]) > year || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) > month) || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) == month && Integer.parseInt(date[0]) > day)) {
                     dateStart.setText(String.format(Locale.GERMAN, "%02d.%02d.%04d", day, month, year));
                 }
             };
@@ -150,7 +138,7 @@ public class DatesFragment extends BaseFragment {
             TimePickerDialog.OnTimeSetListener listener = (timePicker, hour, min) -> {
                 timeEnd.setText(String.format(Locale.GERMAN, mActivity.getString(R.string.event_time), hour, min));
                 String[] time = timeStart.getText().toString().substring(0, 5).split(":");
-                if (Integer.parseInt(time[0]) > hour || (Integer.parseInt(time[0]) == hour && Integer.parseInt(time[1]) > min)){
+                if (Integer.parseInt(time[0]) > hour || (Integer.parseInt(time[0]) == hour && Integer.parseInt(time[1]) > min)) {
                     timeStart.setText(String.format(Locale.GERMAN, mActivity.getString(R.string.event_time), hour, min));
                 }
             };
@@ -169,12 +157,13 @@ public class DatesFragment extends BaseFragment {
         btnCancel.setOnClickListener(view -> dialog.cancel());
 
         btnOk.setOnClickListener(view -> {
-            if (title.getText().toString().length() == 0) Toast.makeText(mActivity, mActivity.getString(R.string.no_title), Toast.LENGTH_SHORT).show();
-            else{
+            if (title.getText().toString().length() == 0)
+                Toast.makeText(mActivity, mActivity.getString(R.string.no_title), Toast.LENGTH_SHORT).show();
+            else {
                 Date start = new Date(Integer.parseInt(dateStart.getText().toString().split("\\.")[0]), Integer.parseInt(dateStart.getText().toString().split("\\.")[1]), Integer.parseInt(dateStart.getText().toString().split("\\.")[2]));
                 Date end;
                 if (wholeDay.isChecked()) end = start;
-                else{
+                else {
                     end = new Date(Integer.parseInt(dateEnd.getText().toString().split("\\.")[0]), Integer.parseInt(dateEnd.getText().toString().split("\\.")[1]), Integer.parseInt(dateEnd.getText().toString().split("\\.")[2]));
                     start.setTime(Integer.parseInt(timeStart.getText().toString().substring(0, 5).split(":")[1]), Integer.parseInt(timeStart.getText().toString().split(":")[0]));
                     end.setTime(Integer.parseInt(timeEnd.getText().toString().substring(0, 5).split(":")[1]), Integer.parseInt(timeEnd.getText().toString().split(":")[0]));
@@ -190,11 +179,11 @@ public class DatesFragment extends BaseFragment {
         dialog.getWindow().setAttributes(lWindowParams);
     }
 
-    public void editEvent(Event event){
+    public void editEvent(Event event) {
         editEvent(null, event);
     }
 
-    public void editEvent(Dialog parentDialog, Event event){
+    public void editEvent(Dialog parentDialog, Event event) {
         final Dialog dialog = new Dialog(mActivity);
         WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
         lWindowParams.copyFrom(dialog.getWindow().getAttributes());
@@ -218,7 +207,7 @@ public class DatesFragment extends BaseFragment {
         final Button btnCancel = dialog.findViewById(R.id.event_cancel);
         final ImageButton export = dialog.findViewById(R.id.export_button);
 
-        if (!DatesHolder.isCustomEvent(event)){
+        if (!DatesHolder.isCustomEvent(event)) {
             title.setEnabled(false);
             dateStart.setEnabled(false);
             timeStart.setEnabled(false);
@@ -227,8 +216,7 @@ public class DatesFragment extends BaseFragment {
             category.setEnabled(false);
             wholeDay.setEnabled(false);
             del.setEnabled(false);
-        }
-        else if (event.start == event.end) {
+        } else if (event.start == event.end) {
             timeStart.setEnabled(false);
             timeEnd.setEnabled(false);
         }
@@ -240,7 +228,7 @@ public class DatesFragment extends BaseFragment {
         timeStart.setText(String.format(Locale.GERMAN, mActivity.getString(R.string.event_time), event.start.getHour(), event.start.getMin()));
         timeEnd.setText(String.format(Locale.GERMAN, mActivity.getString(R.string.event_time), event.end.getHour(), event.end.getMin()));
 
-        CategoryAdapter spinnerArrayAdapter = new CategoryAdapter(this, mActivity, R.layout.dates_category, DatesHolder.getCategories(),true);
+        CategoryAdapter spinnerArrayAdapter = new CategoryAdapter(this, mActivity, R.layout.dates_category, DatesHolder.getCategories(), true);
         category.setAdapter(spinnerArrayAdapter);
 
         category.setSelection(DatesHolder.getCategories().indexOf(event.category));
@@ -266,7 +254,7 @@ public class DatesFragment extends BaseFragment {
                 month++; // Months from 1 to 12
                 dateStart.setText(String.format(Locale.GERMAN, "%02d.%02d.%04d", day, month, year));
                 String[] date = dateEnd.getText().toString().split("\\.");
-                if (Integer.parseInt(date[2]) < year || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) < month) || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) == month && Integer.parseInt(date[0]) < day)){
+                if (Integer.parseInt(date[2]) < year || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) < month) || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) == month && Integer.parseInt(date[0]) < day)) {
                     dateEnd.setText(String.format(Locale.GERMAN, "%02d.%02d.%04d", day, month, year));
                 }
             };
@@ -281,7 +269,7 @@ public class DatesFragment extends BaseFragment {
             TimePickerDialog.OnTimeSetListener listener = (timePicker, hour, min) -> {
                 timeStart.setText(String.format(Locale.GERMAN, mActivity.getString(R.string.event_time), hour, min));
                 String[] time = timeEnd.getText().toString().substring(0, 5).split(":");
-                if (Integer.parseInt(time[0]) < hour || (Integer.parseInt(time[0]) == hour && Integer.parseInt(time[1]) < min)){
+                if (Integer.parseInt(time[0]) < hour || (Integer.parseInt(time[0]) == hour && Integer.parseInt(time[1]) < min)) {
                     timeEnd.setText(String.format(Locale.GERMAN, mActivity.getString(R.string.event_time), hour, min));
                 }
             };
@@ -297,7 +285,7 @@ public class DatesFragment extends BaseFragment {
                 month++; // Months from 1 to 12
                 dateEnd.setText(String.format(Locale.GERMAN, "%02d.%02d.%04d", day, month, year));
                 String[] date = dateStart.getText().toString().split("\\.");
-                if (Integer.parseInt(date[2]) > year || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) > month) || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) == month && Integer.parseInt(date[0]) > day)){
+                if (Integer.parseInt(date[2]) > year || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) > month) || (Integer.parseInt(date[2]) == year && Integer.parseInt(date[1]) == month && Integer.parseInt(date[0]) > day)) {
                     dateStart.setText(String.format(Locale.GERMAN, "%02d.%02d.%04d", day, month, year));
                 }
             };
@@ -312,7 +300,7 @@ public class DatesFragment extends BaseFragment {
             TimePickerDialog.OnTimeSetListener listener = (timePicker, hour, min) -> {
                 timeEnd.setText(String.format(Locale.GERMAN, mActivity.getString(R.string.event_time), hour, min));
                 String[] time = timeStart.getText().toString().substring(0, 5).split(":");
-                if (Integer.parseInt(time[0]) > hour || (Integer.parseInt(time[0]) == hour && Integer.parseInt(time[1]) > min)){
+                if (Integer.parseInt(time[0]) > hour || (Integer.parseInt(time[0]) == hour && Integer.parseInt(time[1]) > min)) {
                     timeStart.setText(String.format(Locale.GERMAN, mActivity.getString(R.string.event_time), hour, min));
                 }
             };
@@ -331,8 +319,9 @@ public class DatesFragment extends BaseFragment {
         btnCancel.setOnClickListener(view -> dialog.cancel());
 
         btnOk.setOnClickListener(view -> {
-            if (title.getText().toString().length() == 0) Toast.makeText(mActivity, mActivity.getString(R.string.no_title), Toast.LENGTH_SHORT).show();
-            else{
+            if (title.getText().toString().length() == 0)
+                Toast.makeText(mActivity, mActivity.getString(R.string.no_title), Toast.LENGTH_SHORT).show();
+            else {
                 Date start = new Date(Integer.parseInt(dateStart.getText().toString().split("\\.")[0]), Integer.parseInt(dateStart.getText().toString().split("\\.")[1]), Integer.parseInt(dateStart.getText().toString().split("\\.")[2]));
                 Date end;
                 if (wholeDay.isChecked()) end = start;
@@ -352,13 +341,13 @@ public class DatesFragment extends BaseFragment {
         dialog.getWindow().setAttributes(lWindowParams);
     }
 
-    private void updateCalendar(){
+    private void updateCalendar() {
         ViewPager pager = view.findViewById(R.id.dates_viewpager);
         DatesFragmentAdapter adapter = (DatesFragmentAdapter) pager.getAdapter();
         adapter.update(this);
     }
 
-    public void editCategories(CategoryAdapter parent){
+    public void editCategories(CategoryAdapter parent) {
         final Dialog dialog = new Dialog(mActivity);
         WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
         lWindowParams.copyFrom(dialog.getWindow().getAttributes());
@@ -384,7 +373,7 @@ public class DatesFragment extends BaseFragment {
         name.setText(DatesHolder.getCategory(0).name);
         color.setBackgroundColor(Color.rgb(DatesHolder.getCategory(0).color.r, DatesHolder.getCategory(0).color.g, DatesHolder.getCategory(0).color.b));
 
-        CategoryAdapter spinnerArrayAdapter = new CategoryAdapter(this, mActivity, R.layout.dates_category, categories,false);
+        CategoryAdapter spinnerArrayAdapter = new CategoryAdapter(this, mActivity, R.layout.dates_category, categories, false);
         categoriesList.setAdapter(spinnerArrayAdapter);
 
         isSchool.setChecked(!categories.get(categoriesList.getSelectedItemPosition()).isSchool);
@@ -398,7 +387,7 @@ public class DatesFragment extends BaseFragment {
                 name.setText(categories.get(position).name);
                 color.setBackgroundColor(Color.rgb(categories.get(position).color.r, categories.get(position).color.g, categories.get(position).color.b));
                 name.setEnabled(!(categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.other_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holiday_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holidays_category))));
-                del.setEnabled(!(categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.other_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holiday_category))  || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holidays_category))));
+                del.setEnabled(!(categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.other_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holiday_category)) || categories.get(categoriesList.getSelectedItemPosition()).name.equals(mActivity.getString(R.string.holidays_category))));
                 isSchool.setChecked(!categories.get(categoriesList.getSelectedItemPosition()).isSchool);
             }
 

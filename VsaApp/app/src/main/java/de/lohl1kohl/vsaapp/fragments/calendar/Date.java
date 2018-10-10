@@ -126,7 +126,7 @@ public class Date {
         return Arrays.asList(context.getResources().getStringArray(R.array.monthNames)).get(month - 1);
     }
 
-    public long getTimeInMillis(Context context){
+    public long getTimeInMillis(Context context) {
         Calendar date = Calendar.getInstance();
         date.set(Calendar.YEAR, getYear());
         date.set(Calendar.MONTH, getMonth(context) - 1);

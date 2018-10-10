@@ -26,10 +26,9 @@ import de.lohl1kohl.vsaapp.FirebaseHandler;
 import de.lohl1kohl.vsaapp.LoadingActivity;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BasePreferenceFragment;
-import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.fragments.vp.VpFragment;
+import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.holders.VpHolder;
-import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 import static de.lohl1kohl.vsaapp.fragments.web.WebFragment.pushChoices;
 
@@ -96,22 +95,22 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                 JobManager.instance().cancel(sharedPreferences.getInt("startid", 0));
                 JobManager.instance().cancel(sharedPreferences.getInt("endid", 0));
             } else {
-            new Thread(() -> {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Intent mStartActivity = new Intent(mActivity, LoadingActivity.class);
-                int mPendingIntentId = 123456;
-                PendingIntent mPendingIntent = PendingIntent.getActivity(mActivity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                AlarmManager mgr = (AlarmManager) mActivity.getSystemService(Context.ALARM_SERVICE);
-                mgr.set(AlarmManager.RTC, 0, mPendingIntent);
-                System.exit(0);
-            }).start();
-        }
-        return true;
-    });
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Intent mStartActivity = new Intent(mActivity, LoadingActivity.class);
+                    int mPendingIntentId = 123456;
+                    PendingIntent mPendingIntent = PendingIntent.getActivity(mActivity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                    AlarmManager mgr = (AlarmManager) mActivity.getSystemService(Context.ALARM_SERVICE);
+                    mgr.set(AlarmManager.RTC, 0, mPendingIntent);
+                    System.exit(0);
+                }).start();
+            }
+            return true;
+        });
 
         Preference gradePref = findPreference("pref_grade");
         gradePref.setOnPreferenceClickListener(preference -> {
@@ -162,7 +161,7 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
         });
     }
 
-    private void reloadData(){
+    private void reloadData() {
         SpHolder.load(mActivity, true, () -> {
             Log.d("VsaApp/LoadingActivity", "SpHolder loaded");
 

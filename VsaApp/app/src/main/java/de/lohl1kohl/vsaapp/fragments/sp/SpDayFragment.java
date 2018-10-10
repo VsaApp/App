@@ -26,10 +26,10 @@ import java.util.List;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.StringUtils;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
+import de.lohl1kohl.vsaapp.fragments.web.Push;
 import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.holders.TeacherHolder;
 import de.lohl1kohl.vsaapp.holders.VpHolder;
-import de.lohl1kohl.vsaapp.fragments.web.Push;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class SpDayFragment extends BaseFragment {
@@ -47,7 +47,7 @@ public class SpDayFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.sp_day, container, false);
         new Thread(() -> {
-            if (container != null){
+            if (container != null) {
                 lineHeight = container.getMeasuredHeight() / 5;
                 lineWidth = container.getMeasuredWidth();
             }

@@ -60,7 +60,7 @@ public class DocumentsHolder {
         }
     }
 
-    public static boolean isLoaded(){
+    public static boolean isLoaded() {
         return documents.size() > 0;
     }
 

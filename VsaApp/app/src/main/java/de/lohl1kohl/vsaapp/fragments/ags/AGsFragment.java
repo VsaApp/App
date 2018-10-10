@@ -30,7 +30,7 @@ public class AGsFragment extends BaseFragment {
         return root;
     }
 
-    public void createView(View root){
+    public void createView(View root) {
         mActivity.runOnUiThread(() -> {
 
             ViewPager pager = root.findViewById(R.id.ags_viewpager);
