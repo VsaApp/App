@@ -162,6 +162,7 @@
         <item>PH:Physik</item>
         <item>DB:NW</item>
         <item>DP:PoWi</item>
+        <item>PO:PoWi</item>
         <item>IF:Info</item>
         <item>S8:Spanisch</item>
         <item>S1:Spanisch</item>
@@ -175,7 +176,6 @@
         <item>E5:Englisch</item>
         <item>M:Mathe</item>
         <item>PK:Politik</item>
-        <item>PO:Politik</item>
         <item>BI:Bio</item>
         <item>UC:U. Chor</item>
         <item>EK:Erdkunde</item>
