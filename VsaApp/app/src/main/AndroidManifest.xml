@@ -34,6 +34,8 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".jobs.NotificationReceiver" />
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"

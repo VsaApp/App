@@ -1,5 +1,6 @@
 package de.lohl1kohl.vsaapp.jobs;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -46,20 +47,30 @@ public class StartJob extends Job {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("in_school", true);
             editor.apply();
-            final AudioManager mode = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
-            mode.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-
+            final AudioManager audio = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+            audio.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+            audio.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
 
             Intent intent = new Intent(getContext(), LoadingActivity.class);
             Random generator = new Random();
 
+            Intent intent2 = new Intent(getContext(), NotificationReceiver.class);
+            intent2.putExtra("btn","media");
+
+            Intent intent3 = new Intent(getContext(), NotificationReceiver.class);
+            intent3.putExtra("btn","ringtone");
+
             PendingIntent i = PendingIntent.getActivity(getContext(), generator.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent media = PendingIntent.getBroadcast(getContext(), generator.nextInt(), intent2, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent ringtone = PendingIntent.getBroadcast(getContext(), generator.nextInt(), intent3, PendingIntent.FLAG_UPDATE_CURRENT);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "muted")
                     .setSmallIcon(R.mipmap.logo_white)
                     .setContentTitle(getContext().getString(R.string.in_school))
                     .setContentText(getContext().getString(R.string.phone_muted))
                     .setColor(getContext().getResources().getColor(R.color.colorPrimary))
+                    .addAction(R.drawable.ic_ringtone, "Klingelton", ringtone)
+                    .addAction(R.drawable.ic_media_volume, "Medienton", media)
                     .setOngoing(true)
                     .setContentIntent(i);
 
@@ -85,6 +96,7 @@ public class StartJob extends Job {
                                 .build()
                                 .schedule()
                 );
+                editor.apply();
             }
         };
         SpHolder.load(getContext(), false, baseLoadedCallback);

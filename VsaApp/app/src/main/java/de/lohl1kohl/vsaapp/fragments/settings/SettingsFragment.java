@@ -90,6 +90,7 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                 editor.putBoolean("in_school", false);
                 editor.apply();
                 mode.setRingerMode(sharedPreferences.getInt("ringer_mode", AudioManager.RINGER_MODE_VIBRATE));
+                mode.setStreamVolume(AudioManager.STREAM_MUSIC, sharedPreferences.getInt("media_mode", (int) mode.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2), 0);
                 NotificationManager notificationManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.cancel(-1);
                 JobManager.instance().cancel(sharedPreferences.getInt("startid", 0));

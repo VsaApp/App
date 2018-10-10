@@ -70,8 +70,8 @@ public class LoadingActivity extends AppCompatActivity {
             int s;
             if (!isInSchool(context)) {
                 final AudioManager mode = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+                editor.putInt("media_mode", mode.getStreamVolume(AudioManager.STREAM_MUSIC));
                 editor.putInt("ringer_mode", mode.getRingerMode());
-                editor.apply();
                 long start = secondsUntilStart(getNextStartTime(context)) * 1000;
                 s = new JobRequest.Builder(StartJob.TAG)
                         .setExact(start)
@@ -86,6 +86,7 @@ public class LoadingActivity extends AppCompatActivity {
                         .schedule();
             }
             editor.putInt("startid", s);
+            editor.apply();
         }
     }
 
