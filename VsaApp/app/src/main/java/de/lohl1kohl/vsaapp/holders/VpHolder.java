@@ -13,6 +13,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import de.lohl1kohl.vsaapp.R;
@@ -39,6 +41,9 @@ public class VpHolder {
 
         vp = new ArrayList<>();
         countDownloadedVps = 0;
+        List<String> outputs = new ArrayList<>();
+        outputs.add("");
+        outputs.add("");
 
         for (int i = 0; i < 2; i++) {
             boolean today = (i == 0);
@@ -48,25 +53,38 @@ public class VpHolder {
                 Callbacks.baseCallback callback = new Callbacks.baseCallback() {
                     @Override
                     public void onReceived(String output) {
-                        List<Subject> newVp = convertJsonToArray(context, output, today);
-                        vp.add(today ? 0 : (vp.size() == 0 ? 0 : 1), (newVp != null) ? newVp : new ArrayList<>());
+                        outputs.set(today ? 0 : 1, output);
 
                         countDownloadedVps++;
 
-                        if (newVp != null) {
-                            // Save the current sp...
-                            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-                            SharedPreferences.Editor editor = settings.edit();
-                            editor.putString("pref_vp_" + grade + "_" + (today ? "today" : "tomorrow"), output);
-                            editor.apply();
+                        if (countDownloadedVps == 2) {
+                            Calendar day1 = getDate(outputs.get(0));
+                            Calendar day2 = getDate(outputs.get(1));
 
-                            if (vpLoadedCallback != null && countDownloadedVps == 2)
-                                vpLoadedCallback.onLoaded();
-                        } else {
-                            Log.e("Vsa/Vp", "Size of vp == 0");
-                            Toast.makeText(context, String.format(context.getString(R.string.convertingFailed), "VP"), Toast.LENGTH_SHORT).show();
-                            if (vpLoadedCallback != null && countDownloadedVps == 2)
-                                vpLoadedCallback.onLoaded();
+                            boolean today = true;
+                            do {
+                                List<Subject> subjects;
+                                subjects = convertJsonToArray(context, outputs.get(today ? 0 : 1), today,  today && day1.get(Calendar.DAY_OF_MONTH) == day2.get(Calendar.DAY_OF_MONTH));
+                                vp.add(today ? 0 : (vp.size() == 0 ? 0 : 1), (subjects != null) ? subjects : new ArrayList<>());
+                                if (subjects != null) {
+                                    // Save the current sp...
+                                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+                                    SharedPreferences.Editor editor = settings.edit();
+                                    editor.putString("pref_vp_" + grade + "_" + (today ? "today" : "tomorrow"), outputs.get(today ? 0 : 1));
+                                    editor.apply();
+
+                                    if (vpLoadedCallback != null)
+                                        vpLoadedCallback.onLoaded();
+                                } else {
+                                    Log.e("Vsa/Vp", "Size of vp == 0");
+                                    Toast.makeText(context, String.format(context.getString(R.string.convertingFailed), "VP"), Toast.LENGTH_SHORT).show();
+                                    if (vpLoadedCallback != null)
+                                        vpLoadedCallback.onLoaded();
+                                }
+                                today = !today;
+                            } while (!today);
+
+                            if (day1.get(Calendar.DAY_OF_MONTH) == day2.get(Calendar.DAY_OF_MONTH)) vp.set(0, vp.get(1));
                         }
                     }
 
@@ -101,6 +119,24 @@ public class VpHolder {
         }
     }
 
+    private static Calendar getDate(String array){
+        try {
+            JSONObject header = new JSONObject(array);
+            String date = header.getString("date");
+
+            Calendar day = Calendar.getInstance();
+            day.setTime(new Date());
+            day.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date.split("\\.")[0]));
+            day.set(Calendar.MONTH, Integer.parseInt(date.split("\\.")[1]));
+            day.set(Calendar.YEAR, Integer.parseInt(date.split("\\.")[2]));
+            return day;
+
+        } catch (JSONException e) {
+            Log.e("VsaApp/VpHolder", "Cannot convert output to array!");
+            return null;
+        }
+    }
+
     public static boolean isLoaded() {
         return vp.size() > 0;
     }
@@ -124,14 +160,22 @@ public class VpHolder {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String grade = sharedPref.getString("pref_grade", "-1");
         String savedVP = sharedPref.getString("pref_vp_" + grade + "_" + (today ? "today" : "tomorrow"), "-1");
+        boolean onlyHeader = false;
+
+        if (today) {
+            String savedVPTomorrow = sharedPref.getString("pref_vp_" + grade + "_tomorrow", "-1");
+            Calendar day1 = getDate(savedVP);
+            Calendar day2 = getDate(savedVPTomorrow);
+            if (day1.get(Calendar.DAY_OF_MONTH) == day2.get(Calendar.DAY_OF_MONTH)) onlyHeader = true;
+        }
 
         if (savedVP.equals("-1")) return null;
-        List<Subject> vp = convertJsonToArray(context, savedVP, today);
+        List<Subject> vp = convertJsonToArray(context, savedVP, today, onlyHeader);
         return (vp != null) ? vp : new ArrayList<>();
     }
 
     @Nullable
-    private static List<Subject> convertJsonToArray(Context context, String array, boolean today) {
+    private static List<Subject> convertJsonToArray(Context context, String array, boolean today, boolean onlyHeader) {
         List<Subject> subjects = new ArrayList<>();
         try {
             JSONObject header = new JSONObject(array);
@@ -139,49 +183,51 @@ public class VpHolder {
             String weekday = header.getString("weekday");
             String time = header.getString("time");
             String update = header.getString("update");
-            JSONArray jsonarray = new JSONArray(header.getString("changes"));
-            for (int i = 0; i < jsonarray.length(); i++) {
-                JSONObject entry = jsonarray.getJSONObject(i);
-                int unit = Integer.valueOf(entry.getString("unit")) - 1;
-                String normalLesson = entry.getString("lesson");
-                String normalTeacher = entry.getString("teacher");
-                JSONObject changed = new JSONObject(entry.getString("changed"));
+            if (!onlyHeader) {
+                JSONArray jsonarray = new JSONArray(header.getString("changes"));
+                for (int i = 0; i < jsonarray.length(); i++) {
+                    JSONObject entry = jsonarray.getJSONObject(i);
+                    int unit = Integer.valueOf(entry.getString("unit")) - 1;
+                    String normalLesson = entry.getString("lesson");
+                    String normalTeacher = entry.getString("teacher");
+                    JSONObject changed = new JSONObject(entry.getString("changed"));
 
-                String info = changed.getString("info");
-                String teacher = changed.getString("teacher");
-                String room = changed.getString("room");
+                    String info = changed.getString("info");
+                    String teacher = changed.getString("teacher");
+                    String room = changed.getString("room");
 
-                if (SubjectSymbolsHolder.has(info.split(" ")[0].toUpperCase())) {
-                    info = info.replace(info.split(" ")[0], SubjectSymbolsHolder.get(info.split(" ")[0].toUpperCase()));
-                }
-                try {
-                    Subject subject;
-                    if (info.contains(context.getString(R.string.exam))) {
-                        subject = new Subject(weekday, unit, normalLesson, "?", "");
-                        subject.changes = new Subject(weekday, unit, normalLesson, room, normalTeacher);
-                        try {
-                            teacher = TeacherHolder.searchTeacher(teacher).getGenderizedGenitiveName();
-                        } catch (Exception ignored) {
-
-                        }
-                        subject.changes.name = String.format(context.getString(R.string.exam_info), subject.changes.getName(), info, teacher);
-                        if (info.equals(context.getString(R.string.exam)) && compaireSubjects(context, subject, null)) {
-                            SpHolder.getDay(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday)).get(unit).getSubject().changes = new Subject(subject.changes.day, subject.changes.unit, subject.changes.name.split(" ")[0] + " " + subject.changes.name.split(" ")[1], subject.changes.room, subject.changes.teacher);
-                        }
-                    } else {
-                        subject = SpHolder.getSubject(context, weekday, unit, normalLesson.split(" ")[0]);
-                        if (subject == null)
+                    if (SubjectSymbolsHolder.has(info.split(" ")[0].toUpperCase())) {
+                        info = info.replace(info.split(" ")[0], SubjectSymbolsHolder.get(info.split(" ")[0].toUpperCase()));
+                    }
+                    try {
+                        Subject subject;
+                        if (info.contains(context.getString(R.string.exam))) {
                             subject = new Subject(weekday, unit, normalLesson, "?", "");
-                        if (subject.changes == null)
-                            subject.changes = new Subject(weekday, unit, info, room, teacher);
+                            subject.changes = new Subject(weekday, unit, normalLesson, room, normalTeacher);
+                            try {
+                                teacher = TeacherHolder.searchTeacher(teacher).getGenderizedGenitiveName();
+                            } catch (Exception ignored) {
+
+                            }
+                            subject.changes.name = String.format(context.getString(R.string.exam_info), subject.changes.getName(), info, teacher);
+                            if (info.equals(context.getString(R.string.exam)) && compaireSubjects(context, subject, null)) {
+                                SpHolder.getDay(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday)).get(unit).getSubject().changes = new Subject(subject.changes.day, subject.changes.unit, subject.changes.name.split(" ")[0] + " " + subject.changes.name.split(" ")[1], subject.changes.room, subject.changes.teacher);
+                            }
+                        } else {
+                            subject = SpHolder.getSubject(context, weekday, unit, normalLesson.split(" ")[0]);
+                            if (subject == null)
+                                subject = new Subject(weekday, unit, normalLesson, "?", "");
+                            if (subject.changes == null)
+                                subject.changes = new Subject(weekday, unit, info, room, teacher);
+                        }
+                        if (!isShowOnlySelectedSubjects(context) || compaireSubjects(context, subject, SpHolder.getLesson(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday), unit).getSubject())) {
+                            subjects.add(subject);
+                        }
+                    } catch (IndexOutOfBoundsException ignored) {
+
                     }
-                    if (!isShowOnlySelectedSubjects(context) || compaireSubjects(context, subject, SpHolder.getLesson(Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday), unit).getSubject())) {
-                        subjects.add(subject);
-                    }
-                } catch (IndexOutOfBoundsException ignored) {
 
                 }
-
             }
 
             if (today) {
@@ -206,7 +252,7 @@ public class VpHolder {
 
     public static boolean compaireSubjects(Context context, Subject s1, Subject s2) {
         if (s1.changes.name.contains(context.getString(R.string.make_up_exam))) return true;
-        else if (s1.changes.name.contains(context.getString(R.string.exam))) {
+        if (s1.changes.name.contains(context.getString(R.string.exam))) {
             for (int i = 0; i < 5; i++) {
                 List<Lesson> day = SpHolder.getDay(i);
                 for (int j = 0; j < day.size(); j++) {
@@ -221,8 +267,7 @@ public class VpHolder {
             return false;
         }
 
-        if (s1 == s2) return true;
-        return s2.getName().equals(context.getString(R.string.lesson_tandem)) && (s1.getName().equals(context.getString(R.string.lesson_french)) || s1.getName().equals(context.getString(R.string.lesson_latin)));
+        return s1 == s2 || s2.getName().equals(context.getString(R.string.lesson_tandem)) && (s1.getName().equals(context.getString(R.string.lesson_french)) || s1.getName().equals(context.getString(R.string.lesson_latin)));
     }
 
     public static List<List<Subject>> getVp() {

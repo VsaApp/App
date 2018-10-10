@@ -238,7 +238,7 @@ public class SpHolder {
 
     public static Subject getSubject(Context context, String weekday, int unit, String normalSubject) {
         int day = Arrays.asList(context.getResources().getStringArray(R.array.weekdays)).indexOf(weekday);
-        Lesson lesson = sp.get(day).get(unit);
+        Lesson lesson = getLesson(day, unit);
 
         for (int i = 0; i < lesson.numberOfSubjects(); i++) {
             if (lesson.getSubject(i).name.toLowerCase().equals(normalSubject.toLowerCase())) {

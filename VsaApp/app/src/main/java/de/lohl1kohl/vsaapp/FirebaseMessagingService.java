@@ -26,8 +26,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     public void notifyUser(String title, String text) {
         if (text.length() == 0) {
             text = getString(R.string.no_changes);
-        }
-        text = text.substring(0, text.length() - 1);
+        }else text = text.substring(0, text.length() - 1);
 
         String tText = text;
         if (tText.split("\n").length > 1) {
@@ -84,7 +83,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             SubjectSymbolsHolder.load(this);
             SpHolder.load(getApplicationContext(), false, () -> {
                 try {
-                    service.onSp(jsonObject.getString("lesson"), jsonObject.getString("teacher"), changes, weekday);
+                    service.onSp(changes, weekday);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -94,7 +93,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         }
     }
 
-    public void onSp(String normaLesson, String teacher, JSONArray changes, String weekday) throws JSONException {
+    public void onSp(JSONArray changes, String weekday) throws JSONException {
         Log.i("changes", changes.toString());
         StringBuilder text = new StringBuilder();
         for (int i = 0; i < changes.length(); i++) {
@@ -120,17 +119,19 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             try {
                 Lesson lesson = SpHolder.getLesson(day, Integer.parseInt(change.getString("unit")) - 1);
                 Subject subject = lesson.getSubject();
-                String normal = subject.name;
-                String changed = change.getString("lesson").split(" ")[0];
-                if (change.getString("info").contains("Klausur")) {
+                String normal = subject.name.toLowerCase();
+                String changed = change.getString("lesson").split(" ")[0].toLowerCase();
+                String teacher = change.getString("teacher").toLowerCase();
+                Log.i("VsaApp/MsgService", String.format("Normal: %s, Changed: %s, Teacher: %s, Info: %s", normal, changed, teacher, change.getJSONObject("changed").getString("info").toLowerCase()));
+                if (change.getJSONObject("changed").getString("info").toLowerCase().contains("klausur")) {
                     boolean isMyExam = false;
-                    for (int j = 0; i < 5; i++) {
-                        List<Lesson> d = SpHolder.getDay(j);
-                        for (int k = 0; k < d.size(); k++) {
-                            Lesson l = d.get(k);
-                            if (l.numberOfSubjects() > 0) {
-                                Subject s = lesson.getSubject();
-                                if (teacher.equals(s.teacher) && normaLesson.equals(s.getName()))
+                    for (int j = 0; j < 5; j++) {
+                        List<Lesson> dayOfWeek = SpHolder.getDay(j);
+                        for (int k = 0; k < dayOfWeek.size(); k++) {
+                            Lesson lessonOfDay = dayOfWeek.get(k);
+                            if (lessonOfDay.numberOfSubjects() > 0) {
+                                Subject subjectOfLesson = lessonOfDay.getSubject();
+                                if (teacher.equals(subjectOfLesson.teacher.toLowerCase()) && changed.equals(subjectOfLesson.name.toLowerCase()))
                                     isMyExam = true;
                             }
                         }
@@ -139,7 +140,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                         text.append(change.getString("unit")).append(". Stunde ").append(change.getJSONObject("changed").getString("teacher")).append(" ").append(change.getJSONObject("changed").getString("info")).append(" ").append(change.getJSONObject("changed").getString("room")).append("\n");
 
 
-                } else if (normal.equals(changed) || (normal.equals(getString(R.string.lesson_tandem)) && (changed.equals(getString(R.string.lesson_french)) || changed.equals(getString(R.string.lesson_latin))))) {
+                } else if (normal.equals(changed) || (normal.equals(getString(R.string.lesson_tandem).toLowerCase()) && (changed.equals(getString(R.string.lesson_french).toLowerCase()) || changed.equals(getString(R.string.lesson_latin).toLowerCase())))) {
                     text.append(change.getString("unit")).append(". Stunde ").append(change.getJSONObject("changed").getString("teacher")).append(" ").append(change.getJSONObject("changed").getString("info")).append(" ").append(change.getJSONObject("changed").getString("room")).append("\n");
                 }
             } catch (IndexOutOfBoundsException ignored) {
