@@ -24,4 +24,10 @@ public class Subject {
         }
         return name;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Subject s = (Subject) obj;
+        return day.equals(s.day) && unit == s.unit && name.equals(s.name) && room.equals(s.room) && teacher.equals(s.teacher);
+    }
 }
