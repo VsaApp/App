@@ -17,8 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
-
 import de.lohl1kohl.vsaapp.fragments.ags.AGsFragment;
 import de.lohl1kohl.vsaapp.fragments.cafetoria.CafetoriaFragment;
 import de.lohl1kohl.vsaapp.fragments.calendar.DatesFragment;
@@ -110,7 +110,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressWarnings("deprecation")
     private void displayView(int viewId) {
 
-        // If the logindata is correct, open fragment...
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (getCurrentFocus() != null)
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
         SettingsFragment settingsFragment = null;
         String title = getString(R.string.app_name);
 

@@ -3,27 +3,13 @@ package de.lohl1kohl.vsaapp.fragments.sp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import android.view.*;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.*;
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.StringUtils;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
@@ -32,6 +18,11 @@ import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.holders.TeacherHolder;
 import de.lohl1kohl.vsaapp.holders.VpHolder;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 public class SpDayFragment extends BaseFragment {
 
@@ -47,30 +38,45 @@ public class SpDayFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.sp_day, container, false);
-        new Thread(() -> {
-            if (container != null) {
-                lineHeight = container.getMeasuredHeight() / 5;
-                lineWidth = container.getMeasuredWidth();
+        root.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                root.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                Rect r = new Rect();
+                root.getWindowVisibleDisplayFrame(r);
+                int screenHeight = root.getRootView().getHeight();
+                int heightDifference = screenHeight - (r.bottom - r.top);
+
+                new Thread(() -> {
+                    if (container != null) {
+                        lineHeight = container.getMeasuredHeight() / 5;
+                        lineWidth = container.getMeasuredWidth();
+                    }
+                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm.isAcceptingText()) {
+                        lineHeight += heightDifference;
+                    }
+
+                    try {
+                        // Get preferences...
+                        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
+                        List<Lesson> spDay;
+                        if (sharedPref.getBoolean("pref_lockSubjects", false)) spDay = SpHolder.getDay(day);
+                        else spDay = SpHolder.getUntrimmedDay(day);
+                        LinearLayout ll = root.findViewById(R.id.sp_day);
+
+                        LayoutInflater layoutinflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                        for (int position = 0; position < spDay.size(); position++) {
+                            View view = createView(layoutinflater, spDay, position, sharedPref);
+                            mActivity.runOnUiThread(() -> ll.addView(view));
+                        }
+                    } catch (IndexOutOfBoundsException ignored) {
+
+                    }
+                }).start();
             }
-
-            try {
-                // Get preferences...
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
-                List<Lesson> spDay;
-                if (sharedPref.getBoolean("pref_lockSubjects", false)) spDay = SpHolder.getDay(day);
-                else spDay = SpHolder.getUntrimmedDay(day);
-                LinearLayout ll = root.findViewById(R.id.sp_day);
-
-                LayoutInflater layoutinflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                for (int position = 0; position < spDay.size(); position++) {
-                    View view = createView(layoutinflater, spDay, position, sharedPref);
-                    mActivity.runOnUiThread(() -> ll.addView(view));
-                }
-            } catch (IndexOutOfBoundsException ignored) {
-
-            }
-        }).start();
+        });
 
         return root;
     }
