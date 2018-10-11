@@ -267,7 +267,7 @@ public class VpHolder {
             return false;
         }
 
-        return s1 == s2 || s2.getName().equals(context.getString(R.string.lesson_tandem)) && (s1.getName().equals(context.getString(R.string.lesson_french)) || s1.getName().equals(context.getString(R.string.lesson_latin)));
+        return s1.equals(s2) || s2.getName().equals(context.getString(R.string.lesson_tandem)) && (s1.getName().equals(context.getString(R.string.lesson_french)) || s1.getName().equals(context.getString(R.string.lesson_latin)));
     }
 
     public static List<List<Subject>> getVp() {
