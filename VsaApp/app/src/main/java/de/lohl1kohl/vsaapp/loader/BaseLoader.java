@@ -8,6 +8,7 @@ public class BaseLoader implements AsyncResponse {
 
     public String TAG;
     public String url;
+    public int readTimeout = 3000;
     private Callbacks.baseCallback callback;
 
     @Override
@@ -23,7 +24,7 @@ public class BaseLoader implements AsyncResponse {
         callback = c;
         Log.i("VsaApp/Server/" + TAG, "Open: " + url);
 
-        HttpGetRequest asyncTask = new HttpGetRequest();
+        HttpGetRequest asyncTask = new HttpGetRequest(readTimeout);
 
         //this to set delegate/listener back to this class
         asyncTask.delegate = this;

@@ -69,7 +69,8 @@ public class CafetoriaFragment extends BaseFragment {
 
         mActivity.runOnUiThread(() -> {
             TextView saldo = cafetoriaView.findViewById(R.id.cafetoria_saldo);
-            mActivity.runOnUiThread(() -> saldo.setText(String.format(Locale.GERMAN, getString(R.string.cafetoriaSaldo), CafetoriaHolder.saldo)));
+            if (CafetoriaHolder.days.size() > 0) mActivity.runOnUiThread(() -> saldo.setText(String.format(Locale.GERMAN, getString(R.string.cafetoriaSaldo), CafetoriaHolder.saldo)));
+            else saldo.setText(mActivity.getString(R.string.cafetoria_need_connection));
 
             ViewPager pager = cafetoriaView.findViewById(R.id.cafetoria_viewpager);
             CafetoriaDayAdapter adapter = new CafetoriaDayAdapter(mActivity, getFragmentManager());
@@ -81,8 +82,6 @@ public class CafetoriaFragment extends BaseFragment {
             int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
             try {
                 if (weekday == -1 | weekday == 5) weekday = 0;
-                else if (LessonUtils.isLessonPassed(SpHolder.getNumberOfLessons(weekday) - 1))
-                    weekday++;
                 TabLayout.Tab tab = tabLayout.getTabAt(weekday);
                 try {
                     tab.select();

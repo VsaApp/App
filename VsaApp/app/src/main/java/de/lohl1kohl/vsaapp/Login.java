@@ -51,7 +51,7 @@ public class Login implements AsyncResponse {
 
         url = String.format("https://api.vsa.lohl1kohl.de/validate?username=%s&password=%s", hashUsername, hashPassword);
 
-        HttpGetRequest asyncTask = new HttpGetRequest();
+        HttpGetRequest asyncTask = new HttpGetRequest(3000);
 
         //this to set delegate/listener back to this class
         asyncTask.delegate = this;

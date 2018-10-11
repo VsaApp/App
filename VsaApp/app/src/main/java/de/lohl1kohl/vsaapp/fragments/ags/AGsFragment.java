@@ -43,8 +43,6 @@ public class AGsFragment extends BaseFragment {
             int weekday = calendar.get(Calendar.DAY_OF_WEEK) - 2;
             try {
                 if (weekday == -1 | weekday == 5) weekday = 0;
-                else if (LessonUtils.isLessonPassed(SpHolder.getNumberOfLessons(weekday) - 1))
-                    weekday++;
                 TabLayout.Tab tab = tabLayout.getTabAt(weekday);
                 try {
                     tab.select();

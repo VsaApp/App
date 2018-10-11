@@ -26,6 +26,7 @@
     <string name="login_success">Erfolgreich angemeldet</string>
     <string name="no_connection">Verbindung zum Server fehlgeschagen</string>
     <string name="need_connection">Beim ersten mal starten wird immer eine Internetverbindung benötigt!</string>
+    <string name="cafetoria_need_connection">Beim ersten mal laden wird immer eine Internetverbindung benötigt!</string>
     <string name="wait_for_connection">Warte auf eine Internetverbindung…</string>
     <string name="no_class">Keine Klasse gesetzt</string>
     <string name="choose_grade">Klasse auswählen</string>
@@ -163,6 +164,7 @@
     <string-array name="nameOfSubjects">
         <item>CH:Chemie</item>
         <item>PH:Physik</item>
+        <item>MI:Mint</item>
         <item>DB:NW</item>
         <item>DP:PoWi</item>
         <item>PO:PoWi</item>
