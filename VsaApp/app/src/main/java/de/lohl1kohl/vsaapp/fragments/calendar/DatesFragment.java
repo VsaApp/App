@@ -17,26 +17,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.skydoves.colorpickerpreference.ColorPickerDialog;
+import de.lohl1kohl.vsaapp.R;
+import de.lohl1kohl.vsaapp.fragments.BaseFragment;
+import de.lohl1kohl.vsaapp.holders.DatesHolder;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-
-import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.fragments.BaseFragment;
-import de.lohl1kohl.vsaapp.holders.DatesHolder;
 
 public class DatesFragment extends BaseFragment {
 
@@ -421,7 +411,7 @@ public class DatesFragment extends BaseFragment {
                 }
                 if (isNewName) categories.get(categoriesList.getSelectedItemPosition()).name = text;
                 else {
-                    Toast.makeText(mActivity, mActivity.getText(R.string.category_new), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, mActivity.getText(R.string.category_exists), Toast.LENGTH_SHORT).show();
                     name.setText(text.substring(0, text.length() - 1));
                 }
             }

@@ -91,7 +91,9 @@
     <string name="preferenceTitle_showVpinSp">Vertretungsplan im Stundenplan anzeigen</string>
     <string name="preferenceSummary_mutePhone">Dein Handy wird während der Unterrichtszeit stummgestellt</string>
     <string name="preferenceTitle_mutePhone">Handy stummstellen</string>
-    <string name="changeGradeOnlyWithNetworkConnection">Die Klasse kann nur mit einer aktiven Internetverbindung geändert werden</string>
+    <string name="changeGradeOnlyWithNetworkConnection">Die Klasse kann nur mit einer aktiven Internetverbindung
+        geändert werden
+    </string>
     <string name="loadingScreenPercentValue">0 %</string>
     <string name="back">Zurück</string>
     <string name="eventsDialog">Events Dialog</string>
@@ -124,7 +126,8 @@
     <string name="holiday_category">Feiertag</string>
     <string name="edit_categories">Kategorien verwalten</string>
     <string name="pick_color">Farbe auswählen</string>
-    <string name="default_categories">#Ferien::false::61:224:245#Andere::true::91:198:56:#Feiertag::false::96:73:43</string>
+    <string name="default_categories">#Ferien::false::61:224:245#Andere::true::91:198:56:#Feiertag::false::96:73:43
+    </string>
     <string name="add">+</string>
     <string name="add_category">Kategorie hinzufügen:</string>
     <string name="del_category">Kategorie löschen:</string>
@@ -139,7 +142,7 @@
     <string name="exam">Klausur</string>
     <string name="exam_info">%s %s mit Aufsicht von %s</string>
     <string name="make_up_exam">Nachschreiber</string>
-    <string name="category_new">Der Name darf noch nicht vorhanden sein!</string>
+    <string name="category_exists">Der Name ist schon vorhanden!</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>
