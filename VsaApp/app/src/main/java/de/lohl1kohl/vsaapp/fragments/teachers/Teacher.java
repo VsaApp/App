@@ -39,7 +39,7 @@ public class Teacher {
     }
 
     public String getGenderizedGenitiveName() {
-        return getGenderizedName().replace(context.getResources().getString(R.string.mister), context.getResources().getString(R.string.mister_gen));
+        return getGenderizedName().replace(context.getResources().getString(R.string.mister) + " ", context.getResources().getString(R.string.mister_gen) + " ");
     }
 
     public String[] getSubjects() {
