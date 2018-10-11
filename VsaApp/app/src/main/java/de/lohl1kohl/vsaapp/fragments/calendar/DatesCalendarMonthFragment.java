@@ -163,17 +163,34 @@ public class DatesCalendarMonthFragment extends BaseFragment {
         LinearLayout grid = root.findViewById(R.id.dates_calendar_grid);
         mActivity.runOnUiThread(grid::removeAllViews);
 
+        List<View> views = new ArrayList<>();
+
         for (int i = 0; i < 6; i++) {
             View gridLine = inflater.inflate(R.layout.dates_calendar_grid_line, null);
             LinearLayout ll = gridLine.findViewById(R.id.calendar_grid_line);
             int height = grid.getMeasuredHeight() / 6 - 1;
             for (int j = 0; j < 7; j++) {
                 View calendarItem = createGridItem(i * 7 + j, inflater, container, height);
+                views.add(calendarItem);
                 mActivity.runOnUiThread(() -> ll.addView(calendarItem));
             }
 
             mActivity.runOnUiThread(() -> grid.addView(ll));
         }
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            int height = grid.getMeasuredHeight() / 6 - 1;
+            for (int i = 0; i < views.size(); i++){
+                RelativeLayout rl = views.get(i).findViewById(R.id.dates_calendar_item_layout_l);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(columnSize - 1, height);
+                mActivity.runOnUiThread(() -> rl.setLayoutParams(params));
+            }
+        }).start();
     }
 
     @SuppressLint("SetTextI18n")
