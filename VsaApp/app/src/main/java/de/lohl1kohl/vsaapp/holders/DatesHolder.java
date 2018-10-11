@@ -59,11 +59,13 @@ public class DatesHolder {
                 }
 
                 public void onConnectionFailed() {
-                    readSavedDates(context);
-                    events.addAll(HolidayHolder.getHolidays());
-                    sortEvents(context);
-                    createCalendar(context);
-                    if (datesLoadedCallback != null) datesLoadedCallback.onLoaded();
+                    HolidayHolder.load(context, () -> {
+                        readSavedDates(context);
+                        events.addAll(HolidayHolder.getHolidays());
+                        sortEvents(context);
+                        createCalendar(context);
+                        if (datesLoadedCallback != null) datesLoadedCallback.onLoaded();
+                    });
                 }
             };
 

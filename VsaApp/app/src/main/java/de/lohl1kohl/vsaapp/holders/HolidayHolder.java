@@ -30,6 +30,7 @@ public class HolidayHolder {
         Calendar now = Calendar.getInstance();
         now.setTime(new java.util.Date());
         loadedYears = 0;
+        holidays = new ArrayList<>();
 
         for (int i = 0; i < 2; i++) {
             int year = now.get(Calendar.YEAR) + i;
@@ -71,7 +72,6 @@ public class HolidayHolder {
     }
 
     private static void convertHolidaysJson(Context context, String array) {
-        holidays = new ArrayList<>();
         try {
             JSONObject jsonObject = new JSONObject(array);
             Iterator allKeys = jsonObject.keys();
