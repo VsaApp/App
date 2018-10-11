@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SpDayFragment extends BaseFragment {
@@ -66,11 +67,31 @@ public class SpDayFragment extends BaseFragment {
                         LinearLayout ll = root.findViewById(R.id.sp_day);
 
                         LayoutInflater layoutinflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        List<View> views = new ArrayList<>();
 
                         for (int position = 0; position < spDay.size(); position++) {
                             View view = createView(layoutinflater, spDay, position, sharedPref);
+                            views.add(view);
                             mActivity.runOnUiThread(() -> ll.addView(view));
                         }
+
+                        new Thread(() -> {
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            for (int i = 0; i < views.size(); i++){
+                                RelativeLayout rL = views.get(i).findViewById(R.id.sp_rl);
+                                int currentHeight = rL.getMeasuredHeight();
+                                if (lineHeight != 0 && currentHeight < lineHeight) {
+                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(lineWidth, lineHeight);
+                                    mActivity.runOnUiThread(() -> rL.setLayoutParams(params));
+                                }
+                            }
+                        }).start();
+
                     } catch (IndexOutOfBoundsException ignored) {
 
                     }
@@ -93,11 +114,6 @@ public class SpDayFragment extends BaseFragment {
         listViewHolder.rightButton = convertView.findViewById(R.id.sp_right);
         listViewHolder.relativeLayout = convertView.findViewById(R.id.sp_rl);
         convertView.setTag(listViewHolder);
-
-        if (lineHeight != 0) {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(lineWidth, lineHeight);
-            listViewHolder.relativeLayout.setLayoutParams(params);
-        }
 
         Boolean lock = sharedPref.getBoolean("pref_lockSubjects", false);
 
@@ -242,6 +258,7 @@ public class SpDayFragment extends BaseFragment {
                 }
             }
         }
+
         new Thread(() -> {
             try {
                 Thread.sleep(60000);
@@ -256,6 +273,21 @@ public class SpDayFragment extends BaseFragment {
                     parent.removeView(convertView);
                     parent.addView(newView, i);
                 });
+
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    RelativeLayout rL = newView.findViewById(R.id.sp_rl);
+                    int currentHeight = rL.getMeasuredHeight();
+                    if (lineHeight != 0 && currentHeight < lineHeight) {
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(lineWidth, lineHeight);
+                        mActivity.runOnUiThread(() -> rL.setLayoutParams(params));
+                    }
+                }).start();
             } catch (NullPointerException ignored) {
 
             }
