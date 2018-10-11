@@ -1,6 +1,5 @@
 package de.lohl1kohl.vsaapp.jobs;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -10,22 +9,21 @@ import android.media.AudioManager;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
-
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
+import de.lohl1kohl.vsaapp.LoadingActivity;
+import de.lohl1kohl.vsaapp.R;
+import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
+import de.lohl1kohl.vsaapp.fragments.sp.LessonUtils;
+import de.lohl1kohl.vsaapp.holders.SpHolder;
+import de.lohl1kohl.vsaapp.holders.SubjectSymbolsHolder;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-
-import de.lohl1kohl.vsaapp.LoadingActivity;
-import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
-import de.lohl1kohl.vsaapp.fragments.sp.LessonUtils;
-import de.lohl1kohl.vsaapp.holders.SpHolder;
-import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class StartJob extends Job {
 
@@ -42,6 +40,7 @@ public class StartJob extends Job {
     @NonNull
     @Override
     protected Result onRunJob(@NonNull Params params) {
+        SubjectSymbolsHolder.load(getContext());
         Callbacks.baseLoadedCallback baseLoadedCallback = () -> {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -78,7 +77,7 @@ public class StartJob extends Job {
         return Result.SUCCESS;
     }
 
-    public void createNotification(Context context){
+    public void createNotification(Context context) {
         final AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         int ringerMode = audio.getRingerMode();
         int mediaVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
@@ -87,10 +86,10 @@ public class StartJob extends Job {
         Random generator = new Random();
 
         Intent intent2 = new Intent(context, NotificationReceiver.class);
-        intent2.putExtra("btn","media");
+        intent2.putExtra("btn", "media");
 
         Intent intent3 = new Intent(context, NotificationReceiver.class);
-        intent3.putExtra("btn","ringtone");
+        intent3.putExtra("btn", "ringtone");
 
         PendingIntent i = PendingIntent.getActivity(context, generator.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent media = PendingIntent.getBroadcast(context, generator.nextInt(), intent2, PendingIntent.FLAG_UPDATE_CURRENT);
