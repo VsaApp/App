@@ -139,6 +139,7 @@
     <string name="exam">Klausur</string>
     <string name="exam_info">%s %s mit Aufsicht von %s</string>
     <string name="make_up_exam">Nachschreiber</string>
+    <string name="category_new">Der Name darf noch nicht vorhanden sein!</string>
 
     <string-array name="nameOfGrades">
         <item>5a</item>

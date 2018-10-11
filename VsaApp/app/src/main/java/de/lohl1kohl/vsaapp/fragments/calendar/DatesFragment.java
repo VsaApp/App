@@ -414,7 +414,16 @@ public class DatesFragment extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                categories.get(categoriesList.getSelectedItemPosition()).name = s.toString();
+                String text = s.toString();
+                boolean isNewName = true;
+                for (int i = 0; i < categories.size(); i++){
+                    if (text.equals(categories.get(i).name) && i != categoriesList.getSelectedItemPosition()) isNewName = false;
+                }
+                if (isNewName) categories.get(categoriesList.getSelectedItemPosition()).name = text;
+                else {
+                    Toast.makeText(mActivity, mActivity.getText(R.string.category_new), Toast.LENGTH_SHORT).show();
+                    name.setText(text.substring(0, text.length() - 1));
+                }
             }
 
             @Override
