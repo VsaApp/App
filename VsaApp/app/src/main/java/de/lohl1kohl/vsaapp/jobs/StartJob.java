@@ -51,32 +51,7 @@ public class StartJob extends Job {
             audio.setRingerMode(AudioManager.RINGER_MODE_SILENT);
             audio.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
 
-            Intent intent = new Intent(getContext(), LoadingActivity.class);
-            Random generator = new Random();
-
-            Intent intent2 = new Intent(getContext(), NotificationReceiver.class);
-            intent2.putExtra("btn","media");
-
-            Intent intent3 = new Intent(getContext(), NotificationReceiver.class);
-            intent3.putExtra("btn","ringtone");
-
-            PendingIntent i = PendingIntent.getActivity(getContext(), generator.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent media = PendingIntent.getBroadcast(getContext(), generator.nextInt(), intent2, PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent ringtone = PendingIntent.getBroadcast(getContext(), generator.nextInt(), intent3, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "muted")
-                    .setSmallIcon(R.mipmap.logo_white)
-                    .setContentTitle(getContext().getString(R.string.in_school))
-                    .setContentText(getContext().getString(R.string.phone_muted))
-                    .setColor(getContext().getResources().getColor(R.color.colorPrimary))
-                    .addAction(R.drawable.ic_ringtone, "Klingelton", ringtone)
-                    .addAction(R.drawable.ic_media_volume, "Medienton", media)
-                    .setOngoing(true)
-                    .setContentIntent(i);
-
-            NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(-1, builder.build());
-
+            createNotification(getContext());
 
             Date now = new Date();
             Calendar cal = Calendar.getInstance();
@@ -101,5 +76,38 @@ public class StartJob extends Job {
         };
         SpHolder.load(getContext(), false, baseLoadedCallback);
         return Result.SUCCESS;
+    }
+
+    public void createNotification(Context context){
+        final AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        int ringerMode = audio.getRingerMode();
+        int mediaVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+        Intent intent = new Intent(context, LoadingActivity.class);
+        Random generator = new Random();
+
+        Intent intent2 = new Intent(context, NotificationReceiver.class);
+        intent2.putExtra("btn","media");
+
+        Intent intent3 = new Intent(context, NotificationReceiver.class);
+        intent3.putExtra("btn","ringtone");
+
+        PendingIntent i = PendingIntent.getActivity(context, generator.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent media = PendingIntent.getBroadcast(context, generator.nextInt(), intent2, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent ringtone = PendingIntent.getBroadcast(context, generator.nextInt(), intent3, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "muted")
+                .setSmallIcon(R.mipmap.logo_white)
+                .setContentTitle(context.getString(R.string.in_school))
+                .setContentText((ringerMode == AudioManager.RINGER_MODE_SILENT ? context.getString(R.string.phone_muted) : context.getString(R.string.phone_on)) + " + " + (mediaVolume == 0 ? context.getString(R.string.media_muted) : context.getString(R.string.media_on)))
+                .setColor(context.getResources().getColor(R.color.colorPrimary))
+                .addAction(ringerMode == AudioManager.RINGER_MODE_SILENT ? R.drawable.ic_ringtone : R.drawable.ic_volume_mute, "Klingelton", ringtone)
+                .addAction(mediaVolume == 0 ? R.drawable.ic_media_volume : R.drawable.ic_volume_off, "Medienton", media)
+                .setOngoing(true)
+                .setContentIntent(i);
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(-1, builder.build());
+
     }
 }

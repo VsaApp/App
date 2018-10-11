@@ -82,7 +82,10 @@
     <string name="ok">OK</string>
     <string name="cancel">Abbrechen</string>
     <string name="in_school">In der Schule</string>
-    <string name="phone_muted">Handy stumm gestellt</string>
+    <string name="phone_muted">Handy stumm</string>
+    <string name="phone_on">Handy laut</string>
+    <string name="media_muted">Medienton aus</string>
+    <string name="media_on">Medienton an</string>
     <string name="preferenceSummary_showVpinSp">Nutzbar mit der obigen Einstellung</string>
     <string name="preferenceTitle_showVpinSp">Vertretungsplan im Stundenplan anzeigen</string>
     <string name="preferenceSummary_mutePhone">Dein Handy wird während der Unterrichtszeit stummgestellt</string>
