@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,14 +59,13 @@ public class SpDayFragment extends BaseFragment {
                 List<Lesson> spDay;
                 if (sharedPref.getBoolean("pref_lockSubjects", false)) spDay = SpHolder.getDay(day);
                 else spDay = SpHolder.getUntrimmedDay(day);
-                String weekday = Arrays.asList(root.getResources().getStringArray(R.array.weekdays)).get(day);
                 LinearLayout ll = root.findViewById(R.id.sp_day);
 
                 LayoutInflater layoutinflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                 for (int position = 0; position < spDay.size(); position++) {
-                    int finalPosition = position;
-                    mActivity.runOnUiThread(() -> ll.addView(createView(layoutinflater, spDay, finalPosition, sharedPref)));
+                    View view = createView(layoutinflater, spDay, position, sharedPref);
+                    mActivity.runOnUiThread(() -> ll.addView(view));
                 }
             } catch (IndexOutOfBoundsException ignored) {
 
