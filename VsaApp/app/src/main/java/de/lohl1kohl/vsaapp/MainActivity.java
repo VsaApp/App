@@ -3,7 +3,9 @@ package de.lohl1kohl.vsaapp;
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -88,7 +90,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_home) displayView(R.id.nav_sp);
+        if (item.getItemId() == R.id.action_home)
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.viktoriaschule-aachen.de/sundvplan/vps/index.html")));
+
         return item.getItemId() == R.id.action_home || super.onOptionsItemSelected(item);
     }
 
