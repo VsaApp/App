@@ -3,42 +3,38 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_sp"
-            android:icon="@android:drawable/ic_menu_today"
-            android:title="@string/sp" />
+                android:id="@+id/nav_sp"
+                android:icon="@android:drawable/ic_menu_today"
+                android:title="@string/sp"/>
         <item
-            android:id="@+id/nav_vp"
-            android:icon="@android:drawable/ic_menu_agenda"
-            android:title="@string/vp" />
+                android:id="@+id/nav_vp"
+                android:icon="@android:drawable/ic_menu_agenda"
+                android:title="@string/vp"/>
         <item
-            android:id="@+id/nav_teacher"
-            android:icon="@android:drawable/ic_menu_sort_by_size"
-            android:title="@string/teacher" />
+                android:id="@+id/nav_teacher"
+                android:icon="@android:drawable/ic_menu_sort_by_size"
+                android:title="@string/teacher"/>
         <item
-            android:id="@+id/nav_dates"
-            android:icon="@android:drawable/ic_menu_my_calendar"
-            android:title="@string/menu_dates" />
+                android:id="@+id/nav_dates"
+                android:icon="@android:drawable/ic_menu_my_calendar"
+                android:title="@string/menu_dates"/>
         <item
-            android:id="@+id/nav_ags"
-            android:icon="@drawable/sports"
-            android:title="@string/ags" />
+                android:id="@+id/nav_ags"
+                android:icon="@drawable/sports"
+                android:title="@string/ags"/>
         <item
-            android:id="@+id/nav_cafetoria"
-            android:icon="@drawable/food"
-            android:title="@string/cafetoria" />
+                android:id="@+id/nav_cafetoria"
+                android:icon="@drawable/food"
+                android:title="@string/cafetoria"/>
 
         <item
-            android:id="@+id/nav_documents"
-            android:icon="@drawable/documents"
-            android:title="@string/documents" />
+                android:id="@+id/nav_documents"
+                android:icon="@drawable/documents"
+                android:title="@string/documents"/>
         <item
-            android:id="@+id/nav_web"
-            android:icon="@drawable/web"
-            android:title="@string/web" />
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@android:drawable/ic_menu_manage"
-            android:title="@string/menu_settings" />
+                android:id="@+id/nav_settings"
+                android:icon="@android:drawable/ic_menu_manage"
+                android:title="@string/menu_settings"/>
     </group>
 
 </menu>

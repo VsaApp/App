@@ -6,23 +6,17 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
 import de.lohl1kohl.vsaapp.fragments.vp.Today;
 import de.lohl1kohl.vsaapp.fragments.vp.Tomorrow;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.*;
 
 public class VpHolder {
     public static String weekdayToday, dateToday, timeToday, updateToday;
@@ -64,7 +58,7 @@ public class VpHolder {
                             boolean today = true;
                             do {
                                 List<Subject> subjects;
-                                subjects = convertJsonToArray(context, outputs.get(today ? 0 : 1), today,  today && day1.get(Calendar.DAY_OF_MONTH) == day2.get(Calendar.DAY_OF_MONTH));
+                                subjects = convertJsonToArray(context, outputs.get(today ? 0 : 1), today, today && day1.get(Calendar.DAY_OF_MONTH) == day2.get(Calendar.DAY_OF_MONTH));
                                 vp.add(today ? 0 : (vp.size() == 0 ? 0 : 1), (subjects != null) ? subjects : new ArrayList<>());
                                 if (subjects != null) {
                                     // Save the current sp...
@@ -84,7 +78,8 @@ public class VpHolder {
                                 today = !today;
                             } while (!today);
 
-                            if (day1.get(Calendar.DAY_OF_MONTH) == day2.get(Calendar.DAY_OF_MONTH)) vp.set(0, vp.get(1));
+                            if (day1.get(Calendar.DAY_OF_MONTH) == day2.get(Calendar.DAY_OF_MONTH))
+                                vp.set(0, vp.get(1));
                         }
                     }
 
@@ -119,7 +114,7 @@ public class VpHolder {
         }
     }
 
-    private static Calendar getDate(String array){
+    private static Calendar getDate(String array) {
         try {
             JSONObject header = new JSONObject(array);
             String date = header.getString("date");

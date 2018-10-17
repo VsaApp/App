@@ -4,12 +4,11 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import de.lohl1kohl.vsaapp.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.R;
 
 public class AGsDayAdapter extends FragmentStatePagerAdapter {
 

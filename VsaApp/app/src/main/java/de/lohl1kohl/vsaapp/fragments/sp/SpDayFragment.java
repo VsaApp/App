@@ -11,16 +11,10 @@ import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.StringUtils;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
-import de.lohl1kohl.vsaapp.fragments.web.Push;
 import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.holders.TeacherHolder;
 import de.lohl1kohl.vsaapp.holders.VpHolder;
-import de.lohl1kohl.vsaapp.loader.Callbacks;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +76,7 @@ public class SpDayFragment extends BaseFragment {
                                 e.printStackTrace();
                             }
 
-                            for (int i = 0; i < views.size(); i++){
+                            for (int i = 0; i < views.size(); i++) {
                                 RelativeLayout rL = views.get(i).findViewById(R.id.sp_rl);
                                 int currentHeight = rL.getMeasuredHeight();
                                 if (lineHeight != 0 && currentHeight < lineHeight) {
@@ -145,24 +139,6 @@ public class SpDayFragment extends BaseFragment {
                         // Update vp...
                         VpHolder.updateVpList(mActivity);
 
-                        try {
-                            JSONArray jsonArray = new JSONArray();
-                            jsonArray.put(new JSONObject().put("weekday", subject.day).put("unit", subject.unit).put("subject", subject.name).put("teacher", StringUtils.poop(subject.teacher)));
-                            Callbacks.baseCallback pushCallback = new Callbacks.baseCallback() {
-                                @Override
-                                public void onReceived(String output) {
-
-                                }
-
-                                @Override
-                                public void onConnectionFailed() {
-
-                                }
-                            };
-                            new Push().push(mActivity, jsonArray, pushCallback);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
                         View newView = createView(layoutInflater, spDay, position, sharedPref);
                         ViewGroup parent = (ViewGroup) convertView.getParent();
                         int i = parent.indexOfChild(convertView);

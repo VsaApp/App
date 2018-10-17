@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
+import de.lohl1kohl.vsaapp.R;
+import de.lohl1kohl.vsaapp.fragments.calendar.*;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,15 +15,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-
-import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.fragments.calendar.Category;
-import de.lohl1kohl.vsaapp.fragments.calendar.Color;
-import de.lohl1kohl.vsaapp.fragments.calendar.Date;
-import de.lohl1kohl.vsaapp.fragments.calendar.Dates;
-import de.lohl1kohl.vsaapp.fragments.calendar.Day;
-import de.lohl1kohl.vsaapp.fragments.calendar.Event;
-import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class DatesHolder {
     private static List<Event> events;

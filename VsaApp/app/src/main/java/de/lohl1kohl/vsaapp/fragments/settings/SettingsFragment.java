@@ -17,11 +17,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.evernote.android.job.JobManager;
-
-import org.json.JSONException;
-
 import de.lohl1kohl.vsaapp.FirebaseHandler;
 import de.lohl1kohl.vsaapp.LoadingActivity;
 import de.lohl1kohl.vsaapp.R;
@@ -29,8 +25,6 @@ import de.lohl1kohl.vsaapp.fragments.BasePreferenceFragment;
 import de.lohl1kohl.vsaapp.fragments.vp.VpFragment;
 import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.holders.VpHolder;
-
-import static de.lohl1kohl.vsaapp.fragments.web.WebFragment.pushChoices;
 
 public class SettingsFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -90,7 +84,7 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
                 editor.putBoolean("in_school", false);
                 editor.apply();
                 mode.setRingerMode(sharedPreferences.getInt("ringer_mode", AudioManager.RINGER_MODE_VIBRATE));
-                mode.setStreamVolume(AudioManager.STREAM_MUSIC, sharedPreferences.getInt("media_mode", (int) mode.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2), 0);
+                mode.setStreamVolume(AudioManager.STREAM_MUSIC, sharedPreferences.getInt("media_mode", mode.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2), 0);
                 NotificationManager notificationManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.cancel(-1);
                 JobManager.instance().cancel(sharedPreferences.getInt("startid", 0));
@@ -170,11 +164,6 @@ public class SettingsFragment extends BasePreferenceFragment implements SharedPr
             VpHolder.load(mActivity, true, () -> {
                 if (mActivity.getIntent().getStringExtra("day") != null) {
                     VpFragment.selectDay(mActivity.getIntent().getStringExtra("day"));
-                }
-                try {
-                    pushChoices(mActivity);
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
                 Log.d("VsaApp/LoadingActivity", "VpHolder loaded");
             });

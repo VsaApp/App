@@ -5,18 +5,14 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
-
+import de.lohl1kohl.vsaapp.fragments.cafetoria.Cafetoria;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.fragments.cafetoria.Cafetoria;
-import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class CafetoriaHolder {
 

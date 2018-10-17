@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class FirebaseHandler {

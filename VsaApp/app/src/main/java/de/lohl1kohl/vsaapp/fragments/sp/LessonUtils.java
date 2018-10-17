@@ -1,10 +1,10 @@
 package de.lohl1kohl.vsaapp.fragments.sp;
 
+import de.lohl1kohl.vsaapp.holders.SpHolder;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.holders.SpHolder;
 
 public class LessonUtils {
 

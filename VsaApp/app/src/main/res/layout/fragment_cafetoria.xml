@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cafetoriaLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="0dp"
-    android:visibility="visible">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/cafetoriaLayout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="0dp"
+              android:visibility="visible">
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/cafetoria_tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:tabGravity="fill"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/colorAccent"
-        app:tabTextColor="#FFF" />
+            android:id="@+id/cafetoria_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/colorAccent"
+            app:tabTextColor="#FFF"/>
 
     <RelativeLayout
-        android:id="@+id/cafetoria_loading_widget"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:id="@+id/cafetoria_loading_widget"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <ProgressBar
-            android:id="@+id/cafetoria_loading_progress"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+                android:id="@+id/cafetoria_loading_progress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/cafetoria_saldo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
-        android:paddingLeft="5dp"
-        android:paddingStart="5dp"
-        android:paddingTop="5dp"
-        android:textColor="@android:color/black" />
+            android:id="@+id/cafetoria_saldo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:textColor="@android:color/black"/>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/cafetoria_viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            android:id="@+id/cafetoria_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 </LinearLayout>

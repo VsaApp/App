@@ -29,7 +29,6 @@ import de.lohl1kohl.vsaapp.fragments.settings.SettingsFragment;
 import de.lohl1kohl.vsaapp.fragments.sp.SpFragment;
 import de.lohl1kohl.vsaapp.fragments.teachers.TeacherFragment;
 import de.lohl1kohl.vsaapp.fragments.vp.VpFragment;
-import de.lohl1kohl.vsaapp.fragments.web.WebFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -162,13 +161,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 currentFragment = new DocumentsFragment();
                 title = getString(R.string.documents);
                 break;
-            case R.id.nav_web:
-                navigationView.getMenu().getItem(7).setChecked(true);
-                currentFragment = new WebFragment();
-                title = getString(R.string.web);
-                break;
             case R.id.nav_settings:
-                navigationView.getMenu().getItem(8).setChecked(true);
+                navigationView.getMenu().getItem(7).setChecked(true);
                 currentFragment.onDestroy();
                 settingsFragment = new SettingsFragment();
                 break;

@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
+import de.lohl1kohl.vsaapp.R;
+import de.lohl1kohl.vsaapp.fragments.ags.AGs;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,10 +15,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.fragments.ags.AGs;
-import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class AGsHolder {
 

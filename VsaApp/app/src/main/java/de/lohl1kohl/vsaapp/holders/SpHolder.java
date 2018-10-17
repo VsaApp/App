@@ -5,19 +5,17 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
-
+import de.lohl1kohl.vsaapp.R;
+import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
+import de.lohl1kohl.vsaapp.fragments.sp.Sp;
+import de.lohl1kohl.vsaapp.fragments.sp.Subject;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.fragments.sp.Lesson;
-import de.lohl1kohl.vsaapp.fragments.sp.Sp;
-import de.lohl1kohl.vsaapp.fragments.sp.Subject;
-import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class SpHolder {
 

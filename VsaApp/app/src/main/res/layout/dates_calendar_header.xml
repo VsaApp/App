@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/header_item"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@color/calendarBorder"
-    android:orientation="vertical"
-    android:paddingEnd="1px"
-    android:paddingRight="1px">
+              android:id="@+id/header_item"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@color/calendarBorder"
+              android:orientation="vertical"
+              android:paddingEnd="1px"
+              android:paddingRight="1px">
 
     <TextView
-        android:id="@+id/weekday_short"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/calendarHeader"
-        android:gravity="center" />
+            android:id="@+id/weekday_short"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/calendarHeader"
+            android:gravity="center"/>
 
 </LinearLayout>

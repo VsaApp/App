@@ -7,13 +7,12 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.Calendar;
-import java.util.Date;
-
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
 import de.lohl1kohl.vsaapp.holders.SpHolder;
+
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class SpFragment extends BaseFragment {

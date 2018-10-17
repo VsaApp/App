@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="10dp">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
     <TextView
-        android:id="@+id/documentText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+            android:id="@+id/documentText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/documentGroupName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/documentText"
-        android:textSize="15sp"
-        tools:ignore="RelativeOverlap" />
+            android:id="@+id/documentGroupName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/documentText"
+            android:textSize="15sp"
+            tools:ignore="RelativeOverlap"/>
 
     <include
-        android:id="@+id/line"
-        layout="@layout/line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/documentGroupName"
-        android:layout_marginTop="20dp" />
+            android:id="@+id/line"
+            layout="@layout/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/documentGroupName"
+            android:layout_marginTop="20dp"/>
 
 </RelativeLayout>

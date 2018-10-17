@@ -4,11 +4,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import de.lohl1kohl.vsaapp.holders.VpHolder;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.holders.VpHolder;
 
 public class VpDayAdapter extends FragmentStatePagerAdapter {
 

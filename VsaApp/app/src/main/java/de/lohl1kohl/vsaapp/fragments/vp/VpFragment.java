@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
-
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
@@ -63,7 +62,7 @@ public class VpFragment extends BaseFragment {
         final TextView tV_changed = loginDialog.findViewById(R.id.lbl_changed);
 
 
-        tV_units.setText(Integer.toString(subject.unit + 1) + context.getString(R.string.dot_unit));
+        tV_units.setText((subject.unit + 1) + context.getString(R.string.dot_unit));
 
         if (subject.room.equals("?")) tV_normal.setVisibility(TextView.GONE);
         else {

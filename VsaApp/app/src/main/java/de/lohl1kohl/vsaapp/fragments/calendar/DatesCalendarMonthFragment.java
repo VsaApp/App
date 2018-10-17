@@ -13,15 +13,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import de.lohl1kohl.vsaapp.R;
+import de.lohl1kohl.vsaapp.fragments.BaseFragment;
+import de.lohl1kohl.vsaapp.holders.DatesHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.fragments.BaseFragment;
-import de.lohl1kohl.vsaapp.holders.DatesHolder;
 
 public class DatesCalendarMonthFragment extends BaseFragment {
 
@@ -185,7 +184,7 @@ public class DatesCalendarMonthFragment extends BaseFragment {
                 e.printStackTrace();
             }
             int height = grid.getMeasuredHeight() / 6 - 1;
-            for (int i = 0; i < views.size(); i++){
+            for (int i = 0; i < views.size(); i++) {
                 RelativeLayout rl = views.get(i).findViewById(R.id.dates_calendar_item_layout_l);
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(columnSize - 1, height);
                 mActivity.runOnUiThread(() -> rl.setLayoutParams(params));

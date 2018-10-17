@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.preference.PreferenceManager;
-
 import com.evernote.android.job.JobRequest;
 
 public class NotificationReceiver extends BroadcastReceiver {
@@ -16,18 +15,16 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         String action = intent.getStringExtra("btn");
-        if(action.equals("media")){
+        if (action.equals("media")) {
             onMedia(context);
-        }
-        else if(action.equals("ringtone")){
+        } else if (action.equals("ringtone")) {
             onRingtone(context);
-        }
-        else if(action.equals("close")){
+        } else if (action.equals("close")) {
             onClose(context);
         }
     }
 
-    public void onClose(Context context){
+    public void onClose(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("endid",
@@ -40,36 +37,34 @@ public class NotificationReceiver extends BroadcastReceiver {
         editor.apply();
     }
 
-    public void onMedia(Context context){
+    public void onMedia(Context context) {
         final AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         // If the the media is muted, activate it...
-        if (audio.getStreamVolume(AudioManager.STREAM_MUSIC) == 0){
+        if (audio.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             int maxVolume = audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-            audio.setStreamVolume(AudioManager.STREAM_MUSIC, sharedPreferences.getInt("media_mode", (int) maxVolume / 2), 0);
-        }
-        else{
+            audio.setStreamVolume(AudioManager.STREAM_MUSIC, sharedPreferences.getInt("media_mode", maxVolume / 2), 0);
+        } else {
             audio.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
         }
 
         updateNotification(context);
     }
 
-    public void onRingtone(Context context){
+    public void onRingtone(Context context) {
         final AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         // If the the media is muted, activate it...
-        if (audio.getRingerMode() == AudioManager.RINGER_MODE_SILENT){
+        if (audio.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             audio.setRingerMode(sharedPreferences.getInt("ringer_mode", AudioManager.RINGER_MODE_VIBRATE));
-        }
-        else{
+        } else {
             audio.setRingerMode(AudioManager.RINGER_MODE_SILENT);
         }
 
         updateNotification(context);
     }
 
-    private void updateNotification(Context context){
+    private void updateNotification(Context context) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(-1);
         new StartJob().createNotification(context);

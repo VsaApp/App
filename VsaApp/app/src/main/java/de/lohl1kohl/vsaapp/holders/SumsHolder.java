@@ -4,16 +4,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
+import de.lohl1kohl.vsaapp.loader.Callbacks;
+import de.lohl1kohl.vsaapp.loader.Sums;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import de.lohl1kohl.vsaapp.loader.Callbacks;
-import de.lohl1kohl.vsaapp.loader.Sums;
 
 public class SumsHolder {
 

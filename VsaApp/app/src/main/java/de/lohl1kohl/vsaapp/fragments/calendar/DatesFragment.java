@@ -406,8 +406,9 @@ public class DatesFragment extends BaseFragment {
             public void afterTextChanged(Editable s) {
                 String text = s.toString();
                 boolean isNewName = true;
-                for (int i = 0; i < categories.size(); i++){
-                    if (text.equals(categories.get(i).name) && i != categoriesList.getSelectedItemPosition()) isNewName = false;
+                for (int i = 0; i < categories.size(); i++) {
+                    if (text.equals(categories.get(i).name) && i != categoriesList.getSelectedItemPosition())
+                        isNewName = false;
                 }
                 if (isNewName) categories.get(categoriesList.getSelectedItemPosition()).name = text;
                 else {

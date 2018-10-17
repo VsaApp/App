@@ -16,14 +16,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
 import de.lohl1kohl.vsaapp.holders.SubjectSymbolsHolder;
 import de.lohl1kohl.vsaapp.holders.TeacherHolder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class TeacherFragment extends BaseFragment {

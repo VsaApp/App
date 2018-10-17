@@ -5,13 +5,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.widget.TextView;
+import de.lohl1kohl.vsaapp.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.R;
 
 public class DatesCalendarAdapter extends FragmentStatePagerAdapter {
 

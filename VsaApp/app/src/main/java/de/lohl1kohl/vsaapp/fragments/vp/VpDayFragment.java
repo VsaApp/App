@@ -10,17 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import de.lohl1kohl.vsaapp.R;
 import de.lohl1kohl.vsaapp.fragments.BaseFragment;
 import de.lohl1kohl.vsaapp.fragments.sp.Subject;
 import de.lohl1kohl.vsaapp.holders.SpHolder;
 import de.lohl1kohl.vsaapp.holders.TeacherHolder;
 import de.lohl1kohl.vsaapp.holders.VpHolder;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class VpDayFragment extends BaseFragment {
 

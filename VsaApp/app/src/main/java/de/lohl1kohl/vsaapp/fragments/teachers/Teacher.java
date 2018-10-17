@@ -1,7 +1,6 @@
 package de.lohl1kohl.vsaapp.fragments.teachers;
 
 import android.content.Context;
-
 import de.lohl1kohl.vsaapp.R;
 
 public class Teacher {

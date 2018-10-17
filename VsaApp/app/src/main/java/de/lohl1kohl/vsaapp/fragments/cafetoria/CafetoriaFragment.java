@@ -12,26 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
+import de.lohl1kohl.vsaapp.R;
+import de.lohl1kohl.vsaapp.fragments.BaseFragment;
+import de.lohl1kohl.vsaapp.holders.CafetoriaHolder;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
-import de.lohl1kohl.vsaapp.R;
-import de.lohl1kohl.vsaapp.fragments.BaseFragment;
-import de.lohl1kohl.vsaapp.fragments.sp.LessonUtils;
-import de.lohl1kohl.vsaapp.holders.CafetoriaHolder;
-import de.lohl1kohl.vsaapp.holders.SpHolder;
-import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 
 public class CafetoriaFragment extends BaseFragment {
@@ -69,7 +60,8 @@ public class CafetoriaFragment extends BaseFragment {
 
         mActivity.runOnUiThread(() -> {
             TextView saldo = cafetoriaView.findViewById(R.id.cafetoria_saldo);
-            if (CafetoriaHolder.days.size() > 0) mActivity.runOnUiThread(() -> saldo.setText(String.format(Locale.GERMAN, getString(R.string.cafetoriaSaldo), CafetoriaHolder.saldo)));
+            if (CafetoriaHolder.days.size() > 0)
+                mActivity.runOnUiThread(() -> saldo.setText(String.format(Locale.GERMAN, getString(R.string.cafetoriaSaldo), CafetoriaHolder.saldo)));
             else saldo.setText(mActivity.getString(R.string.cafetoria_need_connection));
 
             ViewPager pager = cafetoriaView.findViewById(R.id.cafetoria_viewpager);

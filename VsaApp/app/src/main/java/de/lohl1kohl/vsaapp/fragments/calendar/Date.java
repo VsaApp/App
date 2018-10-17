@@ -1,13 +1,12 @@
 package de.lohl1kohl.vsaapp.fragments.calendar;
 
 import android.content.Context;
+import de.lohl1kohl.vsaapp.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.R;
 
 public class Date {
 

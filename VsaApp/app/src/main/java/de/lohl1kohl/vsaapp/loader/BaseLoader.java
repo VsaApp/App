@@ -1,7 +1,6 @@
 package de.lohl1kohl.vsaapp.loader;
 
 import android.util.Log;
-
 import de.lohl1kohl.vsaapp.HttpGetRequest;
 
 public class BaseLoader implements AsyncResponse {

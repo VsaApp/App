@@ -4,17 +4,15 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
+import de.lohl1kohl.vsaapp.fragments.documents.Document;
+import de.lohl1kohl.vsaapp.fragments.documents.Documents;
+import de.lohl1kohl.vsaapp.loader.Callbacks;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.fragments.documents.Document;
-import de.lohl1kohl.vsaapp.fragments.documents.Documents;
-import de.lohl1kohl.vsaapp.loader.Callbacks;
 
 public class DocumentsHolder {
     @SuppressLint("StaticFieldLeak")

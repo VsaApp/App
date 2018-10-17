@@ -8,10 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import de.lohl1kohl.vsaapp.R;
 
 import java.util.List;
-
-import de.lohl1kohl.vsaapp.R;
 
 public class CategoryAdapter extends ArrayAdapter<Category> {
     public List<Category> data;

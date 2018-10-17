@@ -1,9 +1,9 @@
 package de.lohl1kohl.vsaapp.fragments.calendar;
 
-import java.util.Locale;
-
 import de.lohl1kohl.vsaapp.loader.BaseLoader;
 import de.lohl1kohl.vsaapp.loader.Callbacks;
+
+import java.util.Locale;
 
 public class Holidays extends BaseLoader {
 

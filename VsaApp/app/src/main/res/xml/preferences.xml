@@ -1,50 +1,50 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:key="button_appPref"
-        android:title="@string/preferenceCategory_appPref">
+            android:key="button_appPref"
+            android:title="@string/preferenceCategory_appPref">
 
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="pref_showVpOnlyForYou"
-            android:summary="@string/preferenceSummary_showVpOnlyForYou"
-            android:title="@string/preferenceTitle_showVpOnlyForYou" />
+                android:defaultValue="true"
+                android:key="pref_showVpOnlyForYou"
+                android:summary="@string/preferenceSummary_showVpOnlyForYou"
+                android:title="@string/preferenceTitle_showVpOnlyForYou"/>
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="pref_showVpinSp"
-            android:summary="@string/preferenceSummary_showVpinSp"
-            android:title="@string/preferenceTitle_showVpinSp" />
+                android:defaultValue="true"
+                android:key="pref_showVpinSp"
+                android:summary="@string/preferenceSummary_showVpinSp"
+                android:title="@string/preferenceTitle_showVpinSp"/>
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="pref_lockSubjects"
-            android:summary="@string/preferenceSummary_lockSubjects"
-            android:title="@string/preferenceTitle_lockSubjects" />
+                android:defaultValue="false"
+                android:key="pref_lockSubjects"
+                android:summary="@string/preferenceSummary_lockSubjects"
+                android:title="@string/preferenceTitle_lockSubjects"/>
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="pref_mutePhone"
-            android:summary="@string/preferenceSummary_mutePhone"
-            android:title="@string/preferenceTitle_mutePhone" />
+                android:defaultValue="true"
+                android:key="pref_mutePhone"
+                android:summary="@string/preferenceSummary_mutePhone"
+                android:title="@string/preferenceTitle_mutePhone"/>
 
         <Preference
-            android:key="pref_clear_cache"
-            android:summary="@string/preferenceSummary_clear_cache"
-            android:title="@string/preferenceTitle_clear_cache" />
+                android:key="pref_clear_cache"
+                android:summary="@string/preferenceSummary_clear_cache"
+                android:title="@string/preferenceTitle_clear_cache"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="button_userInfo"
-        android:title="@string/preferenceCategory_userInfo">
+            android:key="button_userInfo"
+            android:title="@string/preferenceCategory_userInfo">
 
         <Preference
-            android:key="pref_grade"
-            android:summary="@string/choose_grade"
-            android:title="@string/preferenceTitle_classname" />
+                android:key="pref_grade"
+                android:summary="@string/choose_grade"
+                android:title="@string/preferenceTitle_classname"/>
 
         <Preference
-            android:key="pref_logout"
-            android:summary="@string/logout_summary"
-            android:title="@string/logout" />
+                android:key="pref_logout"
+                android:summary="@string/logout_summary"
+                android:title="@string/logout"/>
 
     </PreferenceCategory>
 
